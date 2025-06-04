@@ -1,6 +1,7 @@
 <?php
 
-function getCountryCoordinates($isoCode, $filePath = 'countries.json') {
+// pass in iso code of selected country
+function getCountryCoordinates($isoCode, $filePath = '../../data/countryBorders.geo.json') {
     // Load the JSON file
     if (!file_exists($filePath)) {
         return "File not found.";
@@ -28,8 +29,8 @@ function getCountryCoordinates($isoCode, $filePath = 'countries.json') {
 }
 
 // Example usage:
-$isoCode = 'BO'; // Try 'HN' for Honduras
-$coordinates = getCountryCoordinates($isoCode);
+$isoCode = $_REQUEST['isoCode']; // Try 'HN' for Honduras
+$coordinates = json_encode(getCountryCoordinates($isoCode));
 
 // Display result
 if (is_array($coordinates)) {
