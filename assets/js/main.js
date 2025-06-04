@@ -1,7 +1,7 @@
 $(window).on("load", function () {
   if ($("#preloader").length) {
     $("#preloader")
-      .delay(1000)
+      .delay(500)
       .fadeOut("slow", function () {
         $(this).remove();
       });
@@ -13,9 +13,18 @@ $.ajax({
   method: "GET", // or 'POST' if needed
   dataType: "json", // Expect JSON response
   success: function (countryMap) {
-    console.log(JSON.stringify(countryMap));
 
-    $.each(countryMap, function (countryName, isoCode) {
+    // Function to reorder keys alphabetically
+const orderedCountryCodes = Object.keys(countryMap)  // Get all the keys
+  .sort()  // Sort them alphabetically
+  .reduce((acc, key) => {
+    acc[key] = countryMap[key];  // Rebuild the object with sorted keys
+    return acc;
+  }, {});
+  
+    // console.log(JSON.stringify(countryMap));
+
+    $.each(orderedCountryCodes, function (countryName, isoCode) {
       $("#countrySelect").append(
         $("<option></option>").val(isoCode).text(countryName)
       );

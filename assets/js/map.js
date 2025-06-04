@@ -1,7 +1,7 @@
 // create map instance
 var map = L.map("map").setView([52.95, -1.16], 13);
 
-// google street
+// create a tile and add it to the map - google street
 googleStreet = L.tileLayer(
   "http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}",
   {
@@ -11,11 +11,33 @@ googleStreet = L.tileLayer(
   }
 );
 
+// Hybrid,
+
+// googleHybrid = L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}',{
+//     maxZoom: 20,
+//     subdomains:['mt0','mt1','mt2','mt3']
+// });
+// satellite,
+
+// googleSat = L.tileLayer('http://{s}.google.com/vt?lyrs=s&x={x}&y={y}&z={z}',{
+//     maxZoom: 20,
+//     subdomains:['mt0','mt1','mt2','mt3']
+// });
+// Terrain
+
+// googleTerrain = L.tileLayer('http://{s}.google.com/vt?lyrs=p&x={x}&y={y}&z={z}',{
+//     maxZoom: 20,
+//     subdomains:['mt0','mt1','mt2','mt3']
+// });
+
 googleStreet.addTo(map);
 
+// create variable to store map layers
 let geoJsonLayer; // to store and remove the previous layer
 
+// event handler on the country select dropdown element
 $("#countrySelect").on("change", function () {
+  // extract value from the <select> element
   const selectedCode = this.value;
 
   if (!selectedCode) return;
@@ -45,9 +67,9 @@ $("#countrySelect").on("change", function () {
 
       geoJsonLayer = L.geoJSON(geoJson, {
         style: {
-          color: "darkblue",
-          fillColor: "lightblue",
-          fillOpacity: 0.6,
+          color: "#80d643",
+          fillColor: "#80d643",
+          fillOpacity: 0.3,
         },
         onEachFeature: function (feature, layer) {
           layer.bindPopup("Country: " + feature.properties.name);
@@ -59,78 +81,63 @@ $("#countrySelect").on("change", function () {
     });
 });
 
-// Hybrid,
-
-// googleHybrid = L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}',{
-//     maxZoom: 20,
-//     subdomains:['mt0','mt1','mt2','mt3']
-// });
-// satellite,
-
-// googleSat = L.tileLayer('http://{s}.google.com/vt?lyrs=s&x={x}&y={y}&z={z}',{
-//     maxZoom: 20,
-//     subdomains:['mt0','mt1','mt2','mt3']
-// });
-// Terrain
-
-// googleTerrain = L.tileLayer('http://{s}.google.com/vt?lyrs=p&x={x}&y={y}&z={z}',{
-//     maxZoom: 20,
-//     subdomains:['mt0','mt1','mt2','mt3']
-// });
-
-// onClickFunction: Callback function that runs on click.
-// tooltipText: (Optional) Hover tooltip text.
-// buttonId: (Optional) Unique ID for the button.
-
-// buttons
-
 // You will be expected to provide at least five buttons with each one opening a different modal with a dedicated theme, eg; demographics, wiki, news, currency converter, images, public holidays, weather forecast. See what else you can find that may be of interest.
 
 // User location variables
 
 let userMarker; // To store and remove the previous marker
 
-// Add the EasyButton to the map
-L.easyButton(
-  '<i class="bi bi-geo-alt"></i>',
+L.easyBar(
+  [
+    // get current location button
+    L.easyButton(
+      '<i class="bi bi-geo-alt"></i>',
 
-  
-  function (btn, map) {
-    
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0,
-    };
+      function (btn, map) {
+        const options = {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0,
+        };
 
-    function success(position) {
-      const latlng = [position.coords.latitude, position.coords.longitude];
-      const accuracy = position.coords.accuracy;
-      
-      // Move the map to the user's current location
-      map.setView(latlng, 15);
+        function success(position) {
+          const latlng = [position.coords.latitude, position.coords.longitude];
+          const accuracy = position.coords.accuracy;
 
-      // Remove previous marker if it exists
-      if (userMarker) {
-        map.removeLayer(userMarker);
-      }
+          // Move the map to the user's current location
+          map.setView(latlng, 15);
 
-      // Add a new marker at the user's location
-      userMarker = L.marker(latlng)
-        .addTo(map)
-        .bindPopup(`You're here - accuracy: ${accuracy}m`)  // Add popup
-        .openPopup();  // Open popup automatically
-    }
+          // Remove previous marker if it exists
+          if (userMarker) {
+            map.removeLayer(userMarker);
+          }
 
-    function error(err) {
-      console.warn(`ERROR(${err.code}): ${err.message}`);
-    }
+          // Add a new marker at the user's location
+          userMarker = L.marker(latlng)
+            .addTo(map)
+            .bindPopup(`You're here - accuracy: ${accuracy}m`) // Add popup
+            .openPopup(); // Open popup automatically
+        }
 
-    navigator.geolocation.getCurrentPosition(success, error, options);
+        function error(err) {
+          console.warn(`ERROR(${err.code}): ${err.message}`);
+        }
 
-
-  },
-  "Show My Location"
+        navigator.geolocation.getCurrentPosition(success, error, options);
+      },
+      "Show My Location"
+    ),
+    L.easyButton(
+      '<i class="bi bi-house-door-fill"></i>',
+      function (btn, map) {
+        map.setView([52.95, -1.16], 13);
+      },
+      "Home View"
+    ),
+  ],
+  {
+    position: "topleft",
+  }
 ).addTo(map);
 
 L.easyBar(
@@ -142,14 +149,34 @@ L.easyBar(
       },
       "Info"
     ),
-
-    L.easyButton(
-      '<i class="bi bi-house-door-fill"></i>',
-      function (btn, map) {
-        map.setView([52.95, -1.16], 13);
+        L.easyButton(
+      '<i class="bi bi-info-circle"></i>',
+      function () {
+        $("#infoModal").modal("show");
       },
-      "Home View"
+      "Info"
     ),
+        L.easyButton(
+      '<i class="bi bi-info-circle"></i>',
+      function () {
+        $("#infoModal").modal("show");
+      },
+      "Info"
+    ),
+        L.easyButton(
+      '<i class="bi bi-info-circle"></i>',
+      function () {
+        $("#infoModal").modal("show");
+      },
+      "Info"
+    ),
+        L.easyButton(
+      '<i class="bi bi-info-circle"></i>',
+      function () {
+        $("#infoModal").modal("show");
+      },
+      "Info"
+    )
   ],
   {
     position: "topright",
