@@ -1,26 +1,22 @@
 <?php
 
-$json = file_get_contents('../data/countryBorders.geo.json');
+// set header
+header('Content-Type: application/json');
 
+$json = file_get_contents('../../data/countryBorders.geo.json');
 
+// decode JSON into a PHP associative array
+$array = json_decode($json, true);
 
-$data = json_encode($json);
+if (isset($array['features'])) {
+    foreach ($array['features'] as $feature) {
+        $name = $feature['properties']['name'] ?? 'Unknown';
+        $iso = $feature['properties']['iso_a2'] ?? 'N/A';
 
-echo $json;
-
-// Decode JSON into a PHP associative array
-// $data = json_decode($json, true);
-
-// Check if decoding worked and features exist
-// if (isset($data['features'])) {
-//     foreach ($data['features'] as $feature) {
-//         $name = $feature['properties']['name'] ?? 'Unknown';
-//         $iso_a2 = $feature['properties']['iso_a2'] ?? 'N/A';
-//         echo "Country: $name, ISO Code: $iso_a2\n";
-        
-//     }
-// } else {
-//     echo "Invalid JSON structure.\n";
-// }
-
-// echo json_encode($data);
+        // create associative array of 'country names' => 'country codes'
+        $countryMap[$name] = $iso;
+    }
+    echo json_encode($countryMap);
+} else {
+    echo "Invalid JSON structure.\n";
+}
