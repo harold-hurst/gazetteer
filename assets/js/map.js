@@ -60,11 +60,13 @@ $("#countrySelect").on("change", function () {
         return;
       }
 
+      // create a Feature Collection
       const geoJson = {
         type: "FeatureCollection",
         features: filtered,
       };
 
+      // add layer
       geoJsonLayer = L.geoJSON(geoJson, {
         style: {
           color: "#80d643",
@@ -81,17 +83,13 @@ $("#countrySelect").on("change", function () {
     });
 });
 
-// You will be expected to provide at least five buttons with each one opening a different modal with a dedicated theme, eg; demographics, wiki, news, currency converter, images, public holidays, weather forecast. See what else you can find that may be of interest.
-
-// User location variables
-
 let userMarker; // To store and remove the previous marker
 
 L.easyBar(
   [
     // get current location button
     L.easyButton(
-      '<i class="bi bi-geo-alt"></i>',
+      '<i class="bi bi-geo-alt-fill"></i>',
 
       function (btn, map) {
         const options = {
@@ -140,43 +138,74 @@ L.easyBar(
   }
 ).addTo(map);
 
+// text of currently selected <option> of the <select>
+function returnCountry() {
+  const country = $("#countrySelect option:selected").text();
+  const countrySelected = $("#countrySelect").val() !== "";
+  return { country, countrySelected };
+}
+
+function highlightSelect() {
+  $("#countrySelect").addClass("focus-visible"); // Add the class on button click
+
+  // Optional: Remove the class after some time or on focus/blur
+  setTimeout(function () {
+    $("#countrySelect").removeClass("focus-visible"); // Optional: Remove class after 2 seconds
+  }, 2000);
+}
+
 L.easyBar(
   [
-    L.easyButton(
-      '<i class="bi bi-info-circle"></i>',
-      function () {
+    L.easyButton('<i class="bi bi-info-circle"></i>', function () {
+      const country = returnCountry();
+
+      if (country.countrySelected) {
+        $("#modalContainer").html(createCard("Demographics of", country));
         $("#infoModal").modal("show");
-      },
-      "Info"
-    ),
-        L.easyButton(
-      '<i class="bi bi-info-circle"></i>',
-      function () {
+      } else {
+        highlightSelect();
+      }
+    }),
+    L.easyButton('<i class="bi bi-newspaper"></i>', function () {
+      const country = returnCountry();
+
+      if (country.countrySelected) {
+        $("#modalContainer").html(createCard("Latest news about", country));
         $("#infoModal").modal("show");
-      },
-      "Info"
-    ),
-        L.easyButton(
-      '<i class="bi bi-info-circle"></i>',
-      function () {
+      } else {
+        highlightSelect();
+      }
+    }),
+    L.easyButton('<i class="bi bi-image"></i>', function () {
+      const country = returnCountry();
+
+      if (country.countrySelected) {
+        $("#modalContainer").html(createCard("Images of", country));
         $("#infoModal").modal("show");
-      },
-      "Info"
-    ),
-        L.easyButton(
-      '<i class="bi bi-info-circle"></i>',
-      function () {
+      } else {
+        highlightSelect();
+      }
+    }),
+    L.easyButton('<i class="bi bi-coin"></i>', function () {
+      const country = returnCountry();
+
+      if (country.countrySelected) {
+        $("#modalContainer").html(createCard("Exchange rate for", country));
         $("#infoModal").modal("show");
-      },
-      "Info"
-    ),
-        L.easyButton(
-      '<i class="bi bi-info-circle"></i>',
-      function () {
+      } else {
+        highlightSelect();
+      }
+    }),
+    L.easyButton('<i class="bi bi-cloud-sun"></i>', function () {
+      const country = returnCountry();
+
+      if (country.countrySelected) {
+        $("#modalContainer").html(createCard("Weather in", country));
         $("#infoModal").modal("show");
-      },
-      "Info"
-    )
+      } else {
+        highlightSelect();
+      }
+    }),
   ],
   {
     position: "topright",
