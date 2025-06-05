@@ -63,31 +63,47 @@
 
     <div id="modalContainer"></div>
 
-    <!-- Bootstrap JS -->
-    <!-- <script src="assets/js/bootstrap.bundle.min.js"></script> -->
+    <!-- ---------------------------------------------------------
+JS
+--------------------------------------------------------- -->
+
+
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="assets/js/returnModal.js"></script>
+
+    <!-- Leaflet JS CDN -->
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <!-- Leaflet JS EasyButton plugin -->
+    <script src="https://unpkg.com/leaflet-easybutton/src/easy-button.js"></script>
+    
+
+    <script src="assets/js/utils/geolocation.js"></script>
+
+    <!-- create a using leaflet JS -->
+    <script src="assets/js/loadLeafletMap.js"></script>
+
+    <!-- onchange handler for #countrySelect that adds border layer of selected country -->
+    <script src="assets/js/createLeafletBorder.js"></script>
+
+    <!-- Populate #countrySelect element with country names from countryBorders.geo.json -->
+    <script src="assets/js/populateSelect.js"></script>
+
+    <!-- Bootstrap JS CDN -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
       crossorigin="anonymous"
     ></script>
 
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-    <!-- Leaflet JS -->
-    <!-- <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> -->
-    <script
-      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-      crossorigin=""
-    ></script>
-
-    <!-- Leaflet JS EasyButton plugin -->
-    <script src="https://unpkg.com/leaflet-easybutton/src/easy-button.js"></script>
-
-    <!-- Custom JS -->
-    <script src="assets/js/createModal.js"></script>
-    <script src="assets/js/map.js"></script>
-    <script src="assets/js/main.js"></script>
+        <!-- remove pre-loader (spinner) after all content load -->
+    <script src="assets/js/removePreloader.js"></script>
   </body>
 </html>

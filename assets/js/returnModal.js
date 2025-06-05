@@ -1,5 +1,4 @@
 function createCard(string, country) {
-  console.log(country);
   return `
       <div
         id="infoModal"
