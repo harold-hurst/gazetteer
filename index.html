@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Gazetteer</title>
 
     <link
@@ -71,10 +71,6 @@
 
     <div id="modalContainer"></div>
 
-    <!-- ---------------------------------------------------------
-JS
---------------------------------------------------------- -->
-
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
@@ -95,13 +91,11 @@ JS
     <script src="assets/js/utils/getCountryInfo.js"></script>
 
     <!-- create a using leaflet JS -->
-    <script src="assets/js/loadLeafletMap.js"></script>
-
-    <!-- set the selected country when user clicks that country -->
-     <script src="assets/js/setSelectOnClick.js"></script>
+    <script src="assets/js/loadMap.js"></script>
 
     <!-- onchange handler for #countrySelect that adds border layer of selected country -->
-    <script src="assets/js/createLeafletBorder.js"></script>
+    <script src="assets/js/createCountryBorder.js"></script>
+    <script src="assets/js/createAllBorders.js"></script>
 
     <!-- Populate #countrySelect element with country names from countryBorders.geo.json -->
     <script src="assets/js/populateSelect.js"></script>

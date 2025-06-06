@@ -1,7 +1,8 @@
 // create map instance
 var map = L.map("map").setView([52.95, -1.16], 13);
 
-// create a tile and add it to the map - google street
+// Street
+
 googleStreet = L.tileLayer(
   "http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}",
   {
@@ -11,29 +12,56 @@ googleStreet = L.tileLayer(
   }
 );
 
-// Hybrid,
+// Hybrid
 
-// googleHybrid = L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}',{
-//     maxZoom: 20,
-//     subdomains:['mt0','mt1','mt2','mt3']
-// });
-// satellite,
+googleHybrid = L.tileLayer(
+  "http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}",
+  {
+    maxZoom: 20,
+    subdomains: ["mt0", "mt1", "mt2", "mt3"],
+    attribution: "Google Maps",
+  }
+);
 
-// googleSat = L.tileLayer('http://{s}.google.com/vt?lyrs=s&x={x}&y={y}&z={z}',{
-//     maxZoom: 20,
-//     subdomains:['mt0','mt1','mt2','mt3']
-// });
+// satellite
+
+googleSat = L.tileLayer("http://{s}.google.com/vt?lyrs=s&x={x}&y={y}&z={z}", {
+  maxZoom: 20,
+  subdomains: ["mt0", "mt1", "mt2", "mt3"],
+  attribution: "Google Maps",
+});
+
 // Terrain
 
-// googleTerrain = L.tileLayer('http://{s}.google.com/vt?lyrs=p&x={x}&y={y}&z={z}',{
-//     maxZoom: 20,
-//     subdomains:['mt0','mt1','mt2','mt3']
-// });
+googleTerrain = L.tileLayer(
+  "http://{s}.google.com/vt?lyrs=p&x={x}&y={y}&z={z}",
+  {
+    maxZoom: 20,
+    subdomains: ["mt0", "mt1", "mt2", "mt3"],
+    attribution: "Google Maps",
+  }
+);
 
-googleStreet.addTo(map);
+const basemaps = {
+  Streets: googleStreet,
+  Satellite: googleSat,
+  Hybrid: googleHybrid,
+  Terrain: googleTerrain,
+};
 
-// create variable to store map layers
-let geoJsonLayer; // to store and remove the previous layer
+// add streets to map as a default
+basemaps["Streets"].addTo(map);
+
+const options = {
+  collapsed: true, // Make the control open by default
+  position: "bottomright", // Position the control at the top-right corner
+  autoZIndex: false, // Don't auto adjust the z-index of layers
+};
+
+// add the different layers to the map
+layerControl = L.control.layers(basemaps, null, options).addTo(map);
+
+// BUTTONS -----------------------------------------------
 
 let userMarker; // To store and remove the previous marker
 
@@ -43,34 +71,43 @@ L.easyBar(
     L.easyButton(
       '<i class="bi bi-geo-alt-fill"></i>',
 
-      
       function (btn, map) {
-        // success callback
-        function success(position) {
-          const latlng = [position.coords.latitude, position.coords.longitude];
-          const accuracy = position.coords.accuracy;
+        getCurrentLocation()
+          .then((position) => {
+            // Handle the success, location object contains the latitude and longitude
 
-          // Move the map to the user's current location
-          map.setView(latlng, 15);
+            const location = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            };
 
-          // Remove previous marker if it exists
-          if (userMarker) {
-            map.removeLayer(userMarker);
-          }
+            const accuracy = position.coords.accuracy;
 
-          // Add a new marker at the user's location
-          userMarker = L.marker(latlng)
-            .addTo(map)
-            .bindPopup(`You're here - accuracy: ${accuracy}m`) // Add popup
-            .openPopup(); // Open popup automatically
-        }
+            // Move the map to the user's current location
+            map.setView(location, 15);
 
-        // error callback
-        function error(err) {
-          console.warn(`ERROR: ${err}`);
-        }
+            // Remove previous marker if it exists
+            if (userMarker) {
+              map.removeLayer(userMarker);
+            }
 
-        getCurrentLocation(success, error);
+            // Add a new marker at the user's location
+            userMarker = L.marker(location)
+              .addTo(map)
+              .bindPopup(`You're here`) // Add popup
+              .openPopup(); // Open popup automatically
+
+            userCircle = L.circle(location, {
+              color: "red",
+              fillColor: "#f03",
+              fillOpacity: 0.5,
+              radius: accuracy,
+            }).addTo(map);
+          })
+          .catch((error) => {
+            // Handle errors (e.g. if geolocation fails)
+            console.error("Error:", error);
+          });
       }
     ),
     L.easyButton('<i class="bi bi-house-door-fill"></i>', function (btn, map) {

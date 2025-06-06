@@ -1,6 +1,10 @@
 // set the value of the select element to the current country
 getCurrentLocation()
-  .then((location) => {
+  .then((position) => {
+    const location = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
+    };
 
     getCountryInfo(location)
       .then((data) => {

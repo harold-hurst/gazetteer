@@ -1,4 +1,3 @@
 $("#clearSelect").on("click", function () {
-  $("#countrySelect").val('');
-  map.removeLayer(geoJsonLayer);
+  $("#countrySelect").val('').trigger("change");
 });

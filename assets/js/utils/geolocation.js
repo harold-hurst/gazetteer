@@ -6,13 +6,15 @@ function getCurrentLocation() {
     if (navigator.geolocation) {
       // Attempt to get the current position
       navigator.geolocation.getCurrentPosition(
+
         function (position) {
+        console.log(position);
           // Resolve the Promise with the location (latitude and longitude)
-          const location = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-          resolve(location);
+        //   const location = {
+        //     lat: position.coords.latitude,
+        //     lng: position.coords.longitude,
+        //   };
+          resolve(position);
         },
         function (error) {
           // Reject the Promise with the error message
@@ -30,16 +32,3 @@ function getCurrentLocation() {
     }
   });
 }
-
-//   if ("geolocation" in navigator) {
-//     // Get the current position
-//     navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {
-//       enableHighAccuracy: true, // Use high accuracy if available
-//       timeout: 10000, // Timeout after 10 seconds
-//       maximumAge: 0, // Don't use cached position
-//     });
-//   } else {
-//     errorCallback("Geolocation is not supported by this browser.");
-//   }
-
-// }

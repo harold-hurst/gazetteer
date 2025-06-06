@@ -1,3 +1,6 @@
+// initialise variable for layer
+let currentCountryGeoJsonLayer;
+
 // event handler on the country select dropdown element
 $("#countrySelect").on("change", function () {
   // extract value from the <select> element
@@ -14,13 +17,8 @@ $("#countrySelect").on("change", function () {
       );
 
       // Clear old layer if exists
-      if (geoJsonLayer) {
-        map.removeLayer(geoJsonLayer);
-      }
-
-      if (filtered.length === 0) {
-        alert("No matching country found.");
-        return;
+      if (currentCountryGeoJsonLayer) {
+        map.removeLayer(currentCountryGeoJsonLayer);
       }
 
       // create a Feature Collection
@@ -30,18 +28,31 @@ $("#countrySelect").on("change", function () {
       };
 
       // add layer
-      geoJsonLayer = L.geoJSON(geoJson, {
+      currentCountryGeoJsonLayer = L.geoJSON(geoJson, {
         style: {
           color: "#80d643",
           fillColor: "#80d643",
-          fillOpacity: 0.1,
+          fillOpacity: 0.3,
         },
         onEachFeature: function (feature, layer) {
           layer.bindPopup("Country: " + feature.properties.name);
+
+          layer.on({
+            mouseover: function () {
+              // On mouseover, change the style
+              layer.setStyle({
+                fillOpacity: 0.5, // Increase opacity on hover
+              });
+            },
+            mouseout: function () {
+              // On mouseout, reset the style to initial
+              currentCountryGeoJsonLayer.resetStyle(layer); // Use the initial style
+            },
+          });
         },
       }).addTo(map);
 
       // Zoom to the selected country
-      map.fitBounds(geoJsonLayer.getBounds());
+      map.fitBounds(currentCountryGeoJsonLayer.getBounds());
     });
 });
