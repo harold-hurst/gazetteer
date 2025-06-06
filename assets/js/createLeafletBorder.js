@@ -34,7 +34,7 @@ $("#countrySelect").on("change", function () {
         style: {
           color: "#80d643",
           fillColor: "#80d643",
-          fillOpacity: 0.3,
+          fillOpacity: 0.1,
         },
         onEachFeature: function (feature, layer) {
           layer.bindPopup("Country: " + feature.properties.name);

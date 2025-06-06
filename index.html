@@ -50,11 +50,19 @@
   </head>
   <body>
     <div id="preloader"></div>
-    <span id="selectContainer">
-      <select id="countrySelect" class="form-select shadow-sm">
+    <span id="selectContainer" class="d-flex flex-row">
+      <select id="countrySelect" class="form-select shadow-sm me-2">
         <!-- populate from an AJAX CALL to a PHP routine that returns a JSON object that is an array of just ISO codes and names from countryBorders.geo.json -->
         <option value="">Select a country</option>
-      </select>
+        </select>
+        <button
+          type="button"
+          class="btn btn-outline-primary shadow-sm"
+          id="clearSelect"
+        >
+          Clear
+        </button>
+      
     </span>
 
     <div id="map"></div>
@@ -66,8 +74,6 @@
     <!-- ---------------------------------------------------------
 JS
 --------------------------------------------------------- -->
-
-
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -83,18 +89,27 @@ JS
     ></script>
     <!-- Leaflet JS EasyButton plugin -->
     <script src="https://unpkg.com/leaflet-easybutton/src/easy-button.js"></script>
-    
 
+    <!-- util functions -->
     <script src="assets/js/utils/geolocation.js"></script>
+    <script src="assets/js/utils/getCountryInfo.js"></script>
 
     <!-- create a using leaflet JS -->
     <script src="assets/js/loadLeafletMap.js"></script>
+
+    <!-- set the selected country when user clicks that country -->
+     <script src="assets/js/setSelectOnClick.js"></script>
 
     <!-- onchange handler for #countrySelect that adds border layer of selected country -->
     <script src="assets/js/createLeafletBorder.js"></script>
 
     <!-- Populate #countrySelect element with country names from countryBorders.geo.json -->
     <script src="assets/js/populateSelect.js"></script>
+
+    <script src="assets/js/setSelect.js"></script>
+
+    <!-- onchange handler for #clearSelect-->
+    <script src="assets/js/clearSelect.js"></script>
 
     <!-- Bootstrap JS CDN -->
     <script
@@ -103,7 +118,7 @@ JS
       crossorigin="anonymous"
     ></script>
 
-        <!-- remove pre-loader (spinner) after all content load -->
+    <!-- remove pre-loader (spinner) after all content load -->
     <script src="assets/js/removePreloader.js"></script>
   </body>
 </html>
