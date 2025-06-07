@@ -1,25 +1,25 @@
-// initialise variable for layer
-let allCountriesGeoJsonLayer;
 
-// event handler on the country select dropdown element
+let allCountriesGeoJsonLayer = null;
+
 $("#countrySelect").on("change", function () {
-  // extract value from the <select> element
-  const selectedCode = this.value;
 
-  if (!selectedCode) return;
+  // extract value from the <select> element - iso code or empty string
+  selectedCode = this.value;
+
+ if (allCountriesGeoJsonLayer) {
+    map.removeLayer(allCountriesGeoJsonLayer);
+  }
 
   fetch("data/countryBorders.geo.json")
     .then((res) => res.json())
     .then((data) => {
+
+      // create filtered array of all countries excluding currently selected one
       const filtered = data.features.filter(
-        (feature) => feature.properties.iso_a2 !== $("#countrySelect").val()
+        (feature) => feature.properties.iso_a2 !== this.value
       );
 
-      // Clear old layer if exists
-      if (allCountriesGeoJsonLayer) {
-        map.removeLayer(allCountriesGeoJsonLayer);
-      }
-
+      // asign the new filtered array to the layer
       allCountriesGeoJsonLayer = L.geoJSON(filtered, {
         style: {
           color: "#1c1c1c",
@@ -53,5 +53,6 @@ $("#countrySelect").on("change", function () {
           });
         },
       }).addTo(map);
+
     });
 });

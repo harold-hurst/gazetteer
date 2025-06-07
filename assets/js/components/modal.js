@@ -1,11 +1,6 @@
 function createCard(string, country) {
   return `
-      <div
-        id="infoModal"
-        class="modal"
-        data-bs-backdrop="false"
-        tabindex="-1"
-      >
+
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content shadow">
             <div class="modal-header bg-primary text-white">
@@ -221,6 +216,6 @@ function createCard(string, country) {
             </div>
           </div>
         </div>
-      </div>
+
     `;
 }

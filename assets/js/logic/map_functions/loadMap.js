@@ -141,8 +141,11 @@ L.easyBar(
       const country = returnCountry();
 
       if (country.countrySelected) {
-        $("#modalContainer").html(createCard("Demographics of", country));
-        $("#infoModal").modal("show");
+        $("#infoModal")
+          .html(createCard("Demographics of", country))
+          .modal("show");
+
+        alert("showing modal");
       } else {
         highlightSelect();
       }
@@ -151,8 +154,9 @@ L.easyBar(
       const country = returnCountry();
 
       if (country.countrySelected) {
-        $("#modalContainer").html(createCard("Latest news about", country));
-        $("#infoModal").modal("show");
+        $("#infoModal")
+          .html(createCard("Latest news about", country))
+          .modal("show");
       } else {
         highlightSelect();
       }
@@ -161,8 +165,7 @@ L.easyBar(
       const country = returnCountry();
 
       if (country.countrySelected) {
-        $("#modalContainer").html(createCard("Images of", country));
-        $("#infoModal").modal("show");
+        $("#infoModal").html(createCard("Images of", country)).modal("show");
       } else {
         highlightSelect();
       }
@@ -171,8 +174,9 @@ L.easyBar(
       const country = returnCountry();
 
       if (country.countrySelected) {
-        $("#modalContainer").html(createCard("Exchange rate for", country));
-        $("#infoModal").modal("show");
+        $("#infoModal")
+          .html(createCard("Exchange rate for", country))
+          .modal("show");
       } else {
         highlightSelect();
       }
@@ -181,8 +185,7 @@ L.easyBar(
       const country = returnCountry();
 
       if (country.countrySelected) {
-        $("#modalContainer").html(createCard("Weather in", country));
-        $("#infoModal").modal("show");
+        $("#infoModal").html(createCard("Weather in", country)).modal("show");
       } else {
         highlightSelect();
       }
@@ -192,3 +195,5 @@ L.easyBar(
     position: "topright",
   }
 ).addTo(map);
+
+$(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");

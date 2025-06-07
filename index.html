@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Gazetteer</title>
 
     <link
@@ -54,28 +57,31 @@
       <select id="countrySelect" class="form-select shadow-sm me-2">
         <!-- populate from an AJAX CALL to a PHP routine that returns a JSON object that is an array of just ISO codes and names from countryBorders.geo.json -->
         <option value="">Select a country</option>
-        </select>
-        <button
-          type="button"
-          class="btn btn-outline-primary shadow-sm"
-          id="clearSelect"
-        >
-          Clear
-        </button>
-      
+      </select>
+      <button
+        type="button"
+        class="btn btn-outline-primary shadow-sm"
+        id="clearSelect"
+      >
+        Clear
+      </button>
     </span>
 
     <div id="map"></div>
 
     <!-- example modal layout -->
-
-    <div id="modalContainer"></div>
+    <div
+      id="infoModal"
+      class="modal"
+      data-bs-backdrop="true"
+      tabindex="-1"
+    ></div>
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    <!-- Custom JS -->
-    <script src="assets/js/returnModal.js"></script>
+    <!-- Return modal component -->
+    <script src="assets/js/components/modal.js"></script>
 
     <!-- Leaflet JS CDN -->
     <script
@@ -91,19 +97,19 @@
     <script src="assets/js/utils/getCountryInfo.js"></script>
 
     <!-- create a using leaflet JS -->
-    <script src="assets/js/loadMap.js"></script>
+    <script src="assets/js/logic/map_functions/loadMap.js"></script>
 
     <!-- onchange handler for #countrySelect that adds border layer of selected country -->
-    <script src="assets/js/createCountryBorder.js"></script>
-    <script src="assets/js/createAllBorders.js"></script>
+    <script src="assets/js/logic/map_functions/createCountryBorder.js"></script>
+    <script src="assets/js/logic/map_functions/createAllBorders.js"></script>
 
     <!-- Populate #countrySelect element with country names from countryBorders.geo.json -->
-    <script src="assets/js/populateSelect.js"></script>
+    <script src="assets/js/logic/populateSelect.js"></script>
 
-    <script src="assets/js/setSelect.js"></script>
+    <script src="assets/js/logic/setSelect.js"></script>
 
     <!-- onchange handler for #clearSelect-->
-    <script src="assets/js/clearSelect.js"></script>
+    <script src="assets/js/logic/clearSelect.js"></script>
 
     <!-- Bootstrap JS CDN -->
     <script
@@ -113,6 +119,6 @@
     ></script>
 
     <!-- remove pre-loader (spinner) after all content load -->
-    <script src="assets/js/removePreloader.js"></script>
+    <script src="assets/js/logic/removePreloader.js"></script>
   </body>
 </html>

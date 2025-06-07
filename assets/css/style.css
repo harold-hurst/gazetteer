@@ -21,7 +21,6 @@ body {
 
 #countrySelect {
   width: 200px;
-  /* margin: 0 auto; */
 }
 
 /* Preloader */
@@ -81,11 +80,9 @@ body {
 
 /* modal compoents */
 
-
-  .modal-dialog {
-    margin-bottom: 0px;
-  }
-
+.modal-dialog {
+  margin-bottom: 0px;
+}
 
 .btn-outline-primary {
   border-color: var(--bs-primary) !important;
@@ -112,11 +109,37 @@ body {
   box-shadow: 0 0 0 0.2rem rgba(128, 214, 67, 0.25); /* Optional: Adding a shadow effect for focus */
 }
 
-.leaflet-bar {
-  border: 2px solid rgba(128, 214, 67, 0.5) !important;
-}
-
 #countrySelect.focus-visible {
   outline: 2px solid #80d643; /* Primary color outline */
   box-shadow: 0 0 0 3px rgba(128, 214, 67, 0.4); /* Light green glow */
+}
+
+/* a tag */
+.leaflet-control-layers-toggle {
+  background-image: none !important;
+  text-align: center;
+  line-height: 44px;
+  color: black !important;
+}
+
+/* Radio buttons */
+input[type="radio"] {
+  appearance: none; /* Remove the default radio button appearance */
+  width: 15px; /* Size of the radio button */
+  height: 15px; /* Size of the radio button */
+  border-radius: 4px; /* Make it circular */
+  border: 2px solid #b2f29b; /* Border color using the provided color */
+  background-color: white; /* Background color */
+  cursor: pointer; /* Show pointer on hover */
+  transition: background-color 0.3s, border-color 0.3s; /* Smooth transition */
+}
+
+/* When the radio button is checked */
+input[type="radio"]:checked {
+  background-color: #80d643; /* Background color when selected */
+}
+
+/* Hover effect for the radio button */
+input[type="radio"]:hover {
+  background-color: #b2f29b; /* Lighter green when hovered */
 }
