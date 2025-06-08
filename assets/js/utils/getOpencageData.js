@@ -1,8 +1,8 @@
 // return country info from coords
-function getCountryInfo(location) {
+function getOpencageData(location) {
   return new Promise((resolve, reject) => {
     $.ajax({
-      url: "libs/php/openCageApi.php",
+      url: "libs/php/api-connections/opencage-geocode-request.php",
       type: "POST",
       dataType: "json",
       data: location,

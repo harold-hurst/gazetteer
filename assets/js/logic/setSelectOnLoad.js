@@ -6,7 +6,7 @@ getCurrentLocation()
       lng: position.coords.longitude,
     };
 
-    getCountryInfo(location)
+    getOpencageData(location)
       .then((data) => {
         const isoCode = data.data.results[0].components["ISO_3166-1_alpha-2"];
         $("#countrySelect").val(isoCode).trigger("change");

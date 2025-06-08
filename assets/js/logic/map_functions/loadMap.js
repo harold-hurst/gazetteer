@@ -8,7 +8,7 @@ googleStreet = L.tileLayer(
   {
     maxZoom: 20,
     subdomains: ["mt0", "mt1", "mt2", "mt3"],
-    attribution: "Google Maps",
+    attribution: "Google Streets",
   }
 );
 
@@ -19,7 +19,7 @@ googleHybrid = L.tileLayer(
   {
     maxZoom: 20,
     subdomains: ["mt0", "mt1", "mt2", "mt3"],
-    attribution: "Google Maps",
+    attribution: "Google Hybrid",
   }
 );
 
@@ -28,7 +28,7 @@ googleHybrid = L.tileLayer(
 googleSat = L.tileLayer("http://{s}.google.com/vt?lyrs=s&x={x}&y={y}&z={z}", {
   maxZoom: 20,
   subdomains: ["mt0", "mt1", "mt2", "mt3"],
-  attribution: "Google Maps",
+  attribution: "Google Satellite",
 });
 
 // Terrain
@@ -38,7 +38,7 @@ googleTerrain = L.tileLayer(
   {
     maxZoom: 20,
     subdomains: ["mt0", "mt1", "mt2", "mt3"],
-    attribution: "Google Maps",
+    attribution: "Google Terrain",
   }
 );
 
@@ -119,77 +119,36 @@ L.easyBar(
   }
 ).addTo(map);
 
-// text of currently selected <option> of the <select>
-function returnCountry() {
-  const country = $("#countrySelect option:selected").text();
-  const countrySelected = $("#countrySelect").val() !== "";
-  return { country, countrySelected };
-}
-
-function highlightSelect() {
-  $("#countrySelect").addClass("focus-visible"); // Add the class on button click
-
-  // Optional: Remove the class after some time or on focus/blur
-  setTimeout(function () {
-    $("#countrySelect").removeClass("focus-visible"); // Optional: Remove class after 2 seconds
-  }, 2000);
-}
-
 L.easyBar(
   [
     L.easyButton('<i class="bi bi-info-circle"></i>', function () {
-      const country = returnCountry();
 
-      if (country.countrySelected) {
-        $("#infoModal")
-          .html(createCard("Demographics of", country))
-          .modal("show");
+      const code = $("#countrySelect").val();
+      // return a promise
 
-        alert("showing modal");
-      } else {
-        highlightSelect();
-      }
+
+      getCountrylayerData(code)
+        .then((data) => {
+
+
+          $("#infoModal")
+            .html(createCard("General Information", data[0]))
+            .modal("show");
+
+          console.log("data from get country layer api:");
+          console.log(data[0]);
+        })
+        .catch(function (error) {
+          console.log(error); // Handle the error if it happens
+        });
+
+
+
     }),
-    L.easyButton('<i class="bi bi-newspaper"></i>', function () {
-      const country = returnCountry();
-
-      if (country.countrySelected) {
-        $("#infoModal")
-          .html(createCard("Latest news about", country))
-          .modal("show");
-      } else {
-        highlightSelect();
-      }
-    }),
-    L.easyButton('<i class="bi bi-image"></i>', function () {
-      const country = returnCountry();
-
-      if (country.countrySelected) {
-        $("#infoModal").html(createCard("Images of", country)).modal("show");
-      } else {
-        highlightSelect();
-      }
-    }),
-    L.easyButton('<i class="bi bi-coin"></i>', function () {
-      const country = returnCountry();
-
-      if (country.countrySelected) {
-        $("#infoModal")
-          .html(createCard("Exchange rate for", country))
-          .modal("show");
-      } else {
-        highlightSelect();
-      }
-    }),
-    L.easyButton('<i class="bi bi-cloud-sun"></i>', function () {
-      const country = returnCountry();
-
-      if (country.countrySelected) {
-        $("#infoModal").html(createCard("Weather in", country)).modal("show");
-      } else {
-        highlightSelect();
-      }
-    }),
+    L.easyButton('<i class="bi bi-newspaper"></i>', function () {}),
+    L.easyButton('<i class="bi bi-image"></i>', function () {}),
+    L.easyButton('<i class="bi bi-coin"></i>', function () {}),
+    L.easyButton('<i class="bi bi-cloud-sun"></i>', function () {}),
   ],
   {
     position: "topright",
