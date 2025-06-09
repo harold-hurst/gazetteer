@@ -42,11 +42,21 @@ googleTerrain = L.tileLayer(
   }
 );
 
+weatherLayer = L.tileLayer(
+  `https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=745267ab8cb24cb1769dbb5962301b17`,
+  {
+    attribution: "&copy; OpenWeatherMap",
+
+    // opacity: 1,
+  }
+);
+
 const basemaps = {
   Streets: googleStreet,
   Satellite: googleSat,
   Hybrid: googleHybrid,
   Terrain: googleTerrain,
+  Weather: weatherLayer,
 };
 
 // add streets to map as a default
@@ -122,33 +132,43 @@ L.easyBar(
 L.easyBar(
   [
     L.easyButton('<i class="bi bi-info-circle"></i>', function () {
-
       const code = $("#countrySelect").val();
+      const countryName = $("#countrySelect option:selected").text();
       // return a promise
-
 
       getCountrylayerData(code)
         .then((data) => {
-
-
           $("#infoModal")
-            .html(createCard("General Information", data[0]))
+            .html(createDataTable(countryName, data.data[0]))
             .modal("show");
-
-          console.log("data from get country layer api:");
-          console.log(data[0]);
         })
         .catch(function (error) {
           console.log(error); // Handle the error if it happens
         });
-
-
-
     }),
     L.easyButton('<i class="bi bi-newspaper"></i>', function () {}),
     L.easyButton('<i class="bi bi-image"></i>', function () {}),
     L.easyButton('<i class="bi bi-coin"></i>', function () {}),
-    L.easyButton('<i class="bi bi-cloud-sun"></i>', function () {}),
+    L.easyButton('<i class="bi bi-cloud-sun"></i>', function () {
+      const code = $("#countrySelect").val();
+      const countryName = $("#countrySelect option:selected").text();
+
+
+
+      getOpenWeatherData("Paris", "FR")
+        .then((data) => {
+
+          $("#infoModal").html(createWeatherTable(countryName, data.list)).modal("show");
+
+
+          // console.log("data from get country layer api:");
+          console.log(JSON.stringify(data));
+          console.log(data);
+        })
+        .catch(function (error) {
+          console.log(error); // Handle the error if it happens
+        });
+    }),
   ],
   {
     position: "topright",

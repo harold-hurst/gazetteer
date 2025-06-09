@@ -43,13 +43,22 @@ $("#countrySelect").on("change", function () {
               // On mouseout, reset the style to initial
               allCountriesGeoJsonLayer.resetStyle(layer); // Use the initial style
             },
-            click: function () {
+            click: function (e) {
+
+
+
+
               // Handle the click event
 
               $("#countrySelect")
                 .val(feature.properties.iso_a2)
                 .trigger("change");
             },
+
+
+
+
+
           });
         },
       }).addTo(map);

@@ -1,6 +1,5 @@
-function createCard(string, countryInfo) {
+function createDataTable(countryName, countryInfo) {
   function tableRows(dataObject) {
-    console.log(dataObject);
 
     const orderedKeys = [
       "flag",
@@ -10,6 +9,8 @@ function createCard(string, countryInfo) {
       "area",
       "currencies",
       "continents",
+      "wind",
+      "weather"
     ];
 
     return orderedKeys
@@ -54,7 +55,7 @@ function createCard(string, countryInfo) {
         <div class="modal-dialog modal-dialog-scrollable">
           <div class="modal-content shadow">
             <div class="modal-header bg-primary text-white">
-              <h5 class="modal-title">${countryInfo.name.common} ${string}</h5>
+              <h5 class="modal-title">${countryName} Overview</h5>
               <button
                 type="button"
                 class="btn-close btn-close-white"
