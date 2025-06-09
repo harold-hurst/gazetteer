@@ -75,27 +75,26 @@
       class="modal"
       data-bs-backdrop="true"
       tabindex="-1"
-    >
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  </div>
+    ></div>
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    <!-- Return modal component -->
+    <!-- Component -->
     <script src="assets/js/components/dataTable.js"></script>
     <script src="assets/js/components/weatherTable.js"></script>
+    <script src="assets/js/components/scrollMap.js"></script>
 
     <!-- Leaflet JS CDN -->
     <script
@@ -103,23 +102,26 @@
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
     ></script>
+
     <!-- Leaflet JS EasyButton plugin -->
     <script src="https://unpkg.com/leaflet-easybutton/src/easy-button.js"></script>
 
     <!-- util functions -->
     <script src="assets/js/utils/geolocation.js"></script>
-    <script src="assets/js/utils/getCountryLayerData.js"></script>
 
     <!-- APIs -->
     <script src="assets/js/apis/getOpencageData.js"></script>
     <script src="assets/js/apis/getOpenWeatherData.js"></script>
+    <script src="assets/js/apis/getCountryLayerData.js"></script>
 
     <!-- create a using leaflet JS -->
     <script src="assets/js/logic/map_functions/loadMap.js"></script>
 
-    <!-- onchange handler for #countrySelect that adds border layer of selected country -->
+    <!-- map functions -->
     <script src="assets/js/logic/map_functions/createCountryBorder.js"></script>
     <script src="assets/js/logic/map_functions/createAllBorders.js"></script>
+    <script src="assets/js/logic/map_functions/moveRight.js"></script>
+    <script src="assets/js/logic/map_functions/moveLeft.js"></script>
 
     <!-- Populate #countrySelect element with country names from countryBorders.geo.json -->
     <script src="assets/js/logic/populateSelect.js"></script>
@@ -138,12 +140,5 @@
 
     <!-- remove pre-loader (spinner) after all content load -->
     <script src="assets/js/logic/removePreloader.js"></script>
-
-
-
-
-
-
-
   </body>
 </html>

@@ -169,7 +169,7 @@ L.easyBar(
             getOpenWeatherData(capitalLocation)
               .then((data) => {
                 $("#infoModal")
-                  .html(createWeatherTable(capital, data.daily))
+                  .html(createWeatherTable(capital, data.data.daily))
                   .modal("show");
               })
               .catch(function (error) {

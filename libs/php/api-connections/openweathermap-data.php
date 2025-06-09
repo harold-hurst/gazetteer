@@ -1,6 +1,13 @@
 <?php
 
 
+// Enable comprehensive error reporting
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
+
+// Record start time to calculate the response time
+$executionStartTime = microtime(true);
+
 // data by city not available for 3.0
 $url = 'https://api.openweathermap.org/data/3.0/onecall?lat=' . $_REQUEST['lat'] . '&lon=' . $_REQUEST['lng'] . '&exclude=current,minutely,hourly,alerts&appid=745267ab8cb24cb1769dbb5962301b17';
 
@@ -23,13 +30,28 @@ curl_setopt_array($ch, array(
 // Execute the request
 $response = curl_exec($ch);
 
-// Handle errors
-if (curl_errno($ch)) {
-    echo 'cURL Error: ' . curl_error($ch);
-} else {
-    header('Content-Type: application/json'); // Set response type
-    echo $response;
-}
+
 
 // Close cURL session
 curl_close($ch);
+
+
+        // Decode the JSON response
+        $decode = json_decode($response, true);
+
+        // Prepare the output with status and data
+        $output = array(
+            'status' => array(
+                'code' => "200",
+                'name' => "ok",
+                'description' => "success",
+                'returnedIn' => intval((microtime(true) - $executionStartTime) * 1000) . " ms"
+            ),
+            'data' => $decode
+        );
+
+        // Set content type to JSON
+        header('Content-Type: application/json; charset=UTF-8');
+
+        // Output the response as JSON
+        echo json_encode($output);
