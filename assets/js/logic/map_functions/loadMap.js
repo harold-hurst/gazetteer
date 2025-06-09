@@ -132,42 +132,54 @@ L.easyBar(
 L.easyBar(
   [
     L.easyButton('<i class="bi bi-info-circle"></i>', function () {
-      const code = $("#countrySelect").val();
-      const countryName = $("#countrySelect option:selected").text();
-      // return a promise
+      // do nothing if no country selected
+      if ($("#countrySelect").val() !== "") {
+        const countryCode = $("#countrySelect").val();
+        const countryName = $("#countrySelect option:selected").text();
 
-      getCountrylayerData(code)
-        .then((data) => {
-          $("#infoModal")
-            .html(createDataTable(countryName, data.data[0]))
-            .modal("show");
-        })
-        .catch(function (error) {
-          console.log(error); // Handle the error if it happens
-        });
+        getCountrylayerData(countryCode)
+          .then((data) => {
+            $("#infoModal")
+              .html(createDataTable(countryName, data.data[0]))
+              .modal("show");
+          })
+          .catch(function (error) {
+            console.log(error); // Handle the error if it happens
+          });
+      }
     }),
     L.easyButton('<i class="bi bi-newspaper"></i>', function () {}),
     L.easyButton('<i class="bi bi-image"></i>', function () {}),
     L.easyButton('<i class="bi bi-coin"></i>', function () {}),
     L.easyButton('<i class="bi bi-cloud-sun"></i>', function () {
-      const code = $("#countrySelect").val();
-      const countryName = $("#countrySelect option:selected").text();
+      // do nothing if no country selected
+      if ($("#countrySelect").val() !== "") {
+        const countryCode = $("#countrySelect").val();
+        const countryName = $("#countrySelect option:selected").text();
 
+        getCountrylayerData(countryCode)
+          .then((data) => {
+            const capital = data.data[0].capital[0] + ", " + countryName;
+            let capitalLocation = data.data[0].capitalInfo.latlng;
+            capitalLocation = {
+              lat: capitalLocation[0],
+              lng: capitalLocation[1],
+            };
 
-
-      getOpenWeatherData("Paris", "FR")
-        .then((data) => {
-
-          $("#infoModal").html(createWeatherTable(countryName, data.list)).modal("show");
-
-
-          // console.log("data from get country layer api:");
-          console.log(JSON.stringify(data));
-          console.log(data);
-        })
-        .catch(function (error) {
-          console.log(error); // Handle the error if it happens
-        });
+            getOpenWeatherData(capitalLocation)
+              .then((data) => {
+                $("#infoModal")
+                  .html(createWeatherTable(capital, data.daily))
+                  .modal("show");
+              })
+              .catch(function (error) {
+                console.log(error); // Handle the error if it happens
+              });
+          })
+          .catch(function (error) {
+            console.log(error); // Handle the error if it happens
+          });
+      }
     }),
   ],
   {

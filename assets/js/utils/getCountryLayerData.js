@@ -11,6 +11,7 @@ function getCountrylayerData(code) {
       },
       error: function (xhr, status, error) {
         console.error("AJAX error:", status, error);
+        reject(error);
       },
     });
   });

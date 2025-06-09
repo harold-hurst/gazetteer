@@ -1,10 +1,8 @@
 <?php
 
-// The OpenWeatherMap API URL with coordinates and your API key
+
 // data by city not available for 3.0
-
-$url = 'https://api.openweathermap.org/data/2.5/forecast?q=Berlin,DE&appid=745267ab8cb24cb1769dbb5962301b17';
-
+$url = 'https://api.openweathermap.org/data/3.0/onecall?lat=' . $_REQUEST['lat'] . '&lon=' . $_REQUEST['lng'] . '&exclude=current,minutely,hourly,alerts&appid=745267ab8cb24cb1769dbb5962301b17';
 
 // Initialize cURL session
 $ch = curl_init();
