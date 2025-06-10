@@ -6,14 +6,14 @@ error_reporting(E_ALL);
 
 // Record start time to calculate the response time
 $executionStartTime = microtime(true);
-        
+
 
 $ch = curl_init();
 
 // country layers endpoint
 // 'https://api.countrylayer.com/v2/alpha/' . $_REQUEST['code'] . '?access_key=335e6a96ee740178ffcb4a3209bdfaa1&FullText=true',
 
-$url ='https://restcountries.com/v3.1/alpha/' . $_REQUEST['code'];
+$url = 'https://restcountries.com/v3.1/alpha/' . $_REQUEST['code'];
 
 curl_setopt_array($ch, array(
     CURLOPT_URL => $url,
@@ -31,22 +31,22 @@ $response = curl_exec($ch);
 
 curl_close($ch);
 
-        // Decode the JSON response
-        $decode = json_decode($response, true);
+// Decode the JSON response
+$decode = json_decode($response, true);
 
-        // Prepare the output with status and data
-        $output = array(
-            'status' => array(
-                'code' => "200",
-                'name' => "ok",
-                'description' => "success",
-                'returnedIn' => intval((microtime(true) - $executionStartTime) * 1000) . " ms"
-            ),
-            'data' => $decode
-        );
+// Prepare the output with status and data
+$output = array(
+    'status' => array(
+        'code' => "200",
+        'name' => "ok",
+        'description' => "success",
+        'returnedIn' => intval((microtime(true) - $executionStartTime) * 1000) . " ms"
+    ),
+    'data' => $decode
+);
 
-        // Set content type to JSON
-        header('Content-Type: application/json; charset=UTF-8');
+// Set content type to JSON
+header('Content-Type: application/json; charset=UTF-8');
 
-        // Output the response as JSON
-        echo json_encode($output);
+// Output the response as JSON
+echo json_encode($output);

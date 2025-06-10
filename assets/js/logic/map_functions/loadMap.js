@@ -86,6 +86,9 @@ L.easyBar(
           .then((position) => {
             // Handle the success, location object contains the latitude and longitude
 
+            // clear out selected country
+            $("#countrySelect").val("").trigger("change");
+
             const location = {
               lat: position.coords.latitude,
               lng: position.coords.longitude,
@@ -96,23 +99,37 @@ L.easyBar(
             // Move the map to the user's current location
             map.setView(location, 15);
 
-            // Remove previous marker if it exists
-            if (userMarker) {
-              map.removeLayer(userMarker);
-            }
+            // remove previous circle if it exists
 
-            // Add a new marker at the user's location
-            userMarker = L.marker(location)
-              .addTo(map)
-              .bindPopup(`You're here`) // Add popup
-              .openPopup(); // Open popup automatically
+            // map.removeLayer(userCircle);
 
             userCircle = L.circle(location, {
-              color: "red",
-              fillColor: "#f03",
-              fillOpacity: 0.5,
               radius: accuracy,
+              color: "#80d643",
+              opacity: 0.5,
+              fillColor: "#80d643",
+              fillOpacity: 0.3,
             }).addTo(map);
+
+            getOpencageData(location).then((data) => {
+              // Remove previous marker if it exists
+              if (userMarker) {
+                map.removeLayer(userMarker);
+              }
+
+              var greenIcon = L.icon({
+                iconUrl: "assets/images/geo-alt-fill.svg",
+                iconSize: [32, 32], // size of the icon
+                iconAnchor: [16, 26], // point of the icon which will correspond to marker's location
+                popupAnchor: [0, -26], // point from which the popup should open relative to the iconAnchor
+              });
+
+              // Add a new marker at the user's location
+              userMarker = L.marker(location, { icon: greenIcon })
+                .addTo(map)
+                .bindPopup(data.data.results[0].formatted) // Add popup
+                .openPopup(); // Open popup automatically
+            });
           })
           .catch((error) => {
             // Handle errors (e.g. if geolocation fails)
@@ -150,7 +167,30 @@ L.easyBar(
     }),
     L.easyButton('<i class="bi bi-newspaper"></i>', function () {}),
     L.easyButton('<i class="bi bi-image"></i>', function () {}),
-    L.easyButton('<i class="bi bi-coin"></i>', function () {}),
+    L.easyButton('<i class="bi bi-coin"></i>', function () {
+      const countryCode = $("#countrySelect").val();
+      const countryName = $("#countrySelect option:selected").text();
+
+      getCountrylayerData(countryCode)
+        .then((data) => {
+          const currency = Object.keys(data.data[0].currencies)[0];
+          const flag = data.data[0].flag;
+          getExchangeRateData(currency)
+            .then((data) => {
+              const currencyObject = data.data.rates;
+
+              $("#infoModal")
+                .html(createCurrencyCard(countryName, currencyObject, flag))
+                .modal("show");
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }),
     L.easyButton('<i class="bi bi-cloud-sun"></i>', function () {
       // do nothing if no country selected
       if ($("#countrySelect").val() !== "") {

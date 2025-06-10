@@ -15,8 +15,6 @@ function moveLeft() {
   // Calculate the new longitude by shifting half the longitude range to the left
   const newLongitude = currentCenter.lng - longitudeRange / 4;
 
-  console.log(newLongitude);
-
   // Create a new LatLng object with the updated longitude and the current latitude
   const newCenter = L.latLng(currentCenter.lat, newLongitude);
 

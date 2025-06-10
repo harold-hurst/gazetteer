@@ -9,8 +9,6 @@ function createDataTable(countryName, countryInfo) {
       "area",
       "currencies",
       "continents",
-      "wind",
-      "weather"
     ];
 
     return orderedKeys
@@ -51,32 +49,32 @@ function createDataTable(countryName, countryInfo) {
   }
 
   return `
-
-        <div class="modal-dialog modal-dialog-scrollable">
-          <div class="modal-content shadow">
-            <div class="modal-header bg-primary text-white">
-              <h5 class="modal-title">${countryName} Overview</h5>
-              <button
-                type="button"
-                class="btn-close btn-close-white"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <table class="table table-striped">
-              ${tableRows(countryInfo)}
-              </table>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-outline-primary btn-sm"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>`;
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content shadow">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">${countryName} Overview</h5>
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-striped">
+            ${tableRows(countryInfo)}
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-primary btn-sm"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+`;
 }

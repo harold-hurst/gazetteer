@@ -72,21 +72,13 @@
     <!-- example modal layout -->
     <div
       id="infoModal"
-      class="modal"
       data-bs-backdrop="true"
       tabindex="-1"
+      class="modal fade"
+      tabindex="-1"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
     ></div>
-
-
-
-
-
-
-
-
-
-
-
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -94,7 +86,7 @@
     <!-- Component -->
     <script src="assets/js/components/dataTable.js"></script>
     <script src="assets/js/components/weatherTable.js"></script>
-    <script src="assets/js/components/scrollMap.js"></script>
+    <script src="assets/js/components/currencyCard.js"></script>
 
     <!-- Leaflet JS CDN -->
     <script
@@ -113,6 +105,7 @@
     <script src="assets/js/apis/getOpencageData.js"></script>
     <script src="assets/js/apis/getOpenWeatherData.js"></script>
     <script src="assets/js/apis/getCountryLayerData.js"></script>
+    <script src="assets/js/apis/getOpenexchangerateData.js"></script>
 
     <!-- create a using leaflet JS -->
     <script src="assets/js/logic/map_functions/loadMap.js"></script>
@@ -120,8 +113,10 @@
     <!-- map functions -->
     <script src="assets/js/logic/map_functions/createCountryBorder.js"></script>
     <script src="assets/js/logic/map_functions/createAllBorders.js"></script>
-    <script src="assets/js/logic/map_functions/moveRight.js"></script>
-    <script src="assets/js/logic/map_functions/moveLeft.js"></script>
+
+    <script src="assets/js/logic/map_functions/scrollMapView.js"></script>
+    <script src="assets/js/logic/map_functions/functions/moveRight.js"></script>
+    <script src="assets/js/logic/map_functions/functions/moveLeft.js"></script>
 
     <!-- Populate #countrySelect element with country names from countryBorders.geo.json -->
     <script src="assets/js/logic/populateSelect.js"></script>
