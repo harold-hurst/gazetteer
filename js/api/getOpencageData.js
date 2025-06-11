@@ -2,7 +2,7 @@
 function getOpencageData(location) {
   return new Promise((resolve, reject) => {
     $.ajax({
-      url: "libs/php/api-connections/opencage-geocode-request.php",
+      url: "php/api-connections/opencage-geocode-request.php",
       type: "POST",
       dataType: "json",
       data: location,

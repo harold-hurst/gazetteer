@@ -1,5 +1,5 @@
 $.ajax({
-  url: "libs/php/getCountryNames.php", // PHP file that returns JSON
+  url: "php/utils/getCountryNames.php", // PHP file that returns JSON
   method: "GET", // or 'POST' if needed
   dataType: "json", // Expect JSON response
   success: function (countryMap) {

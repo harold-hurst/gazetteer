@@ -1,11 +1,11 @@
 // return country info from coords
-function getPixabayData(countryName) {
-  return new Promise((resolve, reject) => {
+function getOpenWeatherData(capitalLocation) {
+return new Promise((resolve, reject) => {
     $.ajax({
-      url: "libs/php/api-connections/pixabay-image-data-request.php",
+      url: "php/api-connections/openweathermap-data.php",
       method: "GET",
       dataType: "json",
-      data: { countryName: countryName },
+      data: capitalLocation,
       success: function (data) {
         resolve(data);
       },

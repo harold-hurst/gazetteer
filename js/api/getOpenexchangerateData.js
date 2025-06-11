@@ -1,10 +1,10 @@
 // return country info from coords
-function getCountrylayerData(code) {
+function getExchangeRateData(currency) {
   return new Promise((resolve, reject) => {
     $.ajax({
-      url: "libs/php/api-connections/countrylayer-data-request.php",
+      url: "php/api-connections/openexchagerates-data-request.php",
       type: "GET",
-      data: { code: code },
+      data: { currency: currency },
       dataType: "json",
       success: function (response) {
         resolve(response);

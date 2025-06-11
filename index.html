@@ -40,7 +40,7 @@
     />
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="assets/css/bootstrap-5.3.6.min.css" />
+    <link rel="stylesheet" href="assets/css/libs/bootstrap-5.3.6.min.css" />
 
     <!-- Bootstrap Icons CDN -->
     <link
@@ -80,15 +80,15 @@
       aria-hidden="true"
     ></div>
 
-    <!-- jQuery -->
+    <!-- jQuery CDN -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <!-- Component -->
-    <script src="assets/js/components/dataTable.js"></script>
-    <script src="assets/js/components/weatherTable.js"></script>
-    <script src="assets/js/components/currencyCard.js"></script>
-    <script src="assets/js/components/newsContainer.js"></script>
-    <script src="assets/js/components/photoCarousel.js"></script>
+    <script src="js/components/dataTable.js"></script>
+    <script src="js/components/weatherTable.js"></script>
+    <script src="js/components/currencyCard.js"></script>
+    <script src="js/components/newsContainer.js"></script>
+    <script src="js/components/photoCarousel.js"></script>
 
     <!-- Leaflet JS CDN -->
     <script
@@ -101,34 +101,28 @@
     <script src="https://unpkg.com/leaflet-easybutton/src/easy-button.js"></script>
 
     <!-- util functions -->
-    <script src="assets/js/utils/geolocation.js"></script>
+    <script src="js/utils/geolocation.js"></script>
 
     <!-- APIs -->
-    <script src="assets/js/apis/getOpencageData.js"></script>
-    <script src="assets/js/apis/getOpenWeatherData.js"></script>
-    <script src="assets/js/apis/getCountryLayerData.js"></script>
-    <script src="assets/js/apis/getOpenexchangerateData.js"></script>
-    <script src="assets/js/apis/getCountryNewsData.js"></script>
-    <script src="assets/js/apis/getPhotoData.js"></script>
+    <script src="js/api/getOpencageData.js"></script>
+    <script src="js/api/getOpenWeatherData.js"></script>
+    <script src="js/api/getCountryLayerData.js"></script>
+    <script src="js/api/getOpenexchangerateData.js"></script>
+    <script src="js/api/getCountryNewsData.js"></script>
+    <script src="js/api/getPhotoData.js"></script>
 
-    <!-- create a using leaflet JS -->
-    <script src="assets/js/logic/map_functions/loadMap.js"></script>
+    <!-- Frontend -->
+    <script src="js/frontend/map_functions/loadMap.js"></script>
 
-    <!-- map functions -->
-    <script src="assets/js/logic/map_functions/createCountryBorder.js"></script>
-    <script src="assets/js/logic/map_functions/createAllBorders.js"></script>
+    <script src="js/frontend/map_functions/createCountryBorder.js"></script>
+    <script src="js/frontend/map_functions/createAllBorders.js"></script>
+    <script src="js/frontend/map_functions/scrollMapView.js"></script>
 
-    <script src="assets/js/logic/map_functions/scrollMapView.js"></script>
-    <script src="assets/js/logic/map_functions/functions/moveRight.js"></script>
-    <script src="assets/js/logic/map_functions/functions/moveLeft.js"></script>
+    <script src="js/frontend/populateSelect.js"></script>
+    <script src="js/frontend/setSelectOnLoad.js"></script>
+    <script src="js/frontend/clearSelect.js"></script>
 
-    <!-- Populate #countrySelect element with country names from countryBorders.geo.json -->
-    <script src="assets/js/logic/populateSelect.js"></script>
-
-    <script src="assets/js/logic/setSelectOnLoad.js"></script>
-
-    <!-- onchange handler for #clearSelect-->
-    <script src="assets/js/logic/clearSelect.js"></script>
+    <script src="js/frontend/removePreloader.js"></script>
 
     <!-- Bootstrap JS CDN -->
     <script
@@ -136,8 +130,5 @@
       integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
       crossorigin="anonymous"
     ></script>
-
-    <!-- remove pre-loader (spinner) after all content load -->
-    <script src="assets/js/logic/removePreloader.js"></script>
   </body>
 </html>

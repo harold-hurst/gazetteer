@@ -1,12 +1,11 @@
-function getNewsApiData(countryCode) {
+// return country info from coords
+function getPixabayData(countryName) {
   return new Promise((resolve, reject) => {
     $.ajax({
-      url: "libs/php/api-connections/newsapi-request.php",
+      url: "php/api-connections/pixabay-image-data-request.php",
       method: "GET",
       dataType: "json",
-      data: {
-        countryCode: countryCode.toLowerCase(),
-      },
+      data: { countryName: countryName },
       success: function (data) {
         resolve(data);
       },
