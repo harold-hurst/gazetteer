@@ -1,11 +1,12 @@
-// return country info from coords
-function getOpenWeatherData(capitalLocation) {
-return new Promise((resolve, reject) => {
+function getNewsApiData(countryCode) {
+  return new Promise((resolve, reject) => {
     $.ajax({
-      url: "libs/php/api-connections/openweathermap-data.php",
+      url: "libs/php/api-connections/newsapi-request.php",
       method: "GET",
       dataType: "json",
-      data: capitalLocation,
+      data: {
+        countryCode: countryCode
+      },
       success: function (data) {
         resolve(data);
       },

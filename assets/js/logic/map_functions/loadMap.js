@@ -165,7 +165,24 @@ L.easyBar(
           });
       }
     }),
-    L.easyButton('<i class="bi bi-newspaper"></i>', function () {}),
+    L.easyButton('<i class="bi bi-newspaper"></i>', function () {
+      const countryCode = $("#countrySelect").val();
+      const countryName = $("#countrySelect option:selected").text();
+
+      // const data = getNewsApiData()
+      getNewsApiData(countryCode)
+        .then((data) => {
+          console.log(data);
+
+
+          $("#infoModal")
+            .html(createNewsContainer(countryName, data.news))
+            .modal("show");
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }),
     L.easyButton('<i class="bi bi-image"></i>', function () {}),
     L.easyButton('<i class="bi bi-coin"></i>', function () {
       const countryCode = $("#countrySelect").val();
@@ -174,10 +191,15 @@ L.easyBar(
       getCountrylayerData(countryCode)
         .then((data) => {
           const currency = Object.keys(data.data[0].currencies)[0];
+
+          let currencyObject = data.data[0].currencies[currency];
+
           const flag = data.data[0].flag;
           getExchangeRateData(currency)
             .then((data) => {
-              const currencyObject = data.data.rates;
+              currencyObject = { ...currencyObject, ...data.data.rates };
+
+              console.log(currencyObject);
 
               $("#infoModal")
                 .html(createCurrencyCard(countryName, currencyObject, flag))
