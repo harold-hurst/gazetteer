@@ -1,4 +1,5 @@
 function createNewsContainer(countryName, newsData) {
+  
   function renderArticlesToHTML(articles) {
     return articles
       .map((article) => {
@@ -6,24 +7,27 @@ function createNewsContainer(countryName, newsData) {
           title,
           description,
           url, // Correct key for the article's URL
-          published, // Correct key for the published date
-          image, // Correct key for image
-          author,
-          category, // Correct key for category (it’s an array)
+          published_at, // Correct key for the published date
+          image_url, // Correct key for image
+          source, // Source of the article
+          categories, // Correct key for categories (it's an array)
         } = article;
 
         // Format categories if available
-        const categoryList = category ? category.join(", ") : "General";
+        const categoryList =
+          categories && categories.length > 0
+            ? categories.join(", ")
+            : "General";
 
         // Format published date
-        const publishedDate = new Date(published).toLocaleString();
+        const publishedDate = new Date(published_at).toLocaleString();
 
         return `
         <div class="col-xl-6">
           <div class="card h-100 shadow-sm">
             ${
-              image
-                ? `<img src="${image}" class="card-img-top" alt="News image" />`
+              image_url
+                ? `<img src="${image_url}" class="card-img-top" alt="News image" />`
                 : ""
             }
             <div class="card-body d-flex flex-column">
@@ -31,12 +35,12 @@ function createNewsContainer(countryName, newsData) {
               ${description ? `<p class="card-text">${description}</p>` : ""}
               <p class="card-text mt-auto">
                 <small class="text-muted">
-                  ${author ? "By " + author : "Unknown Author"}<br />
+                  ${source || "Unknown Source"}<br />
                   Categories: ${categoryList}<br />
                   ${publishedDate}
                 </small>
               </p>
-              <a href="${url}" target="_blank" class="btn btn-primary btn-sm mt-2">Read More</a>
+              <a href="${url}" target="_blank" class="btn btn-outline-primary btn-sm mt-2">Read More</a>
             </div>
           </div>
         </div>

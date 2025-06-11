@@ -1,10 +1,11 @@
 <?php
 
-$countryCode = $_REQUEST['countryCode'];
+$countryName = $_REQUEST['countryName'];
+$encodedCountryName = urlencode($countryName);
 
-$apiKey = 'xd9Mpv7ILLnyEM6xEFAEJhC1GfPle35I72rnecLv';
+$apiKey = '1292047-f205a9798a320ae757901c5f6';
 
-$apiUrl = 'https://api.thenewsapi.com/v1/news/top?api_token=xd9Mpv7ILLnyEM6xEFAEJhC1GfPle35I72rnecLv&locale=' . $countryCode . '&limit=25';
+$apiUrl = 'https://pixabay.com/api/?key=' . $apiKey . '&category=places&q=' . $encodedCountryName . '&image_type=photo';
 // Initialize a cURL session
 $curl = curl_init();
 
@@ -37,5 +38,3 @@ if ($err = curl_error($curl)) {
 
 // Close the cURL session
 curl_close($curl);
-
-?>

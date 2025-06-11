@@ -1,6 +1,9 @@
 // create map instance
 var map = L.map("map").setView([52.95, -1.16], 13);
 
+let userMarker;
+let userCircle;
+
 // Street
 
 googleStreet = L.tileLayer(
@@ -71,9 +74,10 @@ const options = {
 // add the different layers to the map
 layerControl = L.control.layers(basemaps, null, options).addTo(map);
 
-// BUTTONS -----------------------------------------------
+// add custom icon to layerControl toggle button
+$(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
 
-let userMarker; // To store and remove the previous marker
+// BUTTONS -----------------------------------------------
 
 L.easyBar(
   [
@@ -84,8 +88,6 @@ L.easyBar(
       function (btn, map) {
         getCurrentLocation()
           .then((position) => {
-            // Handle the success, location object contains the latitude and longitude
-
             // clear out selected country
             $("#countrySelect").val("").trigger("change");
 
@@ -99,9 +101,10 @@ L.easyBar(
             // Move the map to the user's current location
             map.setView(location, 15);
 
-            // remove previous circle if it exists
-
-            // map.removeLayer(userCircle);
+            // Remove the existing circle, if there is one
+            if (userCircle) {
+              map.removeLayer(userCircle);
+            }
 
             userCircle = L.circle(location, {
               radius: accuracy,
@@ -165,54 +168,6 @@ L.easyBar(
           });
       }
     }),
-    L.easyButton('<i class="bi bi-newspaper"></i>', function () {
-      const countryCode = $("#countrySelect").val();
-      const countryName = $("#countrySelect option:selected").text();
-
-      // const data = getNewsApiData()
-      getNewsApiData(countryCode)
-        .then((data) => {
-          console.log(data);
-
-
-          $("#infoModal")
-            .html(createNewsContainer(countryName, data.news))
-            .modal("show");
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    }),
-    L.easyButton('<i class="bi bi-image"></i>', function () {}),
-    L.easyButton('<i class="bi bi-coin"></i>', function () {
-      const countryCode = $("#countrySelect").val();
-      const countryName = $("#countrySelect option:selected").text();
-
-      getCountrylayerData(countryCode)
-        .then((data) => {
-          const currency = Object.keys(data.data[0].currencies)[0];
-
-          let currencyObject = data.data[0].currencies[currency];
-
-          const flag = data.data[0].flag;
-          getExchangeRateData(currency)
-            .then((data) => {
-              currencyObject = { ...currencyObject, ...data.data.rates };
-
-              console.log(currencyObject);
-
-              $("#infoModal")
-                .html(createCurrencyCard(countryName, currencyObject, flag))
-                .modal("show");
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    }),
     L.easyButton('<i class="bi bi-cloud-sun"></i>', function () {
       // do nothing if no country selected
       if ($("#countrySelect").val() !== "") {
@@ -243,10 +198,69 @@ L.easyBar(
           });
       }
     }),
+    L.easyButton('<i class="bi bi-newspaper"></i>', function () {
+      const countryCode = $("#countrySelect").val();
+      const countryName = $("#countrySelect option:selected").text();
+
+      getNewsApiData(countryCode)
+        .then((data) => {
+          console.log(data);
+
+          $("#infoModal")
+            .html(createNewsContainer(countryName, data.data))
+            .modal("show");
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }),
+    L.easyButton('<i class="bi bi-image"></i>', function () {
+      const countryCode = $("#countrySelect").val();
+      const countryName = $("#countrySelect option:selected").text();
+
+      getPixabayData(countryName)
+        .then((data) => {
+          console.log(data);
+
+          $("#infoModal")
+            .html(createPhotoCarousel(countryName, data.hits))
+            .modal("show");
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }),
+    L.easyButton('<i class="bi bi-coin"></i>', function () {
+      const countryCode = $("#countrySelect").val();
+      const countryName = $("#countrySelect option:selected").text();
+
+      getCountrylayerData(countryCode)
+        .then((data) => {
+          const currency = Object.keys(data.data[0].currencies)[0];
+
+          let currencyObject = data.data[0].currencies[currency];
+
+          const flag = data.data[0].flag;
+          getExchangeRateData(currency)
+            .then((data) => {
+              currencyObject = { ...currencyObject, ...data.data.rates };
+
+              console.log(currencyObject);
+
+              $("#infoModal")
+                .html(createCurrencyCard(countryName, currencyObject, flag))
+                .modal("show");
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }),
   ],
   {
     position: "topright",
   }
 ).addTo(map);
-
-$(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
