@@ -199,36 +199,42 @@ L.easyBar(
       }
     }),
     L.easyButton('<i class="bi bi-newspaper"></i>', function () {
-      const countryCode = $("#countrySelect").val();
-      const countryName = $("#countrySelect option:selected").text();
+      // do nothing if no country selected
+      if ($("#countrySelect").val() !== "") {
+        const countryCode = $("#countrySelect").val();
+        const countryName = $("#countrySelect option:selected").text();
 
-      getNewsApiData(countryCode)
-        .then((data) => {
-          console.log(data);
+        getNewsApiData(countryCode)
+          .then((data) => {
+            console.log(data);
 
-          $("#infoModal")
-            .html(createNewsContainer(countryName, data.data))
-            .modal("show");
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+            $("#infoModal")
+              .html(createNewsContainer(countryName, data.data))
+              .modal("show");
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
     }),
     L.easyButton('<i class="bi bi-image"></i>', function () {
-      const countryCode = $("#countrySelect").val();
-      const countryName = $("#countrySelect option:selected").text();
+      // do nothing if no country selected
+      if ($("#countrySelect").val() !== "") {
+        const countryCode = $("#countrySelect").val();
+        const countryName = $("#countrySelect option:selected").text();
 
-      getPixabayData(countryName)
-        .then((data) => {
-          console.log(data);
+        getPixabayData(countryName)
+          .then((data) => {
+            console.log(data);
 
-          $("#infoModal")
-            .html(createPhotoCarousel(countryName, data.hits))
-            .modal("show");
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+            $("#infoModal")
+              .html(createPhotoCarousel(countryName, data.hits))
+              .modal("show");
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
     }),
     L.easyButton('<i class="bi bi-coin"></i>', function () {
       const countryCode = $("#countrySelect").val();

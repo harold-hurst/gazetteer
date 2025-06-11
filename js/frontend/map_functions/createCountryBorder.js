@@ -1,5 +1,5 @@
 // initialise variable for layer
-let currentCountryGeoJsonLayer = null;
+let currentCountryGeoJsonLayer;
 
 // event handler on the country select dropdown element
 $("#countrySelect").on("change", function () {
