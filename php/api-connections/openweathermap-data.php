@@ -8,8 +8,10 @@ error_reporting(E_ALL);
 // Record start time to calculate the response time
 $executionStartTime = microtime(true);
 
+$openWeatherMapApiKey = '745267ab8cb24cb1769dbb5962301b17';
+
 // data by city not available for 3.0
-$url = 'https://api.openweathermap.org/data/3.0/onecall?lat=' . $_REQUEST['lat'] . '&lon=' . $_REQUEST['lng'] . '&exclude=current,minutely,hourly,alerts&appid=745267ab8cb24cb1769dbb5962301b17';
+$url = 'https://api.openweathermap.org/data/3.0/onecall?lat=' . $_REQUEST['lat'] . '&lon=' . $_REQUEST['lng'] . '&exclude=current,minutely,hourly,alerts&appid=' . $openWeatherMapApiKey;
 
 // Initialize cURL session
 $ch = curl_init();

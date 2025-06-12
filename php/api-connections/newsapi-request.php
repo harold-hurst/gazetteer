@@ -2,9 +2,9 @@
 
 $countryCode = $_REQUEST['countryCode'];
 
-$apiKey = 'xd9Mpv7ILLnyEM6xEFAEJhC1GfPle35I72rnecLv';
+$newsApiKey = 'xd9Mpv7ILLnyEM6xEFAEJhC1GfPle35I72rnecLv';
 
-$apiUrl = 'https://api.thenewsapi.com/v1/news/top?api_token=xd9Mpv7ILLnyEM6xEFAEJhC1GfPle35I72rnecLv&locale=' . $countryCode . '&limit=25';
+$apiUrl = 'https://api.thenewsapi.com/v1/news/top?api_token=' . $newsApiKey . '&locale=' . $countryCode . '&limit=25';
 // Initialize a cURL session
 $curl = curl_init();
 

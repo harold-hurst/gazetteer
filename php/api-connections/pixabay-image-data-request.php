@@ -3,9 +3,9 @@
 $countryName = $_REQUEST['countryName'];
 $encodedCountryName = urlencode($countryName);
 
-$apiKey = '1292047-f205a9798a320ae757901c5f6';
+$pixabayApiKey = '1292047-f205a9798a320ae757901c5f6';
 
-$apiUrl = 'https://pixabay.com/api/?key=' . $apiKey . '&category=places&q=' . $encodedCountryName . '&image_type=photo';
+$apiUrl = 'https://pixabay.com/api/?key=' . $pixabayApiKey . '&category=places&q=' . $encodedCountryName . '&image_type=photo';
 // Initialize a cURL session
 $curl = curl_init();
 

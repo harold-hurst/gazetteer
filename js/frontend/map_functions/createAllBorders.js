@@ -1,38 +1,40 @@
+function createAllBorders(array) {
+  allCountriesGeoJsonLayer = L.geoJSON(array, {
+    style: {
+      color: "#1c1c1c",
+      fillColor: "",
+      fillOpacity: 0.1,
+      dashArray: "10",
+      weight: 3,
+      opacity: 0.5,
+    },
+    onEachFeature: function (feature, layer) {
+      layer.bindPopup("Country: " + feature.properties.name);
+
+      layer.on({
+        mouseover: function () {
+          // On mouseover, change the style
+          layer.setStyle({
+            fillOpacity: 0, // Increase opacity on hover
+          });
+        },
+        mouseout: function () {
+          // On mouseout, reset the style to initial
+          allCountriesGeoJsonLayer.resetStyle(layer); // Use the initial style
+        },
+        click: function () {
+          // Handle the click event
+          $("#countrySelect").val(feature.properties.iso_a2).trigger("change");
+        },
+      });
+    },
+  }).addTo(map);
+}
+
 fetch("data/countryBorders.geo.json")
   .then((res) => res.json())
   .then((data) => {
-    allCountriesGeoJsonLayer = L.geoJSON(data.features, {
-      style: {
-        color: "#1c1c1c",
-        fillColor: "",
-        fillOpacity: 0.1,
-        dashArray: "10",
-        weight: 3,
-        opacity: 0.5,
-      },
-      onEachFeature: function (feature, layer) {
-        layer.bindPopup("Country: " + feature.properties.name);
-
-        layer.on({
-          mouseover: function () {
-            // On mouseover, change the style
-            layer.setStyle({
-              fillOpacity: 0, // Increase opacity on hover
-            });
-          },
-          mouseout: function () {
-            // On mouseout, reset the style to initial
-            allCountriesGeoJsonLayer.resetStyle(layer); // Use the initial style
-          },
-          click: function (e) {
-            // Handle the click event
-            $("#countrySelect")
-              .val(feature.properties.iso_a2)
-              .trigger("change");
-          },
-        });
-      },
-    }).addTo(map);
+    createAllBorders(data.features);
   });
 
 $("#countrySelect").on("change", function () {
@@ -52,37 +54,6 @@ $("#countrySelect").on("change", function () {
       );
 
       // asign the new filtered array to the layer
-      allCountriesGeoJsonLayer = L.geoJSON(filtered, {
-        style: {
-          color: "#1c1c1c",
-          fillColor: "",
-          fillOpacity: 0.1,
-          dashArray: "10",
-          weight: 3,
-          opacity: 0.5,
-        },
-        onEachFeature: function (feature, layer) {
-          layer.bindPopup("Country: " + feature.properties.name);
-
-          layer.on({
-            mouseover: function () {
-              // On mouseover, change the style
-              layer.setStyle({
-                fillOpacity: 0, // Increase opacity on hover
-              });
-            },
-            mouseout: function () {
-              // On mouseout, reset the style to initial
-              allCountriesGeoJsonLayer.resetStyle(layer); // Use the initial style
-            },
-            click: function (e) {
-              // Handle the click event
-              $("#countrySelect")
-                .val(feature.properties.iso_a2)
-                .trigger("change");
-            },
-          });
-        },
-      }).addTo(map);
+      createAllBorders(filtered);
     });
 });

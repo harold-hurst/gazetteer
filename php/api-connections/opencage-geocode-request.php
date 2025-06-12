@@ -6,11 +6,13 @@ error_reporting(E_ALL);
 
 // Record start time to calculate the response time
 $executionStartTime = microtime(true);
-        
-    $url = 'https://api.opencagedata.com/geocode/v1/json?key=97c5aef6bcad493193632e6a456e4d3f&q=' . $_REQUEST['lat'] . '%2C+' . $_REQUEST['lng'] . '&pretty=1&no_annotations=1';
 
-    // Initialize cURL
-    $ch = curl_init();
+$opencageApiKey = '97c5aef6bcad493193632e6a456e4d3f';
+
+$url = 'https://api.opencagedata.com/geocode/v1/json?key=' . $opencageApiKey . '&q=' . $_REQUEST['lat'] . '%2C+' . $_REQUEST['lng'] . '&pretty=1&no_annotations=1';
+
+// Initialize cURL
+$ch = curl_init();
 
 curl_setopt_array($ch, array(
     CURLOPT_URL => $url,
@@ -24,27 +26,26 @@ curl_setopt_array($ch, array(
     CURLOPT_SSL_VERIFYPEER => false,  // Added: disables SSL verification (for testing only)
 ));
 
-        // Execute the cURL request and capture the response
-        $response = curl_exec($ch);
-        curl_close($ch);
+// Execute the cURL request and capture the response
+$response = curl_exec($ch);
+curl_close($ch);
 
-        // Decode the JSON response
-        $decode = json_decode($response, true);
+// Decode the JSON response
+$decode = json_decode($response, true);
 
-        // Prepare the output with status and data
-        $output = array(
-            'status' => array(
-                'code' => "200",
-                'name' => "ok",
-                'description' => "success",
-                'returnedIn' => intval((microtime(true) - $executionStartTime) * 1000) . " ms"
-            ),
-            'data' => $decode
-        );
+// Prepare the output with status and data
+$output = array(
+    'status' => array(
+        'code' => "200",
+        'name' => "ok",
+        'description' => "success",
+        'returnedIn' => intval((microtime(true) - $executionStartTime) * 1000) . " ms"
+    ),
+    'data' => $decode
+);
 
-        // Set content type to JSON
-        header('Content-Type: application/json; charset=UTF-8');
+// Set content type to JSON
+header('Content-Type: application/json; charset=UTF-8');
 
-        // Output the response as JSON
-        echo json_encode($output);
-?>
+// Output the response as JSON
+echo json_encode($output);

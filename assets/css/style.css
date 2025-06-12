@@ -17,7 +17,7 @@ body {
   top: 0;
   z-index: 1000;
   width: 100%;
-  padding: 11px 60px;
+  padding: 11px 70px;
 }
 
 #countrySelect {
@@ -168,3 +168,10 @@ input[type="radio"]:hover {
   transform: translate(-50%, -50%); /* Center the image */
   object-fit: cover; /* Crop excess image to maintain aspect ratio */
 }
+
+.leaflet-touch .leaflet-bar button, .leaflet-touch .leaflet-bar a {
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+}
+

@@ -10,9 +10,9 @@ $executionStartTime = microtime(true);
 
 $ch = curl_init();
 
-$app_id = '9c40e7b3afc24fcdab87e65d2e2184c7';
+$openExchangeRatesApiKey = '9c40e7b3afc24fcdab87e65d2e2184c7';
 $currency = $_REQUEST['currency'];
-$url = "https://openexchangerates.org/api/latest.json?app_id=" . $app_id . '&symbols=' . $currency;
+$url = "https://openexchangerates.org/api/latest.json?app_id=" . $openExchangeRatesApiKey . '&symbols=' . $currency;
 
 curl_setopt_array($ch, array(
     CURLOPT_URL => $url,

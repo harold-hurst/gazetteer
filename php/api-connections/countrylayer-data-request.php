@@ -7,11 +7,7 @@ error_reporting(E_ALL);
 // Record start time to calculate the response time
 $executionStartTime = microtime(true);
 
-
 $ch = curl_init();
-
-// country layers endpoint
-// 'https://api.countrylayer.com/v2/alpha/' . $_REQUEST['code'] . '?access_key=335e6a96ee740178ffcb4a3209bdfaa1&FullText=true',
 
 $url = 'https://restcountries.com/v3.1/alpha/' . $_REQUEST['code'];
 

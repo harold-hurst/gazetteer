@@ -1,5 +1,17 @@
 // create map instance
-var map = L.map("map").setView([52.95, -1.16], 13);
+
+(corner1 = L.latLng(-90, -180)),
+  (corner2 = L.latLng(90, 180)),
+  (bounds = L.latLngBounds(corner1, corner2));
+
+var map = L.map("map", {
+  minZoom: 3,
+  maxBounds: bounds,
+  center: [52.95, -1.16],
+  zoom: 13,
+  maxBoundsViscosity: 0.8,
+  inertia: true
+});
 
 let userMarker;
 let userCircle;
@@ -12,6 +24,7 @@ googleStreet = L.tileLayer(
     maxZoom: 20,
     subdomains: ["mt0", "mt1", "mt2", "mt3"],
     attribution: "Google Streets",
+    noWrap: true,
   }
 );
 
@@ -23,6 +36,7 @@ googleHybrid = L.tileLayer(
     maxZoom: 20,
     subdomains: ["mt0", "mt1", "mt2", "mt3"],
     attribution: "Google Hybrid",
+        noWrap: true,
   }
 );
 
@@ -32,6 +46,7 @@ googleSat = L.tileLayer("http://{s}.google.com/vt?lyrs=s&x={x}&y={y}&z={z}", {
   maxZoom: 20,
   subdomains: ["mt0", "mt1", "mt2", "mt3"],
   attribution: "Google Satellite",
+      noWrap: true,
 });
 
 // Terrain
@@ -42,15 +57,46 @@ googleTerrain = L.tileLayer(
     maxZoom: 20,
     subdomains: ["mt0", "mt1", "mt2", "mt3"],
     attribution: "Google Terrain",
+        noWrap: true,
   }
 );
 
-weatherLayer = L.tileLayer(
-  `https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=745267ab8cb24cb1769dbb5962301b17`,
+tempLayer = L.tileLayer(
+  `https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=745267ab8cb24cb1769dbb5962301b17`,
   {
     attribution: "&copy; OpenWeatherMap",
+    subdomains: ["a", "b", "c"],
+    noWrap: true,
+  }
+);
 
-    // opacity: 1,
+var rainLayer = L.tileLayer(
+  "https://{s}.tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=745267ab8cb24cb1769dbb5962301b17",
+  {
+    attribution:
+      'Weather data &copy; <a href="https://openweathermap.org/">OpenWeatherMap</a>',
+    subdomains: ["a", "b", "c"],
+    noWrap: true,
+  }
+);
+
+var cloudsLayer = L.tileLayer(
+  "https://{s}.tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=745267ab8cb24cb1769dbb5962301b17",
+  {
+    attribution:
+      'Weather data &copy; <a href="https://openweathermap.org/">OpenWeatherMap</a>',
+    subdomains: ["a", "b", "c"],
+    noWrap: true,
+  }
+);
+
+var windLayer = L.tileLayer(
+  "https://{s}.tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=745267ab8cb24cb1769dbb5962301b17",
+  {
+    attribution:
+      'Weather data &copy; <a href="https://openweathermap.org/">OpenWeatherMap</a>',
+    subdomains: ["a", "b", "c"],
+    noWrap: true,
   }
 );
 
@@ -59,7 +105,6 @@ const basemaps = {
   Satellite: googleSat,
   Hybrid: googleHybrid,
   Terrain: googleTerrain,
-  Weather: weatherLayer,
 };
 
 // add streets to map as a default
@@ -71,8 +116,15 @@ const options = {
   autoZIndex: false, // Don't auto adjust the z-index of layers
 };
 
+const overlays = {
+  Temperature: tempLayer,
+  Precipitation: rainLayer,
+  Clouds: cloudsLayer,
+  Wind: windLayer,
+};
+
 // add the different layers to the map
-layerControl = L.control.layers(basemaps, null, options).addTo(map);
+layerControl = L.control.layers(basemaps, overlays, options).addTo(map);
 
 // add custom icon to layerControl toggle button
 $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
@@ -83,7 +135,7 @@ L.easyBar(
   [
     // get current location button
     L.easyButton(
-      '<i class="bi bi-geo-alt-fill"></i>',
+      '<i class="bi bi-geo-alt-fill fs-5"></i>',
 
       function (btn, map) {
         getCurrentLocation()
@@ -140,7 +192,7 @@ L.easyBar(
           });
       }
     ),
-    L.easyButton('<i class="bi bi-house-door-fill"></i>', function (btn, map) {
+    L.easyButton('<i class="bi bi-house-door-fill fs-5"></i>', function (btn, map) {
       map.setView([52.95, -1.16], 13);
     }),
   ],
@@ -151,7 +203,7 @@ L.easyBar(
 
 L.easyBar(
   [
-    L.easyButton('<i class="bi bi-info-circle"></i>', function () {
+    L.easyButton('<i class="bi bi-info-circle fs-5"></i>', function () {
       // do nothing if no country selected
       if ($("#countrySelect").val() !== "") {
         const countryCode = $("#countrySelect").val();
@@ -168,7 +220,7 @@ L.easyBar(
           });
       }
     }),
-    L.easyButton('<i class="bi bi-cloud-sun"></i>', function () {
+    L.easyButton('<i class="bi bi-cloud-sun fs-5"></i>', function () {
       // do nothing if no country selected
       if ($("#countrySelect").val() !== "") {
         const countryCode = $("#countrySelect").val();
@@ -198,7 +250,7 @@ L.easyBar(
           });
       }
     }),
-    L.easyButton('<i class="bi bi-newspaper"></i>', function () {
+    L.easyButton('<i class="bi bi-newspaper fs-5"></i>', function () {
       // do nothing if no country selected
       if ($("#countrySelect").val() !== "") {
         const countryCode = $("#countrySelect").val();
@@ -217,7 +269,7 @@ L.easyBar(
           });
       }
     }),
-    L.easyButton('<i class="bi bi-image"></i>', function () {
+    L.easyButton('<i class="bi bi-image fs-5"></i>', function () {
       // do nothing if no country selected
       if ($("#countrySelect").val() !== "") {
         const countryCode = $("#countrySelect").val();
@@ -236,7 +288,7 @@ L.easyBar(
           });
       }
     }),
-    L.easyButton('<i class="bi bi-coin"></i>', function () {
+    L.easyButton('<i class="bi bi-coin fs-5"></i>', function () {
       const countryCode = $("#countrySelect").val();
       const countryName = $("#countrySelect option:selected").text();
 
