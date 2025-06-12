@@ -1,23 +1,20 @@
-// create map instance
-
-(corner1 = L.latLng(-90, -180)),
-  (corner2 = L.latLng(90, 180)),
-  (bounds = L.latLngBounds(corner1, corner2));
+const corner1 = L.latLng(-90, -180);
+const corner2 = L.latLng(90, 180);
+const bounds = L.latLngBounds(corner1, corner2);
 
 var map = L.map("map", {
   minZoom: 3,
   maxBounds: bounds,
-  center: [52.95, -1.16],
+  // center: [52.95, -1.16],
   zoom: 13,
   maxBoundsViscosity: 0.8,
-  inertia: true
+  inertia: true,
 });
 
 let userMarker;
 let userCircle;
 
 // Street
-
 googleStreet = L.tileLayer(
   "http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}",
   {
@@ -29,35 +26,32 @@ googleStreet = L.tileLayer(
 );
 
 // Hybrid
-
 googleHybrid = L.tileLayer(
   "http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}",
   {
     maxZoom: 20,
     subdomains: ["mt0", "mt1", "mt2", "mt3"],
     attribution: "Google Hybrid",
-        noWrap: true,
+    noWrap: true,
   }
 );
 
 // satellite
-
 googleSat = L.tileLayer("http://{s}.google.com/vt?lyrs=s&x={x}&y={y}&z={z}", {
   maxZoom: 20,
   subdomains: ["mt0", "mt1", "mt2", "mt3"],
   attribution: "Google Satellite",
-      noWrap: true,
+  noWrap: true,
 });
 
 // Terrain
-
 googleTerrain = L.tileLayer(
   "http://{s}.google.com/vt?lyrs=p&x={x}&y={y}&z={z}",
   {
     maxZoom: 20,
     subdomains: ["mt0", "mt1", "mt2", "mt3"],
     attribution: "Google Terrain",
-        noWrap: true,
+    noWrap: true,
   }
 );
 
@@ -124,7 +118,7 @@ const overlays = {
 };
 
 // add the different layers to the map
-layerControl = L.control.layers(basemaps, overlays, options).addTo(map);
+L.control.layers(basemaps, overlays, options).addTo(map);
 
 // add custom icon to layerControl toggle button
 $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
@@ -135,7 +129,7 @@ L.easyBar(
   [
     // get current location button
     L.easyButton(
-      '<i class="bi bi-geo-alt-fill fs-5"></i>',
+      '<i class="bi bi-geo-alt-fill fs-6"></i>',
 
       function (btn, map) {
         getCurrentLocation()
@@ -192,9 +186,12 @@ L.easyBar(
           });
       }
     ),
-    L.easyButton('<i class="bi bi-house-door-fill fs-5"></i>', function (btn, map) {
-      map.setView([52.95, -1.16], 13);
-    }),
+    L.easyButton(
+      '<i class="bi bi-house-door-fill fs-6"></i>',
+      function (btn, map) {
+        map.setView([52.95, -1.16], 13);
+      }
+    ),
   ],
   {
     position: "topleft",
@@ -203,7 +200,7 @@ L.easyBar(
 
 L.easyBar(
   [
-    L.easyButton('<i class="bi bi-info-circle fs-5"></i>', function () {
+    L.easyButton('<i class="bi bi-info-circle fs-6"></i>', function () {
       // do nothing if no country selected
       if ($("#countrySelect").val() !== "") {
         const countryCode = $("#countrySelect").val();
@@ -211,6 +208,9 @@ L.easyBar(
 
         getCountrylayerData(countryCode)
           .then((data) => {
+
+            console.log(data);
+            
             $("#infoModal")
               .html(createDataTable(countryName, data.data[0]))
               .modal("show");
@@ -220,7 +220,7 @@ L.easyBar(
           });
       }
     }),
-    L.easyButton('<i class="bi bi-cloud-sun fs-5"></i>', function () {
+    L.easyButton('<i class="bi bi-cloud-sun fs-6"></i>', function () {
       // do nothing if no country selected
       if ($("#countrySelect").val() !== "") {
         const countryCode = $("#countrySelect").val();
@@ -250,7 +250,7 @@ L.easyBar(
           });
       }
     }),
-    L.easyButton('<i class="bi bi-newspaper fs-5"></i>', function () {
+    L.easyButton('<i class="bi bi-newspaper fs-6"></i>', function () {
       // do nothing if no country selected
       if ($("#countrySelect").val() !== "") {
         const countryCode = $("#countrySelect").val();
@@ -269,7 +269,7 @@ L.easyBar(
           });
       }
     }),
-    L.easyButton('<i class="bi bi-image fs-5"></i>', function () {
+    L.easyButton('<i class="bi bi-image fs-6"></i>', function () {
       // do nothing if no country selected
       if ($("#countrySelect").val() !== "") {
         const countryCode = $("#countrySelect").val();
@@ -282,13 +282,18 @@ L.easyBar(
             $("#infoModal")
               .html(createPhotoCarousel(countryName, data.hits))
               .modal("show");
+
+            // Initialize the carousel with jQuery
+            $("#carouselExampleInterval").carousel({
+              interval: 4000, // Interval for auto-sliding
+            });
           })
           .catch(function (error) {
             console.log(error);
           });
       }
     }),
-    L.easyButton('<i class="bi bi-coin fs-5"></i>', function () {
+    L.easyButton('<i class="bi bi-coin fs-6"></i>', function () {
       const countryCode = $("#countrySelect").val();
       const countryName = $("#countrySelect option:selected").text();
 

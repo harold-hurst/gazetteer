@@ -32,7 +32,7 @@ $("#countrySelect").on("change", function () {
             color: "#80d643",
             opacity: 0.5,
             fillColor: "#80d643",
-            fillOpacity: 0.3,
+            fillOpacity: 0.2,
           },
           onEachFeature: function (feature, layer) {
             layer.bindPopup("Country: " + feature.properties.name);
@@ -41,7 +41,7 @@ $("#countrySelect").on("change", function () {
               mouseover: function () {
                 // On mouseover, change the style
                 layer.setStyle({
-                  fillOpacity: 0.5, // Increase opacity on hover
+                  fillOpacity: 0.4, // Increase opacity on hover
                 });
               },
               mouseout: function () {

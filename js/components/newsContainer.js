@@ -70,6 +70,7 @@ function createNewsContainer(countryName, newsData) {
             </div>
             <div class="modal-footer">
             <button
+                id="responsiveBtn"
                 type="button"
                 class="btn btn-outline-primary btn-sm"
                 data-bs-dismiss="modal"

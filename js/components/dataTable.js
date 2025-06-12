@@ -1,6 +1,5 @@
 function createDataTable(countryName, countryInfo) {
   function tableRows(dataObject) {
-
     const orderedKeys = [
       "flag",
       "capital",
@@ -37,11 +36,8 @@ function createDataTable(countryName, countryInfo) {
 
         return `
         <tr>
-          <td class="text-center">
-            <i class="fa-solid fa-street-view fa-xl text-success"></i>
-          </td>
-          <td>${label}</td>
-          <td class="text-end">${value}</td>
+          <td class="p-3">${label}</td>
+          <td class="text-end p-3">${value}</td>
         </tr>
       `;
       })
@@ -67,8 +63,9 @@ function createDataTable(countryName, countryInfo) {
         </div>
         <div class="modal-footer">
           <button
+            id="responsiveBtn"
             type="button"
-            class="btn btn-outline-primary btn-sm"
+            class="btn btn-outline-primary"
             data-bs-dismiss="modal"
           >
             Close

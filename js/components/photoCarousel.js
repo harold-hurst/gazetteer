@@ -25,6 +25,7 @@ function itemHTML(photoArray) {
 }
 
 
+
   return `
     <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content shadow">
@@ -66,6 +67,7 @@ function itemHTML(photoArray) {
         </div>
         <div class="modal-footer">
         <button
+            id="responsiveBtn"
             type="button"
             class="btn btn-outline-primary btn-sm"
             data-bs-dismiss="modal"

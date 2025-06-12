@@ -4,9 +4,9 @@ function createAllBorders(array) {
       color: "#1c1c1c",
       fillColor: "",
       fillOpacity: 0.1,
-      dashArray: "10",
-      weight: 3,
-      opacity: 0.5,
+      dashArray: "5",
+      weight: 2,
+      opacity: 0.8,
     },
     onEachFeature: function (feature, layer) {
       layer.bindPopup("Country: " + feature.properties.name);
