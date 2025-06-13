@@ -12,21 +12,23 @@ $("#countrySelect").on("change", function () {
   }
 
   if (selectedCode.length !== 0) {
-    fetch("data/countryBorders.geo.json")
-      .then((res) => res.json())
-      .then((data) => {
+    $.ajax({
+      url: "php/utils/getBorderData.php",
+      method: "GET",
+      dataType: "json",
+      success: function (data) {
         // Filter features by selected country code
         const filtered = data.features.filter(
           (feature) => feature.properties.iso_a2 === selectedCode
         );
 
-        // create a Feature Collection
+        // Create a FeatureCollection
         const geoJson = {
           type: "FeatureCollection",
           features: filtered,
         };
 
-        // add layer
+        // Add layer to the map
         currentCountryGeoJsonLayer = L.geoJSON(geoJson, {
           style: {
             color: "#80d643",
@@ -39,14 +41,12 @@ $("#countrySelect").on("change", function () {
 
             layer.on({
               mouseover: function () {
-                // On mouseover, change the style
                 layer.setStyle({
-                  fillOpacity: 0.4, // Increase opacity on hover
+                  fillOpacity: 0.4,
                 });
               },
               mouseout: function () {
-                // On mouseout, reset the style to initial
-                currentCountryGeoJsonLayer.resetStyle(layer); // Use the initial style
+                currentCountryGeoJsonLayer.resetStyle(layer);
               },
             });
           },
@@ -54,6 +54,10 @@ $("#countrySelect").on("change", function () {
 
         // Zoom to the selected country
         map.fitBounds(currentCountryGeoJsonLayer.getBounds());
-      });
+      },
+      error: function (xhr, status, error) {
+        console.error("Error loading GeoJSON:", error);
+      },
+    });
   }
 });

@@ -5,7 +5,6 @@ const bounds = L.latLngBounds(corner1, corner2);
 var map = L.map("map", {
   minZoom: 3,
   maxBounds: bounds,
-  // center: [52.95, -1.16],
   zoom: 13,
   maxBoundsViscosity: 0.8,
   inertia: true,
@@ -129,7 +128,7 @@ L.easyBar(
   [
     // get current location button
     L.easyButton(
-      '<i class="bi bi-geo-alt-fill fs-6"></i>',
+      '<i class="bi bi-crosshair fs-6"></i>',
 
       function (btn, map) {
         getCurrentLocation()
@@ -187,7 +186,7 @@ L.easyBar(
       }
     ),
     L.easyButton(
-      '<i class="bi bi-house-door-fill fs-6"></i>',
+      '<i class="bi bi-house fs-6"></i>',
       function (btn, map) {
         map.setView([52.95, -1.16], 13);
       }
@@ -209,8 +208,6 @@ L.easyBar(
         getCountrylayerData(countryCode)
           .then((data) => {
 
-            console.log(data);
-            
             $("#infoModal")
               .html(createDataTable(countryName, data.data[0]))
               .modal("show");

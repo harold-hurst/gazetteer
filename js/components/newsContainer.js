@@ -1,5 +1,4 @@
 function createNewsContainer(countryName, newsData) {
-  
   function renderArticlesToHTML(articles) {
     return articles
       .map((article) => {
@@ -62,7 +61,7 @@ function createNewsContainer(countryName, newsData) {
             ></button>
             </div>
             <div class="modal-body">
-            <div class="container my-4">
+            <div class="my-4">
                 <div id="news-container" class="row gy-4">
                 ${renderArticlesToHTML(newsData)}
                 </div>

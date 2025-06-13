@@ -14,9 +14,9 @@ if (isset($array['features'])) {
         $iso = $feature['properties']['iso_a2'] ?? 'N/A';
 
         // create associative array of 'country names' => 'country codes'
-        $countryMap[$name] = $iso;
+        $countryNames[$name] = $iso;
     }
-    echo json_encode($countryMap);
+    echo json_encode($countryNames);
 } else {
     echo "Invalid JSON structure.\n";
 }

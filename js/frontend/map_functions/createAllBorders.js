@@ -31,11 +31,19 @@ function createAllBorders(array) {
   }).addTo(map);
 }
 
-fetch("data/countryBorders.geo.json")
-  .then((res) => res.json())
-  .then((data) => {
-    createAllBorders(data.features);
-  });
+$.ajax({
+  url: "php/utils/getBorderData.php", // PHP file that returns JSON
+  method: "GET", // or 'POST' if needed
+  dataType: "json", // Expect JSON response
+
+  success: function (borderData) {
+    createAllBorders(borderData.features);
+  },
+
+  error: function (xhr, status, error) {
+    console.error("AJAX error:", error);
+  },
+});
 
 $("#countrySelect").on("change", function () {
   // extract value from the <select> element - iso code or empty string
@@ -45,15 +53,20 @@ $("#countrySelect").on("change", function () {
     map.removeLayer(allCountriesGeoJsonLayer);
   }
 
-  fetch("data/countryBorders.geo.json")
-    .then((res) => res.json())
-    .then((data) => {
-      // create filtered array of all countries excluding currently selected one
+  $.ajax({
+    url: "php/utils/getBorderData.php",
+    method: "GET",
+    dataType: "json",
+    success: function (data) {
+
       const filtered = data.features.filter(
-        (feature) => feature.properties.iso_a2 !== this.value
+        (feature) => feature.properties.iso_a2 !== selectedCode
       );
 
-      // asign the new filtered array to the layer
       createAllBorders(filtered);
-    });
+    },
+    error: function (xhr, status, error) {
+      console.error("Error loading GeoJSON:", error);
+    },
+  });
 });

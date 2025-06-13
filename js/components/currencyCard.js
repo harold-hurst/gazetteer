@@ -1,10 +1,8 @@
 function createCurrencyCard(countryName, currencyObject, flag) {
-
   const currency = Object.keys(currencyObject)[2];
 
   const currencyName = currencyObject.name;
-  console.log(countryName);
-const currencySymbol = currencyObject.symbol;
+  const currencySymbol = currencyObject.symbol;
 
   let rate = currencyObject[currency];
   rate = 1 / rate;
