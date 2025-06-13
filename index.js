@@ -640,6 +640,45 @@ var windLayer = L.tileLayer(
   }
 );
 
+
+
+
+
+
+
+
+// Create a MarkerClusterGroup
+var markers = L.markerClusterGroup();
+var markers2 = L.markerClusterGroup();
+
+// Create and add some markers to the cluster group
+var marker1 = L.marker([51.5, -0.09]).bindPopup("Marker 1");
+var marker2 = L.marker([51.49, -0.1]).bindPopup("Marker 2");
+var marker3 = L.marker([51.51, -0.08]).bindPopup("Marker 3");
+
+var marker4 = L.marker([52.5, -0.09]).bindPopup("Marker 1");
+var marker5 = L.marker([52.49, -0.1]).bindPopup("Marker 2");
+var marker6 = L.marker([52.51, -0.08]).bindPopup("Marker 3");
+
+markers.addLayer(marker1);
+markers.addLayer(marker2);
+markers.addLayer(marker3);
+
+markers2.addLayer(marker4);
+markers2.addLayer(marker5);
+markers2.addLayer(marker6);
+
+// Add the cluster group to the map
+map.addLayer(markers);
+map.addLayer(markers2);
+
+
+
+
+
+
+
+
 const basemaps = {
   Streets: googleStreet,
   Satellite: googleSat,
@@ -666,7 +705,12 @@ const overlays = {
 // add the different layers to the map
 L.control.layers(basemaps, overlays, options).addTo(map);
 
-// add custom icon to layerControl toggle button
+
+
+
+
+
+
 $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
 
 L.easyBar(
@@ -992,7 +1036,6 @@ $("#countrySelect").on("change", function () {
     method: "GET",
     dataType: "json",
     success: function (data) {
-
       const filtered = data.features.filter(
         (feature) => feature.properties.iso_a2 !== selectedCode
       );
@@ -1006,8 +1049,8 @@ $("#countrySelect").on("change", function () {
 });
 
 // Scroll map left and right when modal opens/closes *****************************************
-$('#infoModal').on('show.bs.modal', function () {
-    // Get the current bounds of the map
+$("#infoModal").on("show.bs.modal", function () {
+  // Get the current bounds of the map
   const bounds = map.getBounds();
 
   // Extract the southwest and northeast corners
@@ -1030,8 +1073,8 @@ $('#infoModal').on('show.bs.modal', function () {
   map.setView(newCenter, map.getZoom());
 });
 
-$('#infoModal').on('hidden.bs.modal', function () {
-    // Get the current bounds of the map
+$("#infoModal").on("hidden.bs.modal", function () {
+  // Get the current bounds of the map
   const bounds = map.getBounds();
 
   // Extract the southwest and northeast corners
@@ -1105,14 +1148,14 @@ $(document).ready(function () {
 
 // clear <select> value when Clear button clicked *****************************************
 $("#clearSelect").on("click", function () {
-  $("#countrySelect").val('').trigger("change");
+  $("#countrySelect").val("").trigger("change");
 });
 
 // remove the spinner on document load *****************************************
 $(window).on("load", function () {
   if ($("#preloader").length) {
     $("#preloader").fadeOut("slow", function () {
-        $(this).remove();
-      });
+      $(this).remove();
+    });
   }
 });
