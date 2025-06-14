@@ -424,6 +424,25 @@ function getCurrentLocation() {
 
 // API *****************************************
 
+// CountryLayer
+function getGeonamesData(countryCode) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: "php/api-connections/geonames-data-request.php",
+      type: "GET",
+      data: { code: countryCode },
+      dataType: "json",
+      success: function (response) {
+        resolve(response);
+      },
+      error: function (xhr, status, error) {
+        console.error("AJAX error:", status, error);
+        reject(error);
+      },
+    });
+  });
+}
+
 // OpenCage
 function getOpencageData(location) {
   return new Promise((resolve, reject) => {
@@ -463,12 +482,12 @@ function getOpenWeatherData(capitalLocation) {
 }
 
 // CountryLayer
-function getCountrylayerData(code) {
+function getCountrylayerData(countryCode) {
   return new Promise((resolve, reject) => {
     $.ajax({
       url: "php/api-connections/countrylayer-data-request.php",
       type: "GET",
-      data: { code: code },
+      data: { code: countryCode },
       dataType: "json",
       success: function (response) {
         resolve(response);
@@ -559,6 +578,14 @@ var map = L.map("map", {
 
 let userMarker;
 let userCircle;
+let markerCluster = L.markerClusterGroup();
+
+const greenIcon = L.icon({
+  iconUrl: "assets/images/geo-alt-fill.svg",
+  iconSize: [32, 32], // size of the icon
+  iconAnchor: [16, 26], // point of the icon which will correspond to marker's location
+  popupAnchor: [0, -26], // point from which the popup should open relative to the iconAnchor
+});
 
 // Street
 googleStreet = L.tileLayer(
@@ -640,45 +667,6 @@ var windLayer = L.tileLayer(
   }
 );
 
-
-
-
-
-
-
-
-// Create a MarkerClusterGroup
-var markers = L.markerClusterGroup();
-var markers2 = L.markerClusterGroup();
-
-// Create and add some markers to the cluster group
-var marker1 = L.marker([51.5, -0.09]).bindPopup("Marker 1");
-var marker2 = L.marker([51.49, -0.1]).bindPopup("Marker 2");
-var marker3 = L.marker([51.51, -0.08]).bindPopup("Marker 3");
-
-var marker4 = L.marker([52.5, -0.09]).bindPopup("Marker 1");
-var marker5 = L.marker([52.49, -0.1]).bindPopup("Marker 2");
-var marker6 = L.marker([52.51, -0.08]).bindPopup("Marker 3");
-
-markers.addLayer(marker1);
-markers.addLayer(marker2);
-markers.addLayer(marker3);
-
-markers2.addLayer(marker4);
-markers2.addLayer(marker5);
-markers2.addLayer(marker6);
-
-// Add the cluster group to the map
-map.addLayer(markers);
-map.addLayer(markers2);
-
-
-
-
-
-
-
-
 const basemaps = {
   Streets: googleStreet,
   Satellite: googleSat,
@@ -704,12 +692,6 @@ const overlays = {
 
 // add the different layers to the map
 L.control.layers(basemaps, overlays, options).addTo(map);
-
-
-
-
-
-
 
 $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
 
@@ -754,13 +736,6 @@ L.easyBar(
                 map.removeLayer(userMarker);
               }
 
-              var greenIcon = L.icon({
-                iconUrl: "assets/images/geo-alt-fill.svg",
-                iconSize: [32, 32], // size of the icon
-                iconAnchor: [16, 26], // point of the icon which will correspond to marker's location
-                popupAnchor: [0, -26], // point from which the popup should open relative to the iconAnchor
-              });
-
               // Add a new marker at the user's location
               userMarker = L.marker(location, { icon: greenIcon })
                 .addTo(map)
@@ -802,6 +777,41 @@ L.easyBar(
           });
       }
     }),
+
+    L.easyButton('<i class="bi bi-geo-alt fs-6"></i>', function () {
+      // do nothing if no country selected
+      if ($("#countrySelect").val() !== "") {
+        const countryCode = $("#countrySelect").val();
+
+        markerCluster.clearLayers();
+
+        getGeonamesData(countryCode)
+          .then((data) => {
+            data.geonames.forEach(function (item) {
+              // Convert lat and lng to numbers
+              const lat = parseFloat(item.lat);
+              const lng = parseFloat(item.lng);
+
+              // Create the marker using the lat and lng from the current item
+              let marker = L.marker([lat, lng], { icon: greenIcon }).bindPopup(
+                `<strong>${item.name}</strong><br>${item.adminName1}, ${item.countryName}`
+              );
+
+              // Add the marker to the MarkerClusterGroup
+              markerCluster.addLayer(marker);
+            });
+
+            // Add the updated marker cluster group to the map (if not already added)
+            if (!map.hasLayer(markerCluster)) {
+              map.addLayer(markerCluster);
+            }
+          })
+          .catch(function (error) {
+            console.log(error); // Handle the error if it happens
+          });
+      }
+    }),
+
     L.easyButton('<i class="bi bi-cloud-sun fs-6"></i>', function () {
       // do nothing if no country selected
       if ($("#countrySelect").val() !== "") {
@@ -945,23 +955,12 @@ $("#countrySelect").on("change", function () {
         currentCountryGeoJsonLayer = L.geoJSON(geoJson, {
           style: {
             color: "#80d643",
-            opacity: 0.5,
+            opacity: 0.7,
             fillColor: "#80d643",
-            fillOpacity: 0.2,
+            fillOpacity: 0,
           },
           onEachFeature: function (feature, layer) {
             layer.bindPopup("Country: " + feature.properties.name);
-
-            layer.on({
-              mouseover: function () {
-                layer.setStyle({
-                  fillOpacity: 0.4,
-                });
-              },
-              mouseout: function () {
-                currentCountryGeoJsonLayer.resetStyle(layer);
-              },
-            });
           },
         }).addTo(map);
 
@@ -1046,6 +1045,14 @@ $("#countrySelect").on("change", function () {
       console.error("Error loading GeoJSON:", error);
     },
   });
+});
+
+$("#countrySelect").on("change", function () {
+  markerCluster.clearLayers();
+});
+
+$("#clearSelect").on("click", function () {
+  markerCluster.clearLayers();
 });
 
 // Scroll map left and right when modal opens/closes *****************************************
