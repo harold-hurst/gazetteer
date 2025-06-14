@@ -200,4 +200,18 @@ input[type="checkbox"]:hover {
   }
 }
 
+#responsiveBtn {
+  font-size: 1.25rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+@media (min-width: 840px) {
+  #responsiveBtn {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+  }
+}
+
 
