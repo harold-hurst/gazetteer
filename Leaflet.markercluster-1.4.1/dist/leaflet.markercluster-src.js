@@ -60,10 +60,10 @@
 
       //Options to pass to the L.Polygon constructor
       polygonOptions: {
-        color: "#0004a8", // Border color
+        color: "#80d643", // Border color
         weight: 3, // Border weight (in pixels)
         opacity: 0.7, // Border opacity
-        fillColor: "#0004a8", // Fill color
+        fillColor: "#80d643", // Fill color
         fillOpacity: 0.2,
 		lineJoin: "round",
 		lineCap: "round"

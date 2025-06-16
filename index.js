@@ -589,20 +589,63 @@ const corner1 = L.latLng(-90, -180);
 const corner2 = L.latLng(90, 180);
 const bounds = L.latLngBounds(corner1, corner2);
 
-var map = L.map("map", {
+// define Leaflet js map
+const map = L.map("map", {
   minZoom: 3,
   maxBounds: bounds,
-  zoom: 13,
   maxBoundsViscosity: 0.8,
   inertia: true,
-});
+}).setView([54.5, -3.0], 6);
 
+// define marker variables to show user location
 let userMarker;
 let userCircle;
-let markerCluster = L.markerClusterGroup();
 
-const greenIcon = L.icon({
+// define some cluster groups to be populated with markers
+let airportsCluster = L.markerClusterGroup();
+let citiesCluster = L.markerClusterGroup();
+let castlesCluster = L.markerClusterGroup();
+let universitiesCluster = L.markerClusterGroup();
+let stadiumsCluster = L.markerClusterGroup();
+
+// define custom markers
+const blueIcon = L.icon({
   iconUrl: "assets/images/geo-alt-fill.svg",
+  iconSize: [32, 32], // size of the icon
+  iconAnchor: [16, 26], // point of the icon which will correspond to marker's location
+  popupAnchor: [0, -26], // point from which the popup should open relative to the iconAnchor
+});
+
+const airportIcon = L.icon({
+  iconUrl: "assets/images/airplane.svg",
+  iconSize: [32, 32], // size of the icon
+  iconAnchor: [16, 26], // point of the icon which will correspond to marker's location
+  popupAnchor: [0, -26], // point from which the popup should open relative to the iconAnchor
+});
+
+const citiesIcon = L.icon({
+  iconUrl: "assets/images/geo-alt.svg",
+  iconSize: [32, 32], // size of the icon
+  iconAnchor: [16, 26], // point of the icon which will correspond to marker's location
+  popupAnchor: [0, -26], // point from which the popup should open relative to the iconAnchor
+});
+
+const castlesIcon = L.icon({
+  iconUrl: "assets/images/circle.svg",
+  iconSize: [32, 32], // size of the icon
+  iconAnchor: [16, 26], // point of the icon which will correspond to marker's location
+  popupAnchor: [0, -26], // point from which the popup should open relative to the iconAnchor
+});
+
+const universitiesIcon = L.icon({
+  iconUrl: "assets/images/bank2.svg",
+  iconSize: [32, 32], // size of the icon
+  iconAnchor: [16, 26], // point of the icon which will correspond to marker's location
+  popupAnchor: [0, -26], // point from which the popup should open relative to the iconAnchor
+});
+
+const stadiumsIcon = L.icon({
+  iconUrl: "assets/images/app.svg",
   iconSize: [32, 32], // size of the icon
   iconAnchor: [16, 26], // point of the icon which will correspond to marker's location
   popupAnchor: [0, -26], // point from which the popup should open relative to the iconAnchor
@@ -705,10 +748,15 @@ const options = {
 };
 
 const overlays = {
-  Temperature: tempLayer,
-  Precipitation: rainLayer,
-  Clouds: cloudsLayer,
-  Wind: windLayer,
+  // Temperature: tempLayer,
+  // Precipitation: rainLayer,
+  // Clouds: cloudsLayer,
+  // Wind: windLayer,
+  Cities: citiesCluster,
+  Airports: airportsCluster,
+  Castles: castlesCluster,
+  Universities: universitiesCluster,
+  Stadiums: stadiumsCluster,
 };
 
 // add the different layers to the map
@@ -758,7 +806,7 @@ L.easyBar(
               }
 
               // Add a new marker at the user's location
-              userMarker = L.marker(location, { icon: greenIcon })
+              userMarker = L.marker(location, { icon: blueIcon })
                 .addTo(map)
                 .bindPopup(data.data.results[0].formatted) // Add popup
                 .openPopup(); // Open popup automatically
@@ -806,33 +854,129 @@ L.easyBar(
       if ($("#countrySelect").val() !== "") {
         const countryCode = $("#countrySelect").val();
 
-        markerCluster.clearLayers();
+        // clear any existing layers on clusters
+        citiesCluster.clearLayers();
+        airportsCluster.clearLayers();
+        castlesCluster.clearLayers();
+        stadiumsCluster.clearLayers();
+        universitiesCluster.clearLayers();
 
+        // get
         getGeonamesData(countryCode)
           .then((data) => {
             console.log(data);
-            data.geonames.forEach(function (item) {
+
+            data.cities.forEach(function (item) {
               // Convert lat and lng to numbers
               const lat = parseFloat(item.lat);
               const lng = parseFloat(item.lng);
 
               // Create the marker using the lat and lng from the current item
-              let marker = L.marker([lat, lng], { icon: greenIcon }).bindPopup(
+              let marker = L.marker([lat, lng], {
+                icon: citiesIcon,
+              }).bindPopup(
                 `<strong>${item.name}</strong><br>${item.adminName1}, ${item.countryName}`
               );
 
               // Add the marker to the MarkerClusterGroup
-              markerCluster.addLayer(marker);
+              citiesCluster.addLayer(marker);
             });
 
             // Add the updated marker cluster group to the map (if not already added)
-            if (!map.hasLayer(markerCluster)) {
-              map.addLayer(markerCluster);
+            if (!map.hasLayer(citiesCluster)) {
+              map.addLayer(citiesCluster);
+            }
+
+            data.airports.forEach(function (item) {
+              // Convert lat and lng to numbers
+              const lat = parseFloat(item.lat);
+              const lng = parseFloat(item.lng);
+
+              // Create the marker using the lat and lng from the current item
+              let marker = L.marker([lat, lng], {
+                icon: airportIcon,
+              }).bindPopup(
+                `<strong>${item.name}</strong><br>${item.adminName1}, ${item.countryName}`
+              );
+
+              // Add the marker to the MarkerClusterGroup
+              airportsCluster.addLayer(marker);
+            });
+
+            // Add the updated marker cluster group to the map (if not already added)
+            if (!map.hasLayer(airportsCluster)) {
+              map.addLayer(airportsCluster);
+            }
+
+            data.castles.forEach(function (item) {
+              // Convert lat and lng to numbers
+              const lat = parseFloat(item.lat);
+              const lng = parseFloat(item.lng);
+
+              // Create the marker using the lat and lng from the current item
+              let marker = L.marker([lat, lng], {
+                icon: castlesIcon,
+              }).bindPopup(
+                `<strong>${item.name}</strong><br>${item.adminName1}, ${item.countryName}`
+              );
+
+              // Add the marker to the MarkerClusterGroup
+              castlesCluster.addLayer(marker);
+            });
+
+            // Add the updated marker cluster group to the map (if not already added)
+            if (!map.hasLayer(castlesCluster)) {
+              map.addLayer(castlesCluster);
+            }
+
+            data.stadiums.forEach(function (item) {
+              // Convert lat and lng to numbers
+              const lat = parseFloat(item.lat);
+              const lng = parseFloat(item.lng);
+
+              // Create the marker using the lat and lng from the current item
+              let marker = L.marker([lat, lng], {
+                icon: stadiumsIcon,
+              }).bindPopup(
+                `<strong>${item.name}</strong><br>${item.adminName1}, ${item.countryName}`
+              );
+
+              // Add the marker to the MarkerClusterGroup
+              stadiumsCluster.addLayer(marker);
+            });
+
+            // Add the updated marker cluster group to the map (if not already added)
+            if (!map.hasLayer(stadiumsCluster)) {
+              map.addLayer(stadiumsCluster);
+            }
+
+            data.universities.forEach(function (item) {
+              // Convert lat and lng to numbers
+              const lat = parseFloat(item.lat);
+              const lng = parseFloat(item.lng);
+
+              // Create the marker using the lat and lng from the current item
+              let marker = L.marker([lat, lng], {
+                icon: universitiesIcon,
+              }).bindPopup(
+                `<strong>${item.name}</strong><br>${item.adminName1}, ${item.countryName}`
+              );
+
+              // Add the marker to the MarkerClusterGroup
+              universitiesCluster.addLayer(marker);
+            });
+
+            // Add the updated marker cluster group to the map (if not already added)
+            if (!map.hasLayer(universitiesCluster)) {
+              map.addLayer(universitiesCluster);
             }
           })
           .catch(function (error) {
             console.log(error); // Handle the error if it happens
           });
+
+        const $control = $(".leaflet-control-layers");
+        $control.addClass("leaflet-control-layers-expanded");
       }
     }),
 
@@ -1072,11 +1216,19 @@ $("#countrySelect").on("change", function () {
 });
 
 $("#countrySelect").on("change", function () {
-  markerCluster.clearLayers();
+  map.removeLayer(airportsCluster);
+  map.removeLayer(castlesCluster);
+  map.removeLayer(stadiumsCluster);
+  map.removeLayer(universitiesCluster);
+  map.removeLayer(citiesCluster);
 });
 
 $("#clearSelect").on("click", function () {
-  markerCluster.clearLayers();
+  map.removeLayer(airportsCluster);
+  map.removeLayer(castlesCluster);
+  map.removeLayer(stadiumsCluster);
+  map.removeLayer(universitiesCluster);
+  map.removeLayer(citiesCluster);
 });
 
 // Scroll map left and right when modal opens/closes *****************************************
