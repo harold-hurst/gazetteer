@@ -3,17 +3,28 @@
 // DataTable
 function createDataTable(countryName, countryInfo) {
   function tableRows(dataObject) {
-    const orderedKeys = [
-      "flag",
+    const keysWanted = [
       "capital",
       "region",
       "population",
       "area",
       "currencies",
       "continents",
+      "unMember",
     ];
 
-    return orderedKeys
+    // Icon class mapping per key
+    const iconMap = {
+      flag: "bi bi-flag",
+      capital: "bi bi-bank",
+      region: "bi bi-globe-europe-africa",
+      population: "bi bi-person-standing",
+      area: "bi bi-arrows-angle-expand",
+      currencies: "bi bi-coin",
+      continents: "bi bi-globe",
+    };
+
+    return keysWanted
       .map((key) => {
         let value = dataObject[key];
 
@@ -30,17 +41,26 @@ function createDataTable(countryName, countryInfo) {
             .join(", ");
         }
 
+        // Handle boolean values
+        if (typeof value === "boolean") {
+          value = value ? "Yes" : "No";
+        }
+
         // Optionally format numbers (like population, area)
-        if (typeof value === "number") {
+        else if (typeof value === "number") {
           value = value.toLocaleString();
         }
 
         const label = key.charAt(0).toUpperCase() + key.slice(1);
+        const iconClass = iconMap[key] || "bi bi-circle"; // fallback icon
 
         return `
         <tr>
-          <td class="p-3">${label}</td>
-          <td class="text-end p-3">${value}</td>
+          <td class="p-2 col-1">
+            <i class="${iconClass} fs-4"></i>
+          </td>
+          <td class="p-3 col-6">${label}</td>
+          <td class="text-end p-3 col-5">${value}</td>
         </tr>
       `;
       })
@@ -51,6 +71,7 @@ function createDataTable(countryName, countryInfo) {
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content shadow">
         <div class="modal-header bg-primary text-white">
+        <i class="fs-1 me-3">${countryInfo.flag}</i>
           <h5 class="modal-title">${countryName} Overview</h5>
           <button
             type="button"
@@ -768,6 +789,8 @@ L.easyBar(
 
         getCountrylayerData(countryCode)
           .then((data) => {
+            console.log(data.data[0]);
+
             $("#infoModal")
               .html(createDataTable(countryName, data.data[0]))
               .modal("show");
@@ -787,6 +810,7 @@ L.easyBar(
 
         getGeonamesData(countryCode)
           .then((data) => {
+            console.log(data);
             data.geonames.forEach(function (item) {
               // Convert lat and lng to numbers
               const lat = parseFloat(item.lat);
@@ -885,7 +909,7 @@ L.easyBar(
           });
       }
     }),
-    L.easyButton('<i class="bi bi-coin fs-6"></i>', function () {
+    L.easyButton('<i class="bi bi-currency-exchange fs-6"></i>', function () {
       const countryCode = $("#countrySelect").val();
       const countryName = $("#countrySelect option:selected").text();
 

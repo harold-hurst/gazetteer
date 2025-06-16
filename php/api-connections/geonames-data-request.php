@@ -2,8 +2,9 @@
 
 $countryCode = $_REQUEST['code'];
 
+// &maxRows=10
 
-$apiUrl = 'http://api.geonames.org/searchJSON?&country=' . $countryCode . '&maxRows=10&username=haroldhurst';
+$apiUrl = 'http://api.geonames.org/searchJSON?&country=' . $countryCode . '&username=haroldhurst';
 // Initialize a cURL session
 $curl = curl_init();
 
