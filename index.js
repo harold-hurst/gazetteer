@@ -198,15 +198,28 @@ function createWeatherTable(countryName, forecastArray) {
 }
 
 // CurrencyCard
-function createCurrencyCard(countryName, currencyObject, flag) {
-  const currency = Object.keys(currencyObject)[2];
+function createCurrencyCard(
+  countryName,
+  currencyObject,
+  selectOptions,
+  currency
+) {
+
+  function createCurrencySelect(selectOptions) {
+    let html =
+      '<select name="currency" id="currencySelect" class="form-select shadow-sm mb-4">';
+    html += "<option disabled selected value=''>Select a currency</option>";
+
+    for (const [code, rate] of Object.entries(selectOptions)) {
+      html += `<option value="${rate}">${code}</option>`;
+    }
+
+    html += "</select>";
+    return html;
+  }
 
   const currencyName = currencyObject.name;
   const currencySymbol = currencyObject.symbol;
-
-  let rate = currencyObject[currency];
-  rate = 1 / rate;
-  rate = parseFloat(rate.toFixed(3));
 
   return `
     <div class="modal-dialog modal-dialog-scrollable">
@@ -215,7 +228,7 @@ function createCurrencyCard(countryName, currencyObject, flag) {
 
         <div class="w-100">
             <h5 class="modal-title">Currency in ${countryName}: </h5>
-            <h6>Exchange rate for ${currencyName} (${currencySymbol})</h6>
+            <h6>Exchange ${currencyName}s (${currency})</h6>
         </div>
 
         <button
@@ -226,13 +239,56 @@ function createCurrencyCard(countryName, currencyObject, flag) {
         ></button>
         </div>
         <div class="modal-body">
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="my-4">
+          <label for="currencyAmount" class="form-label">From ${currencyName}s (${currencySymbol}):</label>
+          <input type="number" id="currencyAmount" class="form-control" placeholder="Enter a number">
+        </div>
+
+        <!--
         <div
             class="w-100 d-inline-flex mb-4 p-3 border rounded shadow-sm bg-light"
         >
-            <span class="flex-fill">${currencyName} [${currency}]: </span>
-            <span class="mx-2">$${rate} [USD]</span>
-            <span>${flag}</span>
         </div>
+        -->
+
+
+        ${createCurrencySelect(selectOptions)}
+
+        <div
+            class="w-100 d-inline-flex mb-4 p-3 border rounded shadow-sm bg-light"
+        >
+            <span id="currencyOutput" class="flex-fill"></span>
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </div>
         <div class="modal-footer">
         <button
@@ -611,44 +667,44 @@ let stadiumsCluster = L.markerClusterGroup();
 // define custom markers
 const blueIcon = L.icon({
   iconUrl: "assets/images/geo-alt-fill.svg",
-  iconSize: [32, 32], // size of the icon
-  iconAnchor: [16, 26], // point of the icon which will correspond to marker's location
-  popupAnchor: [0, -26], // point from which the popup should open relative to the iconAnchor
+  iconSize: [22, 22], // size of the icon
+  iconAnchor: [11, 26], // point of the icon which will correspond to marker's location
+  popupAnchor: [0, -22], // point from which the popup should open relative to the iconAnchor
 });
 
 const airportIcon = L.icon({
-  iconUrl: "assets/images/airplane.svg",
-  iconSize: [32, 32], // size of the icon
-  iconAnchor: [16, 26], // point of the icon which will correspond to marker's location
-  popupAnchor: [0, -26], // point from which the popup should open relative to the iconAnchor
+  iconUrl: "assets/images/plane-solid.svg",
+  iconSize: [22, 22], // size of the icon
+  iconAnchor: [11, 26], // point of the icon which will correspond to marker's location
+  popupAnchor: [0, -22], // point from which the popup should open relative to the iconAnchor
 });
 
 const citiesIcon = L.icon({
-  iconUrl: "assets/images/geo-alt.svg",
-  iconSize: [32, 32], // size of the icon
-  iconAnchor: [16, 26], // point of the icon which will correspond to marker's location
-  popupAnchor: [0, -26], // point from which the popup should open relative to the iconAnchor
+  iconUrl: "assets/images/city-solid.svg",
+  iconSize: [22, 22], // size of the icon
+  iconAnchor: [11, 26], // point of the icon which will correspond to marker's location
+  popupAnchor: [0, -22], // point from which the popup should open relative to the iconAnchor
 });
 
 const castlesIcon = L.icon({
-  iconUrl: "assets/images/circle.svg",
-  iconSize: [32, 32], // size of the icon
-  iconAnchor: [16, 26], // point of the icon which will correspond to marker's location
-  popupAnchor: [0, -26], // point from which the popup should open relative to the iconAnchor
+  iconUrl: "assets/images/chess-rook-solid.svg",
+  iconSize: [22, 22], // size of the icon
+  iconAnchor: [11, 26], // point of the icon which will correspond to marker's location
+  popupAnchor: [0, -22], // point from which the popup should open relative to the iconAnchor
 });
 
 const universitiesIcon = L.icon({
-  iconUrl: "assets/images/bank2.svg",
-  iconSize: [32, 32], // size of the icon
-  iconAnchor: [16, 26], // point of the icon which will correspond to marker's location
-  popupAnchor: [0, -26], // point from which the popup should open relative to the iconAnchor
+  iconUrl: "assets/images/school-flag-solid.svg",
+  iconSize: [22, 22], // size of the icon
+  iconAnchor: [11, 26], // point of the icon which will correspond to marker's location
+  popupAnchor: [0, -22], // point from which the popup should open relative to the iconAnchor
 });
 
 const stadiumsIcon = L.icon({
-  iconUrl: "assets/images/app.svg",
-  iconSize: [32, 32], // size of the icon
-  iconAnchor: [16, 26], // point of the icon which will correspond to marker's location
-  popupAnchor: [0, -26], // point from which the popup should open relative to the iconAnchor
+  iconUrl: "assets/images/hotel-solid.svg",
+  iconSize: [22, 22], // size of the icon
+  iconAnchor: [11, 26], // point of the icon which will correspond to marker's location
+  popupAnchor: [0, -22], // point from which the popup should open relative to the iconAnchor
 });
 
 // Street
@@ -864,8 +920,6 @@ L.easyBar(
         // get
         getGeonamesData(countryCode)
           .then((data) => {
-            console.log(data);
-
             data.cities.forEach(function (item) {
               // Convert lat and lng to numbers
               const lat = parseFloat(item.lat);
@@ -1057,22 +1111,50 @@ L.easyBar(
       const countryCode = $("#countrySelect").val();
       const countryName = $("#countrySelect option:selected").text();
 
-      getCountrylayerData(countryCode)
+      getCountrylayerData(countryCode) // pull currency info on base country
         .then((data) => {
-          const currency = Object.keys(data.data[0].currencies)[0];
+          const currency = Object.keys(data.data[0].currencies)[0]; // eg. GBP
+          let currencyObject = data.data[0].currencies[currency]; // eg. {symbol: '£', name: 'British pound'}
 
-          let currencyObject = data.data[0].currencies[currency];
 
-          const flag = data.data[0].flag;
           getExchangeRateData(currency)
             .then((data) => {
-              currencyObject = { ...currencyObject, ...data.data.rates };
 
-              console.log(currencyObject);
+              const selectOptions = data.data.allRates.rates;
+
+              const dollarRate = data.data.dollarRate.rates;
+
+              const [multiplierKey, multiplierValue] =
+                Object.entries(dollarRate)[0];
+
+              const convertedRates = {};
+
+              for (const [code, value] of Object.entries(selectOptions)) {
+                convertedRates[code] = value / multiplierValue;
+              }
 
               $("#infoModal")
-                .html(createCurrencyCard(countryName, currencyObject, flag))
+                .html(
+                  createCurrencyCard(
+                    countryName,
+                    currencyObject,
+                    convertedRates,
+                    currency
+                  )
+                )
                 .modal("show");
+
+              // adding an event listener every time modal opens !!!
+              $("#currencySelect").on("change", function () {
+                const selectedCurrencyRate = parseFloat($(this).val());
+                const amount = $('#currencyAmount').val();
+                const totalCurrencyValue = (selectedCurrencyRate * amount).toFixed(
+                  2
+                );
+
+                const currencyCode = $(this).find("option:selected").text();
+                $("#currencyOutput").text(totalCurrencyValue + ' ' + currencyCode);
+              });
             })
             .catch(function (error) {
               console.log(error);

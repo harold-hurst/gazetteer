@@ -7,7 +7,7 @@ $countryCode = $_REQUEST['code'];
 function fetchCities($countryCode)
 {
 
-    $apiUrl = 'http://api.geonames.org/searchJSON?&country=' . $countryCode . '&maxRows=10&username=haroldhurst';
+    $apiUrl = 'http://api.geonames.org/searchJSON?featureCode=PPL&country=' . $countryCode . '&maxRows=10&username=haroldhurst';
 
     // Initialize a cURL session
     $curl = curl_init();
@@ -68,17 +68,16 @@ function fetchFeatures($featureCode, $countryCode)
 }
 
 $cities = fetchCities($countryCode);
-$geonames = $cities['geonames'];
-
 $airports = fetchFeatures('AIRP', $countryCode);
 $universities = fetchFeatures('UNIV', $countryCode);
 $castles = fetchFeatures('CSTL', $countryCode);
 $stadiums = fetchFeatures('STDM', $countryCode);
 
 
+
 // Combine into one JSON response
 $result = [
-    'cities' => $geonames,
+    'cities' => $cities['geonames'] ?? [],
     'airports' => $airports['geonames'] ?? [],
     'universities' => $universities['geonames'] ?? [],
     'castles' => $castles['geonames'] ?? [],
