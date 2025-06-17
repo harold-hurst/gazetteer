@@ -1,7 +1,7 @@
 // COMPONENTS *****************************************
 
 // DataTable
-function createDataTable(countryName, countryInfo) {
+function createDataTable(countryName, countryInfo, wikiArticle) {
   function tableRows(dataObject) {
     const keysWanted = [
       "capital",
@@ -81,9 +81,11 @@ function createDataTable(countryName, countryInfo) {
           ></button>
         </div>
         <div class="modal-body">
-          <table class="table table-striped">
+          <table class="table table-striped mb-4">
             ${tableRows(countryInfo)}
           </table>
+          <h4>Wikipedia</h4>
+          ${wikiArticle}
         </div>
         <div class="modal-footer">
           <button
@@ -204,7 +206,6 @@ function createCurrencyCard(
   selectOptions,
   currency
 ) {
-
   function createCurrencySelect(selectOptions) {
     let html =
       '<select name="currency" id="currencySelect" class="form-select shadow-sm mb-4">';
@@ -618,11 +619,31 @@ function getNewsApiData(countryCode) {
   });
 }
 
-// Pixabay API
+// Pixabay
 function getPixabayData(countryName) {
   return new Promise((resolve, reject) => {
     $.ajax({
       url: "php/api-connections/pixabay-image-data-request.php",
+      method: "GET",
+      dataType: "json",
+      data: { countryName: countryName },
+      success: function (data) {
+        resolve(data);
+      },
+      error: function (xhr, status, error) {
+        reject(error);
+
+        console.error("AJAX request failed:", error);
+      },
+    });
+  });
+}
+
+// Wikimedia 
+function getWikipediaPage(countryName) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: "php/api-connections/wikipedia-page-request.php",
       method: "GET",
       dataType: "json",
       data: { countryName: countryName },
@@ -891,16 +912,25 @@ L.easyBar(
         const countryCode = $("#countrySelect").val();
         const countryName = $("#countrySelect option:selected").text();
 
-        getCountrylayerData(countryCode)
-          .then((data) => {
-            console.log(data.data[0]);
+        Promise.all([
+          getWikipediaPage(countryName),
+          getCountrylayerData(countryCode),
+        ])
+          .then(([wikipediaData, countryData]) => {
+            // Once both promises are resolved, you can access the data for each API call
+            const [firstKey, firstValue] = Object.entries(
+              wikipediaData.query.pages
+            )[0];
+            const htmlArticle = firstValue.extract;
+
+            const tableData = countryData.data[0];
 
             $("#infoModal")
-              .html(createDataTable(countryName, data.data[0]))
+              .html(createDataTable(countryName, tableData, htmlArticle))
               .modal("show");
           })
           .catch(function (error) {
-            console.log(error); // Handle the error if it happens
+            console.log("An error occurred:", error);
           });
       }
     }),
@@ -1064,6 +1094,7 @@ L.easyBar(
           });
       }
     }),
+
     L.easyButton('<i class="bi bi-newspaper fs-6"></i>', function () {
       // do nothing if no country selected
       if ($("#countrySelect").val() !== "") {
@@ -1116,10 +1147,8 @@ L.easyBar(
           const currency = Object.keys(data.data[0].currencies)[0]; // eg. GBP
           let currencyObject = data.data[0].currencies[currency]; // eg. {symbol: '£', name: 'British pound'}
 
-
           getExchangeRateData(currency)
             .then((data) => {
-
               const selectOptions = data.data.allRates.rates;
 
               const dollarRate = data.data.dollarRate.rates;
@@ -1144,16 +1173,18 @@ L.easyBar(
                 )
                 .modal("show");
 
-              // adding an event listener every time modal opens !!!
               $("#currencySelect").on("change", function () {
+                console.log("event listnener called - select changed");
                 const selectedCurrencyRate = parseFloat($(this).val());
-                const amount = $('#currencyAmount').val();
-                const totalCurrencyValue = (selectedCurrencyRate * amount).toFixed(
-                  2
-                );
+                const amount = $("#currencyAmount").val();
+                const totalCurrencyValue = (
+                  selectedCurrencyRate * amount
+                ).toFixed(2);
 
                 const currencyCode = $(this).find("option:selected").text();
-                $("#currencyOutput").text(totalCurrencyValue + ' ' + currencyCode);
+                $("#currencyOutput").text(
+                  totalCurrencyValue + " " + currencyCode
+                );
               });
             })
             .catch(function (error) {
