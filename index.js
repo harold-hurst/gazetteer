@@ -104,9 +104,7 @@ function createDataTable(countryName, countryInfo, wikiArticle) {
 
 // WeatherTable
 function createWeatherTable(countryName, forecastArray) {
-
-
-  function cardsHTML(forecastArray) {
+  function weatherCard(forecastArray) {
     return forecastArray
       .map((data) => {
         const date = new Date(data.dt * 1000).toLocaleDateString("en-US", {
@@ -182,7 +180,7 @@ function createWeatherTable(countryName, forecastArray) {
 
             <div id="forecastContainer" class="container">
             
-              ${cardsHTML(forecastArray)}
+              ${weatherCard(forecastArray)}
             
             </div>
             </div>
@@ -642,7 +640,7 @@ function getPixabayData(countryName) {
   });
 }
 
-// Wikimedia 
+// Wikimedia
 function getWikipediaPage(countryName) {
   return new Promise((resolve, reject) => {
     $.ajax({
@@ -655,7 +653,6 @@ function getWikipediaPage(countryName) {
       },
       error: function (xhr, status, error) {
         reject(error);
-
         console.error("AJAX request failed:", error);
       },
     });
@@ -669,7 +666,7 @@ const corner1 = L.latLng(-90, -180);
 const corner2 = L.latLng(90, 180);
 const bounds = L.latLngBounds(corner1, corner2);
 
-// define Leaflet js map
+// define Leaflet js map - provide default location to position the map at with setView
 const map = L.map("map", {
   minZoom: 3,
   maxBounds: bounds,
@@ -680,13 +677,6 @@ const map = L.map("map", {
 // define marker variables to show user location
 let userMarker;
 let userCircle;
-
-// define some cluster groups to be populated with markers
-let airportsCluster = L.markerClusterGroup();
-let citiesCluster = L.markerClusterGroup();
-let castlesCluster = L.markerClusterGroup();
-let universitiesCluster = L.markerClusterGroup();
-let stadiumsCluster = L.markerClusterGroup();
 
 // define custom markers
 const blueIcon = L.icon({
@@ -821,17 +811,14 @@ const basemaps = {
 // add streets to map as a default
 basemaps["Streets"].addTo(map);
 
-const options = {
-  collapsed: true, // Make the control open by default
-  position: "bottomright", // Position the control at the top-right corner
-  autoZIndex: false, // Don't auto adjust the z-index of layers
-};
+// define some cluster groups to be populated with markers
+let airportsCluster = L.markerClusterGroup();
+let citiesCluster = L.markerClusterGroup();
+let castlesCluster = L.markerClusterGroup();
+let universitiesCluster = L.markerClusterGroup();
+let stadiumsCluster = L.markerClusterGroup();
 
-const overlays = {
-  // Temperature: tempLayer,
-  // Precipitation: rainLayer,
-  // Clouds: cloudsLayer,
-  // Wind: windLayer,
+const markersOverlay = {
   Cities: citiesCluster,
   Airports: airportsCluster,
   Castles: castlesCluster,
@@ -839,8 +826,28 @@ const overlays = {
   Stadiums: stadiumsCluster,
 };
 
+const weatherOverlay = {
+  Temperature: tempLayer,
+  Precipitation: rainLayer,
+  Clouds: cloudsLayer,
+  Wind: windLayer,
+};
+
+const options = {
+  collapsed: true, // Make the control open by default
+  position: "bottomright", // Position the control at the top-right corner
+  autoZIndex: false, // Don't auto adjust the z-index of layers
+};
+
 // add the different layers to the map
-L.control.layers(basemaps, overlays, options).addTo(map);
+let layersControl = L.control
+  .layers(basemaps, null, options)
+  .addTo(map);
+
+function switchOverlay(newOverlay) {
+  map.removeControl(layersControl);
+  layersControl = L.control.layers(basemaps, newOverlay, options).addTo(map);
+}
 
 $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
 
@@ -920,9 +927,6 @@ L.easyBar(
           getCountrylayerData(countryCode),
         ])
           .then(([wikipediaData, countryData]) => {
-
-            console.log(wikipediaData)
-
             const [firstKey, firstValue] = Object.entries(
               wikipediaData.query.pages
             )[0];
@@ -937,6 +941,10 @@ L.easyBar(
           .catch(function (error) {
             console.log("An error occurred:", error);
           });
+      } else {
+        $(document).ready(function () {
+          $("#countrySelect").focus();
+        });
       }
     }),
 
@@ -1064,8 +1072,18 @@ L.easyBar(
             console.log(error); // Handle the error if it happens
           });
 
+        // change L.control
+        switchOverlay(markersOverlay);
+        // re-add the icon
+        $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
+        // open new control
         const $control = $(".leaflet-control-layers");
         $control.addClass("leaflet-control-layers-expanded");
+
+      } else {
+        $(document).ready(function () {
+          $("#countrySelect").focus();
+        });
       }
     }),
 
@@ -1097,6 +1115,21 @@ L.easyBar(
           .catch(function (error) {
             console.log(error); // Handle the error if it happens
           });
+
+
+                  // change L.control
+        switchOverlay(weatherOverlay);
+        // re-add the icon
+        $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
+        // open new control
+        const $control = $(".leaflet-control-layers");
+        $control.addClass("leaflet-control-layers-expanded");
+
+
+      } else {
+        $(document).ready(function () {
+          $("#countrySelect").focus();
+        });
       }
     }),
 
@@ -1117,6 +1150,10 @@ L.easyBar(
           .catch(function (error) {
             console.log(error);
           });
+      } else {
+        $(document).ready(function () {
+          $("#countrySelect").focus();
+        });
       }
     }),
     L.easyButton('<i class="bi bi-image fs-6"></i>', function () {
@@ -1141,64 +1178,74 @@ L.easyBar(
           .catch(function (error) {
             console.log(error);
           });
+      } else {
+        $(document).ready(function () {
+          $("#countrySelect").focus();
+        });
       }
     }),
     L.easyButton('<i class="bi bi-currency-exchange fs-6"></i>', function () {
-      const countryCode = $("#countrySelect").val();
-      const countryName = $("#countrySelect option:selected").text();
+      if ($("#countrySelect").val() !== "") {
+        const countryCode = $("#countrySelect").val();
+        const countryName = $("#countrySelect option:selected").text();
 
-      getCountrylayerData(countryCode) // pull currency info on base country
-        .then((data) => {
-          const currency = Object.keys(data.data[0].currencies)[0]; // eg. GBP
-          let currencyObject = data.data[0].currencies[currency]; // eg. {symbol: '£', name: 'British pound'}
+        getCountrylayerData(countryCode) // pull currency info on base country
+          .then((data) => {
+            const currency = Object.keys(data.data[0].currencies)[0]; // eg. GBP
+            let currencyObject = data.data[0].currencies[currency]; // eg. {symbol: '£', name: 'British pound'}
 
-          getExchangeRateData(currency)
-            .then((data) => {
-              const selectOptions = data.data.allRates.rates;
+            getExchangeRateData(currency)
+              .then((data) => {
+                const selectOptions = data.data.allRates.rates;
 
-              const dollarRate = data.data.dollarRate.rates;
+                const dollarRate = data.data.dollarRate.rates;
 
-              const [multiplierKey, multiplierValue] =
-                Object.entries(dollarRate)[0];
+                const [multiplierKey, multiplierValue] =
+                  Object.entries(dollarRate)[0];
 
-              const convertedRates = {};
+                const convertedRates = {};
 
-              for (const [code, value] of Object.entries(selectOptions)) {
-                convertedRates[code] = value / multiplierValue;
-              }
+                for (const [code, value] of Object.entries(selectOptions)) {
+                  convertedRates[code] = value / multiplierValue;
+                }
 
-              $("#infoModal")
-                .html(
-                  createCurrencyCard(
-                    countryName,
-                    currencyObject,
-                    convertedRates,
-                    currency
+                $("#infoModal")
+                  .html(
+                    createCurrencyCard(
+                      countryName,
+                      currencyObject,
+                      convertedRates,
+                      currency
+                    )
                   )
-                )
-                .modal("show");
+                  .modal("show");
 
-              $("#currencySelect").on("change", function () {
-                console.log("event listnener called - select changed");
-                const selectedCurrencyRate = parseFloat($(this).val());
-                const amount = $("#currencyAmount").val();
-                const totalCurrencyValue = (
-                  selectedCurrencyRate * amount
-                ).toFixed(2);
+                $("#currencySelect").on("change", function () {
+                  console.log("event listnener called - select changed");
+                  const selectedCurrencyRate = parseFloat($(this).val());
+                  const amount = $("#currencyAmount").val();
+                  const totalCurrencyValue = (
+                    selectedCurrencyRate * amount
+                  ).toFixed(2);
 
-                const currencyCode = $(this).find("option:selected").text();
-                $("#currencyOutput").text(
-                  totalCurrencyValue + " " + currencyCode
-                );
+                  const currencyCode = $(this).find("option:selected").text();
+                  $("#currencyOutput").text(
+                    totalCurrencyValue + " " + currencyCode
+                  );
+                });
+              })
+              .catch(function (error) {
+                console.log(error);
               });
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        })
-        .catch(function (error) {
-          console.log(error);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      } else {
+        $(document).ready(function () {
+          $("#countrySelect").focus();
         });
+      }
     }),
   ],
   {
@@ -1339,14 +1386,9 @@ $("#countrySelect").on("change", function () {
   map.removeLayer(stadiumsCluster);
   map.removeLayer(universitiesCluster);
   map.removeLayer(citiesCluster);
-});
 
-$("#clearSelect").on("click", function () {
-  map.removeLayer(airportsCluster);
-  map.removeLayer(castlesCluster);
-  map.removeLayer(stadiumsCluster);
-  map.removeLayer(universitiesCluster);
-  map.removeLayer(citiesCluster);
+  switchOverlay(null);
+  $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
 });
 
 // Scroll map left and right when modal opens/closes *****************************************

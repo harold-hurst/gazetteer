@@ -113,13 +113,8 @@ body {
 }
 
 #countrySelect:focus {
-  border-color: #80d643; /* Primary color or any color you choose */
-  box-shadow: 0 0 0 0.2rem rgba(128, 214, 67, 0.25); /* Optional: Adding a shadow effect for focus */
-}
-
-#countrySelect.focus-visible {
-  outline: 2px solid #80d643; /* Primary color outline */
-  box-shadow: 0 0 0 3px rgba(128, 214, 67, 0.4); /* Light green glow */
+  border-color: #80d643;
+  box-shadow: 0 0 1rem 1rem #80d643 !important;
 }
 
 /* a tag */
@@ -202,6 +197,13 @@ input[type="checkbox"]:hover {
     height: 40px;
     line-height: 40px;
   }
+}
+
+/* make span within leaflet easyButtons a flex container */
+.leaflet-touch .leaflet-bar button span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #responsiveBtn {
