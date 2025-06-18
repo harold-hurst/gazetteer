@@ -80,7 +80,11 @@ body {
   --bs-primary-rgb: 128, 214, 67; /* RGB value for the primary color */
 }
 
-/* modal compoents */
+/* modal components */
+
+.modal-header {
+  border-bottom: none;
+}
 
 @media (min-width: 840px) {
   .modal-dialog {
@@ -201,8 +205,8 @@ input[type="checkbox"]:hover {
 }
 
 #responsiveBtn {
-  font-size: 1.25rem;
-  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
   border-radius: 0.5rem;
 }
 
@@ -213,5 +217,3 @@ input[type="checkbox"]:hover {
     border-radius: 0.25rem;
   }
 }
-
-

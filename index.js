@@ -84,7 +84,7 @@ function createDataTable(countryName, countryInfo, wikiArticle) {
           <table class="table table-striped mb-4">
             ${tableRows(countryInfo)}
           </table>
-          <h4>Wikipedia</h4>
+          <h5>Wikipedia</h5>
           ${wikiArticle}
         </div>
         <div class="modal-footer">
@@ -104,6 +104,8 @@ function createDataTable(countryName, countryInfo, wikiArticle) {
 
 // WeatherTable
 function createWeatherTable(countryName, forecastArray) {
+
+
   function cardsHTML(forecastArray) {
     return forecastArray
       .map((data) => {
@@ -123,18 +125,19 @@ function createWeatherTable(countryName, forecastArray) {
         const iconUrl = `https://openweathermap.org/img/wn/${weather.icon}@2x.png`;
 
         return `
-      <div class="row align-items-center mb-4 p-3 border rounded shadow-sm bg-light">
+      <div class="row align-items-center p-3 border rounded shadow-sm bg-light mb-4">
 
-        <div class="col-2 text-center">
+        <div class="col-md-3 text-center mb-4 mb-md-0">
           <img src="${iconUrl}" alt="${
           weather.description
         }" class="img-fluid" />
           <div class="small text-muted mt-1">${weather.main}</div>
         </div>
 
-        <div class="col-10">
+        <div class="col-md-9">
           <h6>${date} – ${weather.description}</h6>
           <p class="mb-2"><em>${data.summary}</em></p>
+
           <div class="row small">
             <div class="col-md-4"><strong>Temp:</strong> ${tempDay}°C (min: ${tempMin}°C, max: ${tempMax}°C)</div>
             <div class="col-md-4"><strong>Feels Like:</strong> ${feelsLike}°C</div>
@@ -154,8 +157,8 @@ function createWeatherTable(countryName, forecastArray) {
             <div class="col-md-4"><strong>Sunset:</strong> ${sunset}</div>
             <div class="col-md-4"><strong>UV Index:</strong> ${data.uvi}</div>
           </div>
-        </div>
 
+        </div>
       </div>
     `;
       })
@@ -177,7 +180,7 @@ function createWeatherTable(countryName, forecastArray) {
             </div>
             <div class="modal-body">
 
-            <div id="forecastContainer" class="container my-4">
+            <div id="forecastContainer" class="container">
             
               ${cardsHTML(forecastArray)}
             
@@ -917,7 +920,9 @@ L.easyBar(
           getCountrylayerData(countryCode),
         ])
           .then(([wikipediaData, countryData]) => {
-            // Once both promises are resolved, you can access the data for each API call
+
+            console.log(wikipediaData)
+
             const [firstKey, firstValue] = Object.entries(
               wikipediaData.query.pages
             )[0];
