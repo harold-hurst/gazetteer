@@ -97,19 +97,10 @@ body {
   color: var(--bs-primary);
 }
 
-.btn-outline-primary:hover {
-  background-color: var(--bs-primary) !important;
-  color: #fff !important;
-}
-
 #clearSelect {
-  background-color: white;
-  color: var(--bs-body-color);
-  border: var(--bs-border-width) solid var(--bs-border-color) !important;
-}
-
-#clearSelect:hover {
-  border: var(--bs-border-width) solid var(--bs-primary) !important;
+  background-color: var(--bs-primary);
+  color: white;
+  border: 1px solid var(--bs-border-color);
 }
 
 #countrySelect:focus {
@@ -210,6 +201,10 @@ input[type="checkbox"]:hover {
   font-size: 1rem;
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
+}
+
+#responsiveBtn:hover {
+  background-color: var(--bs-primary);
 }
 
 @media (min-width: 840px) {

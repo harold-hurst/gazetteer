@@ -686,39 +686,44 @@ const blueIcon = L.icon({
   popupAnchor: [0, -22], // point from which the popup should open relative to the iconAnchor
 });
 
-const airportIcon = L.icon({
-  iconUrl: "assets/images/plane-solid.svg",
-  iconSize: [22, 22], // size of the icon
-  iconAnchor: [11, 26], // point of the icon which will correspond to marker's location
-  popupAnchor: [0, -22], // point from which the popup should open relative to the iconAnchor
+const airportIcon = L.ExtraMarkers.icon({
+  icon: "bi-airplane",
+  markerColor: "red",
+  innerHTML: "<img src='assets/images/plane-solid.svg' alt='Marker'  style='width: 17px; height: 33px;'></img>",
+  shape: "square",
+  prefix: "bi",
 });
 
-const citiesIcon = L.icon({
-  iconUrl: "assets/images/city-solid.svg",
-  iconSize: [22, 22], // size of the icon
-  iconAnchor: [11, 26], // point of the icon which will correspond to marker's location
-  popupAnchor: [0, -22], // point from which the popup should open relative to the iconAnchor
+const citiesIcon = L.ExtraMarkers.icon({
+  icon: "bi-buildings",
+  markerColor: "blue",
+  innerHTML: "<img src='assets/images/city-solid.svg' alt='Marker'  style='width: 17px; height: 33px;'></img>",
+  shape: "square",
+  prefix: "bi",
 });
 
-const castlesIcon = L.icon({
-  iconUrl: "assets/images/chess-rook-solid.svg",
-  iconSize: [22, 22], // size of the icon
-  iconAnchor: [11, 26], // point of the icon which will correspond to marker's location
-  popupAnchor: [0, -22], // point from which the popup should open relative to the iconAnchor
+const castlesIcon = L.ExtraMarkers.icon({
+  icon: "",
+  markerColor: "green",
+  innerHTML: "<img src='assets/images/chess-rook-solid.svg' alt='Marker'  style='width: 17px; height: 33px;'></img>",
+  shape: "square",
+  prefix: "bi",
 });
 
-const universitiesIcon = L.icon({
-  iconUrl: "assets/images/school-flag-solid.svg",
-  iconSize: [22, 22], // size of the icon
-  iconAnchor: [11, 26], // point of the icon which will correspond to marker's location
-  popupAnchor: [0, -22], // point from which the popup should open relative to the iconAnchor
+const universitiesIcon = L.ExtraMarkers.icon({
+  icon: "",
+  markerColor: "orange",
+  innerHTML: "<img src='assets/images/school-flag-solid.svg' alt='Marker'  style='width: 17px; height: 33px;'></img>",
+  shape: "square",
+  prefix: "bi",
 });
 
-const stadiumsIcon = L.icon({
-  iconUrl: "assets/images/hotel-solid.svg",
-  iconSize: [22, 22], // size of the icon
-  iconAnchor: [11, 26], // point of the icon which will correspond to marker's location
-  popupAnchor: [0, -22], // point from which the popup should open relative to the iconAnchor
+const stadiumsIcon = L.ExtraMarkers.icon({
+  icon: "",
+  markerColor: "yellow",
+  innerHTML: "<img src='assets/images/hotel-solid.svg' alt='Marker'  style='width: 17px; height: 33px;'></img>",
+  shape: "square",
+  prefix: "bi",
 });
 
 // Street
@@ -840,9 +845,7 @@ const options = {
 };
 
 // add the different layers to the map
-let layersControl = L.control
-  .layers(basemaps, null, options)
-  .addTo(map);
+let layersControl = L.control.layers(basemaps, null, options).addTo(map);
 
 function switchOverlay(newOverlay) {
   map.removeControl(layersControl);
@@ -945,8 +948,9 @@ L.easyBar(
         // change L.control
         switchOverlay(null);
         // re-add the icon
-        $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
-       
+        $(".leaflet-control-layers-toggle").html(
+          "<i class='bi bi-layers fs-3'></i>"
+        );
       } else {
         $(document).ready(function () {
           $("#countrySelect").focus();
@@ -1081,11 +1085,12 @@ L.easyBar(
         // change L.control
         switchOverlay(markersOverlay);
         // re-add the icon
-        $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
+        $(".leaflet-control-layers-toggle").html(
+          "<i class='bi bi-layers fs-3'></i>"
+        );
         // open new control
         const $control = $(".leaflet-control-layers");
         $control.addClass("leaflet-control-layers-expanded");
-
       } else {
         $(document).ready(function () {
           $("#countrySelect").focus();
@@ -1122,16 +1127,15 @@ L.easyBar(
             console.log(error); // Handle the error if it happens
           });
 
-
-                  // change L.control
+        // change L.control
         switchOverlay(weatherOverlay);
         // re-add the icon
-        $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
+        $(".leaflet-control-layers-toggle").html(
+          "<i class='bi bi-layers fs-3'></i>"
+        );
         // open new control
         const $control = $(".leaflet-control-layers");
         $control.addClass("leaflet-control-layers-expanded");
-
-
       } else {
         $(document).ready(function () {
           $("#countrySelect").focus();
@@ -1160,8 +1164,9 @@ L.easyBar(
         // change L.control
         switchOverlay(null);
         // re-add the icon
-        $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
-     
+        $(".leaflet-control-layers-toggle").html(
+          "<i class='bi bi-layers fs-3'></i>"
+        );
       } else {
         $(document).ready(function () {
           $("#countrySelect").focus();
@@ -1194,8 +1199,9 @@ L.easyBar(
         // change L.control
         switchOverlay(null);
         // re-add the icon
-        $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
-     
+        $(".leaflet-control-layers-toggle").html(
+          "<i class='bi bi-layers fs-3'></i>"
+        );
       } else {
         $(document).ready(function () {
           $("#countrySelect").focus();
@@ -1263,8 +1269,9 @@ L.easyBar(
         // change L.control
         switchOverlay(null);
         // re-add the icon
-        $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
-     
+        $(".leaflet-control-layers-toggle").html(
+          "<i class='bi bi-layers fs-3'></i>"
+        );
       } else {
         $(document).ready(function () {
           $("#countrySelect").focus();
@@ -1312,9 +1319,9 @@ $("#countrySelect").on("change", function () {
         currentCountryGeoJsonLayer = L.geoJSON(geoJson, {
           style: {
             color: "#e61414",
-            opacity: 0.7,
+            opacity: 1,
             fillColor: "#e61414",
-            fillOpacity: 0,
+            fillOpacity: 0.1,
           },
           onEachFeature: function (feature, layer) {
             layer.bindPopup("Country: " + feature.properties.name);
