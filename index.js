@@ -941,6 +941,12 @@ L.easyBar(
           .catch(function (error) {
             console.log("An error occurred:", error);
           });
+
+        // change L.control
+        switchOverlay(null);
+        // re-add the icon
+        $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
+       
       } else {
         $(document).ready(function () {
           $("#countrySelect").focus();
@@ -1150,6 +1156,12 @@ L.easyBar(
           .catch(function (error) {
             console.log(error);
           });
+
+        // change L.control
+        switchOverlay(null);
+        // re-add the icon
+        $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
+     
       } else {
         $(document).ready(function () {
           $("#countrySelect").focus();
@@ -1178,6 +1190,12 @@ L.easyBar(
           .catch(function (error) {
             console.log(error);
           });
+
+        // change L.control
+        switchOverlay(null);
+        // re-add the icon
+        $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
+     
       } else {
         $(document).ready(function () {
           $("#countrySelect").focus();
@@ -1241,6 +1259,12 @@ L.easyBar(
           .catch(function (error) {
             console.log(error);
           });
+
+        // change L.control
+        switchOverlay(null);
+        // re-add the icon
+        $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
+     
       } else {
         $(document).ready(function () {
           $("#countrySelect").focus();
@@ -1287,9 +1311,9 @@ $("#countrySelect").on("change", function () {
         // Add layer to the map
         currentCountryGeoJsonLayer = L.geoJSON(geoJson, {
           style: {
-            color: "#80d643",
+            color: "#e61414",
             opacity: 0.7,
-            fillColor: "#80d643",
+            fillColor: "#e61414",
             fillOpacity: 0,
           },
           onEachFeature: function (feature, layer) {
