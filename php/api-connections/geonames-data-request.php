@@ -9,10 +9,8 @@ function fetchCities($countryCode)
 
     $apiUrl = 'http://api.geonames.org/searchJSON?featureCode=PPL&country=' . $countryCode . '&maxRows=10&username=haroldhurst';
 
-    // Initialize a cURL session
     $curl = curl_init();
 
-    // Set the cURL options
     curl_setopt_array($curl, [
         CURLOPT_URL => $apiUrl,                  // API URL
         CURLOPT_RETURNTRANSFER => true,           // Return the response as a string
@@ -27,11 +25,9 @@ function fetchCities($countryCode)
         ],
     ]);
 
-    // Execute the cURL request and get the response
     $response = curl_exec($curl);
     return json_decode($response, true);
 
-    // Close the cURL session
     curl_close($curl);
 }
 
@@ -41,10 +37,8 @@ function fetchFeatures($featureCode, $countryCode)
 
     $apiUrl = 'http://api.geonames.org/searchJSON?featureCode=' . $featureCode . '&country=' . $countryCode . '&maxRows=10&username=haroldhurst';
 
-    // Initialize a cURL session
     $curl = curl_init();
 
-    // Set the cURL options
     curl_setopt_array($curl, [
         CURLOPT_URL => $apiUrl,                  // API URL
         CURLOPT_RETURNTRANSFER => true,           // Return the response as a string
@@ -59,11 +53,9 @@ function fetchFeatures($featureCode, $countryCode)
         ],
     ]);
 
-    // Execute the cURL request and get the response
     $response = curl_exec($curl);
     return json_decode($response, true);
 
-    // Close the cURL session
     curl_close($curl);
 }
 

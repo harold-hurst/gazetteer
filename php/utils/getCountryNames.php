@@ -18,5 +18,5 @@ if (isset($array['features'])) {
     }
     echo json_encode($countryNames);
 } else {
-    echo "Invalid JSON structure.\n";
+    echo "Invalid JSON structure.";
 }

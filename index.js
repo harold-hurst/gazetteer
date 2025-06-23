@@ -1318,10 +1318,11 @@ $("#countrySelect").on("change", function () {
         // Add layer to the map
         currentCountryGeoJsonLayer = L.geoJSON(geoJson, {
           style: {
-            color: "#e61414",
+            color: "#80d643",
             opacity: 1,
-            fillColor: "#e61414",
-            fillOpacity: 0.1,
+            fillColor: "#80d643",
+            //#e61414
+            fillOpacity: 0.0,
           },
           onEachFeature: function (feature, layer) {
             layer.bindPopup("Country: " + feature.properties.name);
