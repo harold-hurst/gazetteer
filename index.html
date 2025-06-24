@@ -50,9 +50,10 @@
     />
 
     <!-- Include Leaflet Extra Markers CSS -->
-     <link
-     rel="stylesheet"
-     href="Leaflet.ExtraMarkers-master/dist/css/leaflet.extra-markers.min.css"/>
+    <link
+      rel="stylesheet"
+      href="Leaflet.ExtraMarkers-master/dist/css/leaflet.extra-markers.min.css"
+    />
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="assets/css/libs/bootstrap-5.3.6.min.css" />
@@ -69,17 +70,10 @@
   <body>
     <div id="preloader"></div>
     <span id="selectContainer" class="d-flex flex-row justify-content-center">
-      <select id="countrySelect" class="form-select shadow-sm me-2">
+      <select id="countrySelect" class="form-select shadow-sm">
         <!-- populate from an AJAX CALL to a PHP routine that returns a JSON object that is an array of just ISO codes and names from countryBorders.geo.json -->
         <option value="">Select a country</option>
       </select>
-      <!-- <button
-        type="button"
-        class="btn btn-outline-primary shadow-sm"
-        id="clearSelect"
-      >
-        Clear
-      </button> -->
     </span>
 
     <div id="map"></div>
@@ -93,7 +87,30 @@
       tabindex="-1"
       aria-labelledby="myModalLabel"
       aria-hidden="true"
-    ></div>
+    >
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content shadow">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title" id="modalTitle"></h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div id="modalPreloader"></div>
+
+
+            <div id="contentContainer">
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- jQuery CDN -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

@@ -68,37 +68,17 @@ function createDataTable(countryName, countryInfo, wikiArticle) {
   }
 
   return `
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content shadow">
-        <div class="modal-header bg-primary text-white">
-        <i class="fs-1 me-3">${countryInfo.flag}</i>
-          <h5 class="modal-title">${countryName} Overview</h5>
-          <button
-            type="button"
-            class="btn-close btn-close-white"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
+
+
+
           <table class="table table-striped mb-4">
             ${tableRows(countryInfo)}
           </table>
           <h5>Wikipedia</h5>
           ${wikiArticle}
-        </div>
-        <div class="modal-footer">
-          <button
-            id="responsiveBtn"
-            type="button"
-            class="btn btn-outline-primary"
-            data-bs-dismiss="modal"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
+
+
+
 `;
 }
 
@@ -107,8 +87,6 @@ function createWeatherTable(countryName, forecastArray) {
   const firstItem = forecastArray.shift();
 
   console.log(firstItem);
-
-
 
   const tempMin = (firstItem.temp.min - 273.15).toFixed(1);
   const tempMax = (firstItem.temp.max - 273.15).toFixed(1);
@@ -228,20 +206,8 @@ function createWeatherTable(countryName, forecastArray) {
   }
 
   return `
-  
-<div class="modal-dialog modal-dialog-scrollable">
-  <div class="modal-content shadow">
-    <div class="modal-header bg-primary text-white">
-      <h5 class="modal-title">${countryName} Forecast</h5>
-      <button
-        type="button"
-        class="btn-close btn-close-white"
-        data-bs-dismiss="modal"
-        aria-label="Close"
-      ></button>
-    </div>
-    <div class="modal-body">
-      <div id="modalPreloader"></div>
+
+
 
       <div class="row">
 
@@ -280,9 +246,7 @@ function createWeatherTable(countryName, forecastArray) {
 
       ${weatherCard(grouped)}
 
-    </div>
-  </div>
-</div>
+
 
   
   `;
@@ -312,86 +276,25 @@ function createCurrencyCard(
   const currencySymbol = currencyObject.symbol;
 
   return `
-    <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content shadow">
-        <div class="modal-header bg-primary text-white align-items-start">
-
-        <div class="w-100">
-            <h5 class="modal-title">Currency in ${countryName}: </h5>
-            <h6>Exchange ${currencyName}s (${currency})</h6>
-        </div>
-
-        <button
-            type="button"
-            class="btn-close btn-close-white"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-        ></button>
-        </div>
-        <div class="modal-body">
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <div class="my-4">
-          <label for="currencyAmount" class="form-label">From ${currencyName}s (${currencySymbol}):</label>
-          <input type="number" id="currencyAmount" class="form-control" placeholder="Enter a number">
-        </div>
-
-        <!--
-        <div
-            class="w-100 d-inline-flex mb-4 p-3 border rounded shadow-sm bg-light"
+      <div class="my-4">
+        <label for="currencyAmount" class="form-label"
+          >From ${currencyName}s (${currencySymbol}):</label
         >
-        </div>
-        -->
+        <input
+          type="number"
+          id="currencyAmount"
+          class="form-control"
+          placeholder="Enter a number"
+        />
+      </div>
 
+      ${createCurrencySelect(selectOptions)}
 
-        ${createCurrencySelect(selectOptions)}
-
-        <div
-            class="w-100 d-inline-flex mb-4 p-3 border rounded shadow-sm bg-light"
-        >
-            <span id="currencyOutput" class="flex-fill"></span>
-
-        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        </div>
-        <div class="modal-footer">
-        <button
-            id="responsiveBtn"
-            type="button"
-            class="btn btn-outline-primary btn-sm"
-            data-bs-dismiss="modal"
-        >
-            Close
-        </button>
-        </div>
-    </div>
-    </div>
+      <div
+        class="w-100 d-inline-flex mb-4 p-3 border rounded shadow-sm bg-light"
+      >
+        <span id="currencyOutput" class="flex-fill"></span>
+      </div>
 `;
 }
 
@@ -447,36 +350,11 @@ function createNewsContainer(countryName, newsData) {
   }
 
   return `
-        <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content shadow">
-            <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title">Latest news in ${countryName}</h5>
-            <button
-                type="button"
-                class="btn-close btn-close-white"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-            ></button>
-            </div>
-            <div class="modal-body">
-            <div class="my-4">
-                <div id="news-container" class="row gy-4">
-                ${renderArticlesToHTML(newsData)}
-                </div>
-            </div>
-            </div>
-            <div class="modal-footer">
-            <button
-                id="responsiveBtn"
-                type="button"
-                class="btn btn-outline-primary btn-sm"
-                data-bs-dismiss="modal"
-            >
-                Close
-            </button>
-            </div>
+      <div class="my-4">
+        <div id="news-container" class="row gy-4">
+          ${renderArticlesToHTML(newsData)}
         </div>
-        </div>
+      </div>
 `;
 }
 
@@ -507,56 +385,31 @@ function createPhotoCarousel(countryName, photoArray) {
       .join("");
   }
   return `
-    <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content shadow">
-        <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">Photos of ${countryName}</h5>
+      <div
+        id="carouselExampleInterval"
+        class="carousel slide"
+        data-bs-ride="carousel"
+      >
+        <div class="carousel-inner">${itemHTML(photoArray)}</div>
         <button
-            type="button"
-            class="btn-close btn-close-white"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-        ></button>
-        </div>
-        <div class="modal-body">
-        <div
-            id="carouselExampleInterval"
-            class="carousel slide"
-            data-bs-ride="carousel"
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselExampleInterval"
+          data-bs-slide="prev"
         >
-            <div class="carousel-inner">${itemHTML(photoArray)}</div>
-            <button
-            class="carousel-control-prev"
-            type="button"
-            data-bs-target="#carouselExampleInterval"
-            data-bs-slide="prev"
-            >
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-            </button>
-            <button
-            class="carousel-control-next"
-            type="button"
-            data-bs-target="#carouselExampleInterval"
-            data-bs-slide="next"
-            >
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-        </div>
-        <div class="modal-footer">
-        <button
-            id="responsiveBtn"
-            type="button"
-            class="btn btn-outline-primary btn-sm"
-            data-bs-dismiss="modal"
-        >
-            Close
+          <span class="carousel-control-prev-icon"></span>
+          <span class="visually-hidden">Previous</span>
         </button>
-        </div>
-    </div>
-    </div>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselExampleInterval"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
   `;
 }
 
@@ -932,7 +785,7 @@ const weatherOverlay = {
 };
 
 const options = {
-  collapsed: true, // Make the control open by default
+  collapsed: false, // Make the control open by default
   position: "bottomright", // Position the control at the top-right corner
   autoZIndex: false, // Don't auto adjust the z-index of layers
 };
@@ -945,78 +798,18 @@ function switchOverlay(newOverlay) {
   layersControl = L.control.layers(basemaps, newOverlay, options).addTo(map);
 }
 
-$(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
-
-// L.easyBar(
-//   [
-//     // get current location button
-//     L.easyButton(
-//       '<i class="bi bi-crosshair fs-6"></i>',
-
-//       function (btn, map) {
-//         getCurrentLocation()
-//           .then((position) => {
-//             // clear out selected country
-//             $("#countrySelect").val("").trigger("change");
-
-//             const location = {
-//               lat: position.coords.latitude,
-//               lng: position.coords.longitude,
-//             };
-
-//             const accuracy = position.coords.accuracy;
-
-//             // Move the map to the user's current location
-//             map.setView(location, 15);
-
-//             // Remove the existing circle, if there is one
-//             if (userCircle) {
-//               map.removeLayer(userCircle);
-//             }
-
-//             userCircle = L.circle(location, {
-//               radius: accuracy,
-//               color: "#80d643",
-//               opacity: 0.5,
-//               fillColor: "#80d643",
-//               fillOpacity: 0.3,
-//             }).addTo(map);
-
-//             getOpencageData(location).then((data) => {
-//               // Remove previous marker if it exists
-//               if (userMarker) {
-//                 map.removeLayer(userMarker);
-//               }
-
-//               // Add a new marker at the user's location
-//               userMarker = L.marker(location, { icon: blueIcon })
-//                 .addTo(map)
-//                 .bindPopup(data.data.results[0].formatted) // Add popup
-//                 .openPopup(); // Open popup automatically
-//             });
-//           })
-//           .catch((error) => {
-//             // Handle errors (e.g. if geolocation fails)
-//             console.error("Error:", error);
-//           });
-//       }
-//     ),
-//     L.easyButton('<i class="bi bi-house fs-6"></i>', function (btn, map) {
-//       map.setView([52.95, -1.16], 13);
-//     }),
-//   ],
-//   {
-//     position: "topleft",
-//   }
-// ).addTo(map);
-
 L.easyBar(
   [
     L.easyButton('<i class="bi bi-info-circle fs-6"></i>', function () {
       // do nothing if no country selected
       if ($("#countrySelect").val() !== "") {
+        // show the modal which contains a spinner
+        $("#infoModal").modal("show");
+
         const countryCode = $("#countrySelect").val();
+
         const countryName = $("#countrySelect option:selected").text();
+        $('#modalTitle').text(`${countryName} Overview`);
 
         Promise.all([
           getWikipediaPage(countryName),
@@ -1030,27 +823,26 @@ L.easyBar(
 
             const tableData = countryData.data[0];
 
-            $("#infoModal")
-              .html(createDataTable(countryName, tableData, htmlArticle))
-              .modal("show");
+            $("#contentContainer").html(
+              createDataTable(countryName, tableData, htmlArticle)
+            );
+
+            $('#modalPreloader').addClass("fadeOut");
+
           })
           .catch(function (error) {
             console.log("An error occurred:", error);
+            $('#modalTitle').text(`Error retrieving country data`);
           });
 
         // change L.control
         switchOverlay(null);
-        // re-add the icon
-        $(".leaflet-control-layers-toggle").html(
-          "<i class='bi bi-layers fs-3'></i>"
-        );
       } else {
         $(document).ready(function () {
           $("#countrySelect").focus();
         });
       }
     }),
-
     L.easyButton('<i class="bi bi-geo-alt fs-6"></i>', function () {
       // do nothing if no country selected
       if ($("#countrySelect").val() !== "") {
@@ -1177,10 +969,7 @@ L.easyBar(
 
         // change L.control
         switchOverlay(markersOverlay);
-        // re-add the icon
-        $(".leaflet-control-layers-toggle").html(
-          "<i class='bi bi-layers fs-3'></i>"
-        );
+
         // open new control
         const $control = $(".leaflet-control-layers");
         $control.addClass("leaflet-control-layers-expanded");
@@ -1190,12 +979,15 @@ L.easyBar(
         });
       }
     }),
-
     L.easyButton('<i class="bi bi-cloud-sun fs-6"></i>', function () {
       // do nothing if no country selected
       if ($("#countrySelect").val() !== "") {
+        // show the modal which contains a spinner
+        $("#infoModal").modal("show");
+
         const countryCode = $("#countrySelect").val();
         const countryName = $("#countrySelect option:selected").text();
+        $('#modalTitle').text(`${countryName} Weather`);
 
         getCountrylayerData(countryCode)
           .then((data) => {
@@ -1208,9 +1000,11 @@ L.easyBar(
 
             getOpenWeatherData(capitalLocation)
               .then((data) => {
-                $("#infoModal")
-                  .html(createWeatherTable(capital, data.data.daily))
-                  .modal("show");
+                $("#contentContainer").html(
+                  createWeatherTable(capital, data.data.daily)
+                );
+
+                $('#modalPreloader').addClass("fadeOut");
               })
               .catch(function (error) {
                 console.log(error); // Handle the error if it happens
@@ -1218,14 +1012,12 @@ L.easyBar(
           })
           .catch(function (error) {
             console.log(error); // Handle the error if it happens
+            $('#modalTitle').text(`Error retrieving weather data`);
           });
 
         // change L.control
         switchOverlay(weatherOverlay);
-        // re-add the icon
-        $(".leaflet-control-layers-toggle").html(
-          "<i class='bi bi-layers fs-3'></i>"
-        );
+
         // open new control
         const $control = $(".leaflet-control-layers");
         $control.addClass("leaflet-control-layers-expanded");
@@ -1235,31 +1027,31 @@ L.easyBar(
         });
       }
     }),
-
     L.easyButton('<i class="bi bi-newspaper fs-6"></i>', function () {
       // do nothing if no country selected
       if ($("#countrySelect").val() !== "") {
+        // show the modal which contains a spinner
+        $("#infoModal").modal("show");
+
         const countryCode = $("#countrySelect").val();
+
         const countryName = $("#countrySelect option:selected").text();
+        $('#modalTitle').text(`${countryName} News`);
 
         getNewsApiData(countryCode)
           .then((data) => {
             console.log(data);
 
-            $("#infoModal")
-              .html(createNewsContainer(countryName, data.data))
-              .modal("show");
+            $("#contentContainer").html(createNewsContainer(countryName, data.data));
+            $('#modalPreloader').addClass("fadeOut");
           })
           .catch(function (error) {
             console.log(error);
+            $('#modalTitle').text(`Error retrieving news data`);
           });
 
         // change L.control
         switchOverlay(null);
-        // re-add the icon
-        $(".leaflet-control-layers-toggle").html(
-          "<i class='bi bi-layers fs-3'></i>"
-        );
       } else {
         $(document).ready(function () {
           $("#countrySelect").focus();
@@ -1269,16 +1061,18 @@ L.easyBar(
     L.easyButton('<i class="bi bi-image fs-6"></i>', function () {
       // do nothing if no country selected
       if ($("#countrySelect").val() !== "") {
-        const countryCode = $("#countrySelect").val();
+        // show the modal which contains a spinner
+        $("#infoModal").modal("show");
+
         const countryName = $("#countrySelect option:selected").text();
+        $('#modalTitle').text(`${countryName} Images`);
 
         getPixabayData(countryName)
           .then((data) => {
             console.log(data);
 
-            $("#infoModal")
-              .html(createPhotoCarousel(countryName, data.hits))
-              .modal("show");
+            $("#contentContainer").html(createPhotoCarousel(countryName, data.hits));
+            $('#modalPreloader').addClass("fadeOut");
 
             // Initialize the carousel with jQuery
             $("#carouselExampleInterval").carousel({
@@ -1287,14 +1081,11 @@ L.easyBar(
           })
           .catch(function (error) {
             console.log(error);
+            $('#modalTitle').text(`Error retrieving images`);
           });
 
         // change L.control
         switchOverlay(null);
-        // re-add the icon
-        $(".leaflet-control-layers-toggle").html(
-          "<i class='bi bi-layers fs-3'></i>"
-        );
       } else {
         $(document).ready(function () {
           $("#countrySelect").focus();
@@ -1303,8 +1094,12 @@ L.easyBar(
     }),
     L.easyButton('<i class="bi bi-currency-exchange fs-6"></i>', function () {
       if ($("#countrySelect").val() !== "") {
+        // show the modal which contains a spinner
+        $("#infoModal").modal("show");
+
         const countryCode = $("#countrySelect").val();
         const countryName = $("#countrySelect option:selected").text();
+        $('#modalTitle').text(`${countryName} Currency Exchange`);
 
         getCountrylayerData(countryCode) // pull currency info on base country
           .then((data) => {
@@ -1326,16 +1121,15 @@ L.easyBar(
                   convertedRates[code] = value / multiplierValue;
                 }
 
-                $("#infoModal")
-                  .html(
-                    createCurrencyCard(
-                      countryName,
-                      currencyObject,
-                      convertedRates,
-                      currency
-                    )
+                $("#contentContainer").html(
+                  createCurrencyCard(
+                    countryName,
+                    currencyObject,
+                    convertedRates,
+                    currency
                   )
-                  .modal("show");
+                );
+                $('#modalPreloader').addClass("fadeOut");
 
                 $("#currencySelect").on("change", function () {
                   console.log("event listnener called - select changed");
@@ -1353,18 +1147,16 @@ L.easyBar(
               })
               .catch(function (error) {
                 console.log(error);
+                $('#modalTitle').text(`Error retrieving currency data`);
               });
           })
           .catch(function (error) {
             console.log(error);
+            $('#modalTitle').text(`Error retrieving currency data`);
           });
 
         // change L.control
         switchOverlay(null);
-        // re-add the icon
-        $(".leaflet-control-layers-toggle").html(
-          "<i class='bi bi-layers fs-3'></i>"
-        );
       } else {
         $(document).ready(function () {
           $("#countrySelect").focus();
@@ -1465,45 +1257,6 @@ function createAllBorders(array) {
   }).addTo(map);
 }
 
-// $.ajax({
-//   url: "php/utils/getBorderData.php", // PHP file that returns JSON
-//   method: "GET", // or 'POST' if needed
-//   dataType: "json", // Expect JSON response
-
-//   success: function (borderData) {
-//     createAllBorders(borderData.features);
-//   },
-
-//   error: function (xhr, status, error) {
-//     console.error("AJAX error:", error);
-//   },
-// });
-
-// $("#countrySelect").on("change", function () {
-//   // extract value from the <select> element - iso code or empty string
-//   selectedCode = this.value;
-
-//   if (allCountriesGeoJsonLayer) {
-//     map.removeLayer(allCountriesGeoJsonLayer);
-//   }
-
-//   $.ajax({
-//     url: "php/utils/getBorderData.php",
-//     method: "GET",
-//     dataType: "json",
-//     success: function (data) {
-//       const filtered = data.features.filter(
-//         (feature) => feature.properties.iso_a2 !== selectedCode
-//       );
-
-//       createAllBorders(filtered);
-//     },
-//     error: function (xhr, status, error) {
-//       console.error("Error loading GeoJSON:", error);
-//     },
-//   });
-// });
-
 $("#countrySelect").on("change", function () {
   map.removeLayer(airportsCluster);
   map.removeLayer(castlesCluster);
@@ -1512,7 +1265,6 @@ $("#countrySelect").on("change", function () {
   map.removeLayer(citiesCluster);
 
   switchOverlay(null);
-  $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
 });
 
 // Scroll map left and right when modal opens/closes *****************************************
@@ -1538,14 +1290,6 @@ $("#infoModal").on("show.bs.modal", function () {
 
   // Set the new view to move the map to the left
   map.setView(newCenter, map.getZoom());
-
-  if ($("#modalPreloader").length) {
-    $("#modalPreloader")
-      .delay(2000)
-      .fadeOut("slow", function () {
-        $(this).remove();
-      });
-  }
 });
 
 $("#infoModal").on("hidden.bs.modal", function () {
@@ -1570,6 +1314,8 @@ $("#infoModal").on("hidden.bs.modal", function () {
 
   // Set the new view to move the map to the left
   map.setView(newCenter, map.getZoom());
+
+  $('#modalPreloader').removeClass("fadeOut");
 });
 
 // populate the <select> element with country names from geoData file *****************************************
