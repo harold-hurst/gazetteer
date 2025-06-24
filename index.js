@@ -104,60 +104,124 @@ function createDataTable(countryName, countryInfo, wikiArticle) {
 
 // WeatherTable
 function createWeatherTable(countryName, forecastArray) {
-  function weatherCard(forecastArray) {
-    return forecastArray
+  const firstItem = forecastArray.shift();
+
+  console.log(firstItem);
+
+
+
+  const tempMin = (firstItem.temp.min - 273.15).toFixed(1);
+  const tempMax = (firstItem.temp.max - 273.15).toFixed(1);
+
+  const weather = firstItem.weather[0];
+  const iconUrl = `https://openweathermap.org/img/wn/${weather.icon}@2x.png`;
+  const description = weather.description;
+
+  const grouped = [];
+
+  for (let i = 0; i < forecastArray.length; i += 2) {
+    grouped.push({
+      days: [forecastArray[i], forecastArray[i + 1]],
+    });
+  }
+
+  function weatherCard(grouped) {
+    return grouped
       .map((data) => {
-        const date = new Date(data.dt * 1000).toLocaleDateString("en-US", {
-          weekday: "long", // Full weekday name (e.g., "Monday")
-          month: "long", // Full month name (e.g., "June")
-          day: "numeric", // Day of the month (e.g., "9")
-        });
-        const sunrise = new Date(data.sunrise * 1000).toLocaleTimeString();
-        const sunset = new Date(data.sunset * 1000).toLocaleTimeString();
-        const tempDay = (data.temp.day - 273.15).toFixed(1);
-        const tempMin = (data.temp.min - 273.15).toFixed(1);
-        const tempMax = (data.temp.max - 273.15).toFixed(1);
-        const feelsLike = (data.feels_like.day - 273.15).toFixed(1);
+        const date1 = new Date(data.days[0].dt * 1000).toLocaleDateString(
+          "en-US",
+          {
+            weekday: "long", // Full weekday name (e.g., "Monday")
+            month: "long", // Full month name (e.g., "June")
+            day: "numeric", // Day of the month (e.g., "9")
+          }
+        );
 
-        const weather = data.weather[0];
-        const iconUrl = `https://openweathermap.org/img/wn/${weather.icon}@2x.png`;
+        const tempMin1 = (data.days[0].temp.min - 273.15).toFixed(1);
+        const tempMax1 = (data.days[0].temp.max - 273.15).toFixed(1);
 
+        const weather1 = data.days[0].weather[0];
+        const iconUrl1 = `https://openweathermap.org/img/wn/${weather1.icon}@2x.png`;
+
+        if (data.days[1]) {
+          const date2 = new Date(data.days[1].dt * 1000).toLocaleDateString(
+            "en-US",
+            {
+              weekday: "long", // Full weekday name (e.g., "Monday")
+              month: "long", // Full month name (e.g., "June")
+              day: "numeric", // Day of the month (e.g., "9")
+            }
+          );
+
+          const tempMin2 = (data.days[1].temp.min - 273.15).toFixed(1);
+          const tempMax2 = (data.days[1].temp.max - 273.15).toFixed(1);
+
+          const weather2 = data.days[1].weather[0];
+          const iconUrl2 = `https://openweathermap.org/img/wn/${weather2.icon}@2x.png`;
+        }
         return `
-      <div class="row align-items-center p-3 border rounded shadow-sm bg-light mb-4">
 
-        <div class="col-md-3 text-center mb-4 mb-md-0">
-          <img src="${iconUrl}" alt="${
-          weather.description
-        }" class="img-fluid" />
-          <div class="small text-muted mt-1">${weather.main}</div>
-        </div>
 
-        <div class="col-md-9">
-          <h6>${date} – ${weather.description}</h6>
-          <p class="mb-2"><em>${data.summary}</em></p>
+      <div class="row mb-2">
 
-          <div class="row small">
-            <div class="col-md-4"><strong>Temp:</strong> ${tempDay}°C (min: ${tempMin}°C, max: ${tempMax}°C)</div>
-            <div class="col-md-4"><strong>Feels Like:</strong> ${feelsLike}°C</div>
-            <div class="col-md-4"><strong>Humidity:</strong> ${
-              data.humidity
-            }%</div>
-            <div class="col-md-4"><strong>Rain:</strong> ${
-              data.rain ?? 0
-            } mm</div>
-            <div class="col-md-4"><strong>Wind:</strong> ${
-              data.wind_speed
-            } m/s</div>
-            <div class="col-md-4"><strong>Pressure:</strong> ${
-              data.pressure
-            } hPa</div>
-            <div class="col-md-4"><strong>Sunrise:</strong> ${sunrise}</div>
-            <div class="col-md-4"><strong>Sunset:</strong> ${sunset}</div>
-            <div class="col-md-4"><strong>UV Index:</strong> ${data.uvi}</div>
+        <div class="col border mt-2 ms-3 me-3">
+
+          <div class="row">
+            <div class="col text-center">
+              <p id="day1Date" class="fw-bold fs-6 mt-3">${date1}</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col text-center">
+              <img id="day1Icon" src="${iconUrl1}" alt="" title="" />
+            </div>
+
+            <div class="col text-center">
+              <p class="fw-bold fs-4 mb-0">
+                <span id="day1MaxTemp">${tempMax1}</span><sup>o</sup>c
+              </p>
+              <p class="fs-5 mt-0 text-secondary">
+                <span id="day1MinTemp">${tempMin1}</span><sup>o</sup>c
+              </p>
+            </div>
           </div>
 
         </div>
+
+        ${
+          data.days[1]
+            ? `      <div class="col border mt-2 ms-3 me-3">
+
+          <div class="row">
+            <div class="col text-center">
+              <p id="day1Date" class="fw-bold fs-6 mt-3">${date1}</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col text-center">
+              <img id="day1Icon" src="${iconUrl1}" alt="" title="" />
+            </div>
+
+            <div class="col text-center">
+              <p class="fw-bold fs-4 mb-0">
+                <span id="day1MaxTemp">${tempMax1}</span><sup>o</sup>c
+              </p>
+              <p class="fs-5 mt-0 text-secondary">
+                <span id="day1MinTemp">${tempMin1}</span><sup>o</sup>c
+              </p>
+            </div>
+          </div>
+
+        </div>`
+            : `<div class="col mt-2 ms-3 me-3"></div>`
+        }
+
+
+
       </div>
+
     `;
       })
       .join("");
@@ -165,37 +229,61 @@ function createWeatherTable(countryName, forecastArray) {
 
   return `
   
-        <div class="modal-dialog modal-dialog-scrollable">
-          <div class="modal-content shadow">
-            <div class="modal-header bg-primary text-white">
-              <h5 class="modal-title">${countryName} Forecast</h5>
-              <button
-                type="button"
-                class="btn-close btn-close-white"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
+<div class="modal-dialog modal-dialog-scrollable">
+  <div class="modal-content shadow">
+    <div class="modal-header bg-primary text-white">
+      <h5 class="modal-title">${countryName} Forecast</h5>
+      <button
+        type="button"
+        class="btn-close btn-close-white"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div id="modalPreloader"></div>
 
-            <div id="forecastContainer" class="container">
-            
-              ${weatherCard(forecastArray)}
-            
+      <div class="row">
+
+        <div class="col border mt-1 ms-3 me-3 mb-2">
+          <p class="fw-bold fs-6 mt-1">TODAY</p>
+
+          <div class="row">
+            <div class="col text-center">
+              <p id="todayConditions" class="fw-bold fs-6 mt-3">${description}</p>
             </div>
+
+            <div class="col text-center">
+              <img
+                id="todayIcon"
+                class="img-fluid mt-0"
+                src="${iconUrl}"
+                alt=""
+                title=""
+              />
             </div>
-            <div class="modal-footer">
-              <button
-                id="responsiveBtn"
-                type="button"
-                class="btn btn-outline-primary btn-sm"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
+
+            <div class="col text-center">
+              <p class="fw-bold fs-4 mb-0">
+                <span id="todayMaxTemp">${tempMax}</span><sup>o</sup
+                ><span class="tempMetric">c</span>
+              </p>
+              <p class="fs-5 mt-0 text-secondary">
+                <span id="todayMinTemp">${tempMin}</span><sup>o</sup
+                ><span class="tempMetric">c</span>
+              </p>
             </div>
           </div>
         </div>
+
+      </div>
+
+      ${weatherCard(grouped)}
+
+    </div>
+  </div>
+</div>
+
   
   `;
 }
@@ -689,7 +777,8 @@ const blueIcon = L.icon({
 const airportIcon = L.ExtraMarkers.icon({
   icon: "bi-airplane",
   markerColor: "red",
-  innerHTML: "<img src='assets/images/plane-solid.svg' alt='Marker'  style='width: 17px; height: 33px;'></img>",
+  innerHTML:
+    "<img src='assets/images/plane-solid.svg' alt='Marker'  style='width: 17px; height: 33px;'></img>",
   shape: "square",
   prefix: "bi",
 });
@@ -697,7 +786,8 @@ const airportIcon = L.ExtraMarkers.icon({
 const citiesIcon = L.ExtraMarkers.icon({
   icon: "bi-buildings",
   markerColor: "blue",
-  innerHTML: "<img src='assets/images/city-solid.svg' alt='Marker'  style='width: 17px; height: 33px;'></img>",
+  innerHTML:
+    "<img src='assets/images/city-solid.svg' alt='Marker'  style='width: 17px; height: 33px;'></img>",
   shape: "square",
   prefix: "bi",
 });
@@ -705,7 +795,8 @@ const citiesIcon = L.ExtraMarkers.icon({
 const castlesIcon = L.ExtraMarkers.icon({
   icon: "",
   markerColor: "green",
-  innerHTML: "<img src='assets/images/chess-rook-solid.svg' alt='Marker'  style='width: 17px; height: 33px;'></img>",
+  innerHTML:
+    "<img src='assets/images/chess-rook-solid.svg' alt='Marker'  style='width: 17px; height: 33px;'></img>",
   shape: "square",
   prefix: "bi",
 });
@@ -713,7 +804,8 @@ const castlesIcon = L.ExtraMarkers.icon({
 const universitiesIcon = L.ExtraMarkers.icon({
   icon: "",
   markerColor: "orange",
-  innerHTML: "<img src='assets/images/school-flag-solid.svg' alt='Marker'  style='width: 17px; height: 33px;'></img>",
+  innerHTML:
+    "<img src='assets/images/school-flag-solid.svg' alt='Marker'  style='width: 17px; height: 33px;'></img>",
   shape: "square",
   prefix: "bi",
 });
@@ -721,7 +813,8 @@ const universitiesIcon = L.ExtraMarkers.icon({
 const stadiumsIcon = L.ExtraMarkers.icon({
   icon: "",
   markerColor: "yellow",
-  innerHTML: "<img src='assets/images/hotel-solid.svg' alt='Marker'  style='width: 17px; height: 33px;'></img>",
+  innerHTML:
+    "<img src='assets/images/hotel-solid.svg' alt='Marker'  style='width: 17px; height: 33px;'></img>",
   shape: "square",
   prefix: "bi",
 });
@@ -854,68 +947,68 @@ function switchOverlay(newOverlay) {
 
 $(".leaflet-control-layers-toggle").html("<i class='bi bi-layers fs-3'></i>");
 
-L.easyBar(
-  [
-    // get current location button
-    L.easyButton(
-      '<i class="bi bi-crosshair fs-6"></i>',
+// L.easyBar(
+//   [
+//     // get current location button
+//     L.easyButton(
+//       '<i class="bi bi-crosshair fs-6"></i>',
 
-      function (btn, map) {
-        getCurrentLocation()
-          .then((position) => {
-            // clear out selected country
-            $("#countrySelect").val("").trigger("change");
+//       function (btn, map) {
+//         getCurrentLocation()
+//           .then((position) => {
+//             // clear out selected country
+//             $("#countrySelect").val("").trigger("change");
 
-            const location = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            };
+//             const location = {
+//               lat: position.coords.latitude,
+//               lng: position.coords.longitude,
+//             };
 
-            const accuracy = position.coords.accuracy;
+//             const accuracy = position.coords.accuracy;
 
-            // Move the map to the user's current location
-            map.setView(location, 15);
+//             // Move the map to the user's current location
+//             map.setView(location, 15);
 
-            // Remove the existing circle, if there is one
-            if (userCircle) {
-              map.removeLayer(userCircle);
-            }
+//             // Remove the existing circle, if there is one
+//             if (userCircle) {
+//               map.removeLayer(userCircle);
+//             }
 
-            userCircle = L.circle(location, {
-              radius: accuracy,
-              color: "#80d643",
-              opacity: 0.5,
-              fillColor: "#80d643",
-              fillOpacity: 0.3,
-            }).addTo(map);
+//             userCircle = L.circle(location, {
+//               radius: accuracy,
+//               color: "#80d643",
+//               opacity: 0.5,
+//               fillColor: "#80d643",
+//               fillOpacity: 0.3,
+//             }).addTo(map);
 
-            getOpencageData(location).then((data) => {
-              // Remove previous marker if it exists
-              if (userMarker) {
-                map.removeLayer(userMarker);
-              }
+//             getOpencageData(location).then((data) => {
+//               // Remove previous marker if it exists
+//               if (userMarker) {
+//                 map.removeLayer(userMarker);
+//               }
 
-              // Add a new marker at the user's location
-              userMarker = L.marker(location, { icon: blueIcon })
-                .addTo(map)
-                .bindPopup(data.data.results[0].formatted) // Add popup
-                .openPopup(); // Open popup automatically
-            });
-          })
-          .catch((error) => {
-            // Handle errors (e.g. if geolocation fails)
-            console.error("Error:", error);
-          });
-      }
-    ),
-    L.easyButton('<i class="bi bi-house fs-6"></i>', function (btn, map) {
-      map.setView([52.95, -1.16], 13);
-    }),
-  ],
-  {
-    position: "topleft",
-  }
-).addTo(map);
+//               // Add a new marker at the user's location
+//               userMarker = L.marker(location, { icon: blueIcon })
+//                 .addTo(map)
+//                 .bindPopup(data.data.results[0].formatted) // Add popup
+//                 .openPopup(); // Open popup automatically
+//             });
+//           })
+//           .catch((error) => {
+//             // Handle errors (e.g. if geolocation fails)
+//             console.error("Error:", error);
+//           });
+//       }
+//     ),
+//     L.easyButton('<i class="bi bi-house fs-6"></i>', function (btn, map) {
+//       map.setView([52.95, -1.16], 13);
+//     }),
+//   ],
+//   {
+//     position: "topleft",
+//   }
+// ).addTo(map);
 
 L.easyBar(
   [
@@ -1318,10 +1411,10 @@ $("#countrySelect").on("change", function () {
         // Add layer to the map
         currentCountryGeoJsonLayer = L.geoJSON(geoJson, {
           style: {
-            color: "#e61414",
+            color: "#df2e31",
             opacity: 1,
-            fillColor: "#e61414",
-            fillOpacity: 0.1,
+            fillColor: "#df2e31",
+            fillOpacity: 0.0,
           },
           onEachFeature: function (feature, layer) {
             layer.bindPopup("Country: " + feature.properties.name);
@@ -1372,44 +1465,44 @@ function createAllBorders(array) {
   }).addTo(map);
 }
 
-$.ajax({
-  url: "php/utils/getBorderData.php", // PHP file that returns JSON
-  method: "GET", // or 'POST' if needed
-  dataType: "json", // Expect JSON response
+// $.ajax({
+//   url: "php/utils/getBorderData.php", // PHP file that returns JSON
+//   method: "GET", // or 'POST' if needed
+//   dataType: "json", // Expect JSON response
 
-  success: function (borderData) {
-    createAllBorders(borderData.features);
-  },
+//   success: function (borderData) {
+//     createAllBorders(borderData.features);
+//   },
 
-  error: function (xhr, status, error) {
-    console.error("AJAX error:", error);
-  },
-});
+//   error: function (xhr, status, error) {
+//     console.error("AJAX error:", error);
+//   },
+// });
 
-$("#countrySelect").on("change", function () {
-  // extract value from the <select> element - iso code or empty string
-  selectedCode = this.value;
+// $("#countrySelect").on("change", function () {
+//   // extract value from the <select> element - iso code or empty string
+//   selectedCode = this.value;
 
-  if (allCountriesGeoJsonLayer) {
-    map.removeLayer(allCountriesGeoJsonLayer);
-  }
+//   if (allCountriesGeoJsonLayer) {
+//     map.removeLayer(allCountriesGeoJsonLayer);
+//   }
 
-  $.ajax({
-    url: "php/utils/getBorderData.php",
-    method: "GET",
-    dataType: "json",
-    success: function (data) {
-      const filtered = data.features.filter(
-        (feature) => feature.properties.iso_a2 !== selectedCode
-      );
+//   $.ajax({
+//     url: "php/utils/getBorderData.php",
+//     method: "GET",
+//     dataType: "json",
+//     success: function (data) {
+//       const filtered = data.features.filter(
+//         (feature) => feature.properties.iso_a2 !== selectedCode
+//       );
 
-      createAllBorders(filtered);
-    },
-    error: function (xhr, status, error) {
-      console.error("Error loading GeoJSON:", error);
-    },
-  });
-});
+//       createAllBorders(filtered);
+//     },
+//     error: function (xhr, status, error) {
+//       console.error("Error loading GeoJSON:", error);
+//     },
+//   });
+// });
 
 $("#countrySelect").on("change", function () {
   map.removeLayer(airportsCluster);
@@ -1445,6 +1538,14 @@ $("#infoModal").on("show.bs.modal", function () {
 
   // Set the new view to move the map to the left
   map.setView(newCenter, map.getZoom());
+
+  if ($("#modalPreloader").length) {
+    $("#modalPreloader")
+      .delay(2000)
+      .fadeOut("slow", function () {
+        $(this).remove();
+      });
+  }
 });
 
 $("#infoModal").on("hidden.bs.modal", function () {
