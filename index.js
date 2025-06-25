@@ -86,8 +86,6 @@ function createDataTable(countryName, countryInfo, wikiArticle) {
 function createWeatherTable(countryName, forecastArray) {
   const firstItem = forecastArray.shift();
 
-  console.log(firstItem);
-
   const tempMin = (firstItem.temp.min - 273.15).toFixed(1);
   const tempMax = (firstItem.temp.max - 273.15).toFixed(1);
 
@@ -268,6 +266,7 @@ function createCurrencyCard(
       html += `<option value="${rate}">${code}</option>`;
     }
 
+    html = "<label for='currencySelect'>Convert to</label>" + html;
     html += "</select>";
     return html;
   }
@@ -858,6 +857,7 @@ L.easyBar(
         // get
         getGeonamesData(countryCode)
           .then((data) => {
+            console.log(data);
             data.cities.forEach(function (item) {
               // Convert lat and lng to numbers
               const lat = parseFloat(item.lat);
@@ -1000,8 +1000,9 @@ L.easyBar(
 
             getOpenWeatherData(capitalLocation)
               .then((data) => {
+
                 $("#contentContainer").html(
-                  createWeatherTable(capital, data.data.daily)
+                  createWeatherTable(capital, data.daily)
                 );
 
                 $('#modalPreloader').addClass("fadeOut");
@@ -1069,7 +1070,6 @@ L.easyBar(
 
         getPixabayData(countryName)
           .then((data) => {
-            console.log(data);
 
             $("#contentContainer").html(createPhotoCarousel(countryName, data.hits));
             $('#modalPreloader').addClass("fadeOut");
@@ -1093,6 +1093,24 @@ L.easyBar(
       }
     }),
     L.easyButton('<i class="bi bi-currency-exchange fs-6"></i>', function () {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       if ($("#countrySelect").val() !== "") {
         // show the modal which contains a spinner
         $("#infoModal").modal("show");
@@ -1108,9 +1126,10 @@ L.easyBar(
 
             getExchangeRateData(currency)
               .then((data) => {
-                const selectOptions = data.data.allRates.rates;
 
-                const dollarRate = data.data.dollarRate.rates;
+                const selectOptions = data.allRates.rates;
+
+                const dollarRate = data.dollarRate.rates;
 
                 const [multiplierKey, multiplierValue] =
                   Object.entries(dollarRate)[0];
@@ -1132,7 +1151,6 @@ L.easyBar(
                 $('#modalPreloader').addClass("fadeOut");
 
                 $("#currencySelect").on("change", function () {
-                  console.log("event listnener called - select changed");
                   const selectedCurrencyRate = parseFloat($(this).val());
                   const amount = $("#currencyAmount").val();
                   const totalCurrencyValue = (
@@ -1154,6 +1172,24 @@ L.easyBar(
             console.log(error);
             $('#modalTitle').text(`Error retrieving currency data`);
           });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // change L.control
         switchOverlay(null);
