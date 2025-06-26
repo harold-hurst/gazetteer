@@ -119,24 +119,44 @@ function createWeatherTable(countryName, forecastArray) {
         const weather1 = data.days[0].weather[0];
         const iconUrl1 = `https://openweathermap.org/img/wn/${weather1.icon}@2x.png`;
 
-        if (data.days[1]) {
-          const date2 = new Date(data.days[1].dt * 1000).toLocaleDateString(
-            "en-US",
-            {
-              weekday: "long", // Full weekday name (e.g., "Monday")
-              month: "long", // Full month name (e.g., "June")
-              day: "numeric", // Day of the month (e.g., "9")
-            }
-          );
+        if (data.days[1] !== undefined && data.days[1] !== null) {
+          const day2 = data.days[1];
+          const date2 = new Date(day2.dt * 1000).toLocaleDateString("en-US", {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+          });
 
-          const tempMin2 = (data.days[1].temp.min - 273.15).toFixed(1);
-          const tempMax2 = (data.days[1].temp.max - 273.15).toFixed(1);
+          const tempMin2 = (day2.temp.min - 273.15).toFixed(1);
+          const tempMax2 = (day2.temp.max - 273.15).toFixed(1);
 
-          const weather2 = data.days[1].weather[0];
+          const weather2 = day2.weather[0];
           const iconUrl2 = `https://openweathermap.org/img/wn/${weather2.icon}@2x.png`;
-        }
-        return `
 
+          day2Html = `
+          <div class="col border mt-2 ms-3 me-3">
+            <div class="row">
+              <div class="col text-center">
+                <p class="fw-bold fs-6 mt-3">${date2}</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col text-center">
+                <img src="${iconUrl2}" alt="" title="" />
+              </div>
+              <div class="col text-center">
+                <p class="fw-bold fs-4 mb-0">
+                  <span>${tempMax2}</span><sup>o</sup>c
+                </p>
+                <p class="fs-5 mt-0 text-secondary">
+                  <span>${tempMin2}</span><sup>o</sup>c
+                </p>
+              </div>
+            </div>
+          </div>`;
+        }
+
+        return `
 
       <div class="row mb-2">
 
@@ -165,38 +185,9 @@ function createWeatherTable(countryName, forecastArray) {
 
         </div>
 
-        ${
-          data.days[1]
-            ? `      <div class="col border mt-2 ms-3 me-3">
+          ${(data.days[1] !== undefined && data.days[1] !== null) ? day2Html : `<div class="col mt-2 ms-3 me-3"></div>`}
 
-          <div class="row">
-            <div class="col text-center">
-              <p id="day1Date" class="fw-bold fs-6 mt-3">${date1}</p>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col text-center">
-              <img id="day1Icon" src="${iconUrl1}" alt="" title="" />
-            </div>
-
-            <div class="col text-center">
-              <p class="fw-bold fs-4 mb-0">
-                <span id="day1MaxTemp">${tempMax1}</span><sup>o</sup>c
-              </p>
-              <p class="fs-5 mt-0 text-secondary">
-                <span id="day1MinTemp">${tempMin1}</span><sup>o</sup>c
-              </p>
-            </div>
-          </div>
-
-        </div>`
-            : `<div class="col mt-2 ms-3 me-3"></div>`
-        }
-
-
-
-      </div>
+        </div>
 
     `;
       })
@@ -322,38 +313,36 @@ function createNewsContainer(countryName, newsData) {
         const publishedDate = new Date(published_at).toLocaleString();
 
         return `
-        <div class="col-xl-6">
-          <div class="card h-100 shadow-sm">
-            ${
-              image_url
-                ? `<img src="${image_url}" class="card-img-top" alt="News image" />`
-                : ""
-            }
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title">${title}</h5>
-              ${description ? `<p class="card-text">${description}</p>` : ""}
-              <p class="card-text mt-auto">
-                <small class="text-muted">
-                  ${source || "Unknown Source"}<br />
-                  Categories: ${categoryList}<br />
-                  ${publishedDate}
-                </small>
-              </p>
-              <a href="${url}" target="_blank" class="btn btn-outline-primary btn-sm mt-2">Read More</a>
-            </div>
-          </div>
-        </div>
+
+        <table class="table table-borderless">
+          <tr>
+            <td rowspan="2" width="50%">
+              <img class="img-fluid rounded" src="${image_url}" alt="" title="" />
+            </td>
+
+            <td>
+              <a href="${url}" class="fw-bold fs-6 text-black" target="_blank"
+                >${title}</a
+              >
+            </td>
+          </tr>
+
+          <tr>
+            <td class="align-bottom pb-0">
+              <p class="fw-light fs-6 mb-1">${source || "Unknown Source"}</p>
+            </td>
+          </tr>
+        </table>
+
+        <hr />
+
       `;
       })
       .join("");
   }
 
   return `
-      <div class="my-4">
-        <div id="news-container" class="row gy-4">
           ${renderArticlesToHTML(newsData)}
-        </div>
-      </div>
 `;
 }
 
@@ -808,7 +797,7 @@ L.easyBar(
         const countryCode = $("#countrySelect").val();
 
         const countryName = $("#countrySelect option:selected").text();
-        $('#modalTitle').text(`${countryName} Overview`);
+        $("#modalTitle").text(`${countryName} Overview`);
 
         Promise.all([
           getWikipediaPage(countryName),
@@ -826,12 +815,11 @@ L.easyBar(
               createDataTable(countryName, tableData, htmlArticle)
             );
 
-            $('#modalPreloader').addClass("fadeOut");
-
+            $("#modalPreloader").addClass("fadeOut");
           })
           .catch(function (error) {
             console.log("An error occurred:", error);
-            $('#modalTitle').text(`Error retrieving country data`);
+            $("#modalTitle").text(`Error retrieving country data`);
           });
 
         // change L.control
@@ -857,7 +845,6 @@ L.easyBar(
         // get
         getGeonamesData(countryCode)
           .then((data) => {
-            console.log(data);
             data.cities.forEach(function (item) {
               // Convert lat and lng to numbers
               const lat = parseFloat(item.lat);
@@ -987,7 +974,7 @@ L.easyBar(
 
         const countryCode = $("#countrySelect").val();
         const countryName = $("#countrySelect option:selected").text();
-        $('#modalTitle').text(`${countryName} Weather`);
+        $("#modalTitle").text(`${countryName} Weather`);
 
         getCountrylayerData(countryCode)
           .then((data) => {
@@ -1000,12 +987,11 @@ L.easyBar(
 
             getOpenWeatherData(capitalLocation)
               .then((data) => {
-
                 $("#contentContainer").html(
                   createWeatherTable(capital, data.daily)
                 );
 
-                $('#modalPreloader').addClass("fadeOut");
+                $("#modalPreloader").addClass("fadeOut");
               })
               .catch(function (error) {
                 console.log(error); // Handle the error if it happens
@@ -1013,7 +999,7 @@ L.easyBar(
           })
           .catch(function (error) {
             console.log(error); // Handle the error if it happens
-            $('#modalTitle').text(`Error retrieving weather data`);
+            $("#modalTitle").text(`Error retrieving weather data`);
           });
 
         // change L.control
@@ -1037,18 +1023,19 @@ L.easyBar(
         const countryCode = $("#countrySelect").val();
 
         const countryName = $("#countrySelect option:selected").text();
-        $('#modalTitle').text(`${countryName} News`);
+        $("#modalTitle").text(`${countryName} News`);
 
         getNewsApiData(countryCode)
           .then((data) => {
-            console.log(data);
 
-            $("#contentContainer").html(createNewsContainer(countryName, data.data));
-            $('#modalPreloader').addClass("fadeOut");
+            $("#contentContainer").html(
+              createNewsContainer(countryName, data.data)
+            );
+            $("#modalPreloader").addClass("fadeOut");
           })
           .catch(function (error) {
             console.log(error);
-            $('#modalTitle').text(`Error retrieving news data`);
+            $("#modalTitle").text(`Error retrieving news data`);
           });
 
         // change L.control
@@ -1066,13 +1053,14 @@ L.easyBar(
         $("#infoModal").modal("show");
 
         const countryName = $("#countrySelect option:selected").text();
-        $('#modalTitle').text(`${countryName} Images`);
+        $("#modalTitle").text(`${countryName} Images`);
 
         getPixabayData(countryName)
           .then((data) => {
-
-            $("#contentContainer").html(createPhotoCarousel(countryName, data.hits));
-            $('#modalPreloader').addClass("fadeOut");
+            $("#contentContainer").html(
+              createPhotoCarousel(countryName, data.hits)
+            );
+            $("#modalPreloader").addClass("fadeOut");
 
             // Initialize the carousel with jQuery
             $("#carouselExampleInterval").carousel({
@@ -1081,7 +1069,7 @@ L.easyBar(
           })
           .catch(function (error) {
             console.log(error);
-            $('#modalTitle').text(`Error retrieving images`);
+            $("#modalTitle").text(`Error retrieving images`);
           });
 
         // change L.control
@@ -1093,31 +1081,13 @@ L.easyBar(
       }
     }),
     L.easyButton('<i class="bi bi-currency-exchange fs-6"></i>', function () {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       if ($("#countrySelect").val() !== "") {
         // show the modal which contains a spinner
         $("#infoModal").modal("show");
 
         const countryCode = $("#countrySelect").val();
         const countryName = $("#countrySelect option:selected").text();
-        $('#modalTitle').text(`${countryName} Currency Exchange`);
+        $("#modalTitle").text(`${countryName} Currency Exchange`);
 
         getCountrylayerData(countryCode) // pull currency info on base country
           .then((data) => {
@@ -1126,7 +1096,6 @@ L.easyBar(
 
             getExchangeRateData(currency)
               .then((data) => {
-
                 const selectOptions = data.allRates.rates;
 
                 const dollarRate = data.dollarRate.rates;
@@ -1148,7 +1117,7 @@ L.easyBar(
                     currency
                   )
                 );
-                $('#modalPreloader').addClass("fadeOut");
+                $("#modalPreloader").addClass("fadeOut");
 
                 $("#currencySelect").on("change", function () {
                   const selectedCurrencyRate = parseFloat($(this).val());
@@ -1165,31 +1134,13 @@ L.easyBar(
               })
               .catch(function (error) {
                 console.log(error);
-                $('#modalTitle').text(`Error retrieving currency data`);
+                $("#modalTitle").text(`Error retrieving currency data`);
               });
           })
           .catch(function (error) {
             console.log(error);
-            $('#modalTitle').text(`Error retrieving currency data`);
+            $("#modalTitle").text(`Error retrieving currency data`);
           });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         // change L.control
         switchOverlay(null);
@@ -1351,7 +1302,7 @@ $("#infoModal").on("hidden.bs.modal", function () {
   // Set the new view to move the map to the left
   map.setView(newCenter, map.getZoom());
 
-  $('#modalPreloader').removeClass("fadeOut");
+  $("#modalPreloader").removeClass("fadeOut");
 });
 
 // populate the <select> element with country names from geoData file *****************************************

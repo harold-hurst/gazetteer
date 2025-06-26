@@ -95,8 +95,6 @@ body {
   object-fit: cover; /* Crop excess image to maintain aspect ratio */
 }
 
-
-
 /* modal pre loader */
 
 #modalPreloader {
