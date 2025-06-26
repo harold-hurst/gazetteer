@@ -23,7 +23,6 @@ function getRateInDollars($currency)
     return $output;
 }
 
-
 function getallRates()
 {
     $openExchangeRatesApiKey = '9c40e7b3afc24fcdab87e65d2e2184c7';
@@ -35,28 +34,6 @@ function getallRates()
     $output = $output['data'];
 
     return $output;
-    // $ch = curl_init();
-
-    // curl_setopt_array($ch, array(
-    //     CURLOPT_URL => $url,
-    //     CURLOPT_RETURNTRANSFER => true,   // Already included
-    //     CURLOPT_ENCODING => '',
-    //     CURLOPT_MAXREDIRS => 10,
-    //     CURLOPT_TIMEOUT => 0,
-    //     CURLOPT_FOLLOWLOCATION => true,
-    //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    //     CURLOPT_CUSTOMREQUEST => 'GET',
-    //     CURLOPT_SSL_VERIFYPEER => false,  // Added: disables SSL verification (for testing only)
-    // ));
-
-    // $response = curl_exec($ch);
-
-    // curl_close($ch);
-
-    // // Decode the JSON response
-    // $decode = json_decode($response, true);
-
-    // return $decode;
 }
 
 $dollarRate = getRateInDollars($currency);

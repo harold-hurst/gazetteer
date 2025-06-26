@@ -83,11 +83,11 @@ function createDataTable(countryName, countryInfo, wikiArticle) {
 }
 
 // WeatherTable
-function createWeatherTable(countryName, forecastArray) {
+function createWeatherTable(forecastArray) {
   const firstItem = forecastArray.shift();
 
-  const tempMin = (firstItem.temp.min - 273.15).toFixed(1);
-  const tempMax = (firstItem.temp.max - 273.15).toFixed(1);
+  const tempMin = (firstItem.temp.min - 273.15).toFixed(0);
+  const tempMax = (firstItem.temp.max - 273.15).toFixed(0);
 
   const weather = firstItem.weather[0];
   const iconUrl = `https://openweathermap.org/img/wn/${weather.icon}@2x.png`;
@@ -113,8 +113,8 @@ function createWeatherTable(countryName, forecastArray) {
           }
         );
 
-        const tempMin1 = (data.days[0].temp.min - 273.15).toFixed(1);
-        const tempMax1 = (data.days[0].temp.max - 273.15).toFixed(1);
+        const tempMin1 = (data.days[0].temp.min - 273.15).toFixed(0);
+        const tempMax1 = (data.days[0].temp.max - 273.15).toFixed(0);
 
         const weather1 = data.days[0].weather[0];
         const iconUrl1 = `https://openweathermap.org/img/wn/${weather1.icon}@2x.png`;
@@ -127,8 +127,8 @@ function createWeatherTable(countryName, forecastArray) {
             day: "numeric",
           });
 
-          const tempMin2 = (day2.temp.min - 273.15).toFixed(1);
-          const tempMax2 = (day2.temp.max - 273.15).toFixed(1);
+          const tempMin2 = (day2.temp.min - 273.15).toFixed(0);
+          const tempMax2 = (day2.temp.max - 273.15).toFixed(0);
 
           const weather2 = day2.weather[0];
           const iconUrl2 = `https://openweathermap.org/img/wn/${weather2.icon}@2x.png`;
@@ -1001,7 +1001,6 @@ L.easyBar(
 
         getCountrylayerData(countryCode)
           .then((data) => {
-            const capital = data.data[0].capital[0] + ", " + countryName;
             let capitalLocation = data.data[0].capitalInfo.latlng;
             capitalLocation = {
               lat: capitalLocation[0],
@@ -1011,7 +1010,7 @@ L.easyBar(
             getOpenWeatherData(capitalLocation)
               .then((data) => {
                 $("#contentContainer").html(
-                  createWeatherTable(capital, data.daily)
+                  createWeatherTable(data.daily)
                 );
 
                 $("#modalPreloader").addClass("fadeOut");
@@ -1187,13 +1186,38 @@ $("#countrySelect").on("change", function () {
   // extract value from the <select> element
   selectedCode = this.value;
 
-  
-
-  getCountrylayerData(selectedCode).then((data) => {
+getCountrylayerData(selectedCode)
+  .then((data) => {
+    // get capital city 
     const capital = data.data[0].capital[0];
-    getOpencageFromCapital(capital, selectedCode).then((data) => {
-      console.log(data.data.results[0].geometry);
-    });
+    // console.log('capital:');
+    // console.log(capital);
+    // console.log('country code:');
+    // console.log(selectedCode);
+
+    return getOpencageFromCapital(capital, selectedCode)
+      .then((data) => {
+        // console.log('data received:');
+        // console.log(data.data.results);
+
+        const location = data.data.results[0].geometry;
+
+        if (userMarker) {
+          map.removeLayer(userMarker);
+        }
+
+        // Add a new marker at the user's location
+        userMarker = L.marker(location, { icon: blueIcon })
+          .addTo(map)
+          .bindPopup(`Capital city: <strong>${capital}</strong>`)
+          .openPopup();
+      })
+      .catch((error) => {
+        console.error('Error fetching location from OpenCage:', error);
+      });
+  })
+  .catch((error) => {
+    console.error('Error fetching country layer data:', error);
   });
 
   // Clear old layer if exists
@@ -1221,9 +1245,9 @@ $("#countrySelect").on("change", function () {
         // Add layer to the map
         currentCountryGeoJsonLayer = L.geoJSON(geoJson, {
           style: {
-            color: "#df2e31",
+            color: "#0004a8",
             opacity: 1,
-            fillColor: "#df2e31",
+            fillColor: "#0004a8",
             fillOpacity: 0.0,
           },
           onEachFeature: function (feature, layer) {
