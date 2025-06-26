@@ -185,7 +185,11 @@ function createWeatherTable(countryName, forecastArray) {
 
         </div>
 
-          ${(data.days[1] !== undefined && data.days[1] !== null) ? day2Html : `<div class="col mt-2 ms-3 me-3"></div>`}
+          ${
+            data.days[1] !== undefined && data.days[1] !== null
+              ? day2Html
+              : `<div class="col mt-2 ms-3 me-3"></div>`
+          }
 
         </div>
 
@@ -459,6 +463,24 @@ function getOpencageData(location) {
       type: "POST",
       dataType: "json",
       data: location,
+      success: function (result, status, xhr) {
+        resolve(result);
+      },
+      error: function (xhr, status, error) {
+        reject(error);
+      },
+    });
+  });
+}
+
+// OpenCage
+function getOpencageFromCapital(capital, countryCode) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: "php/api-connections/opencage-from-capital.php",
+      type: "POST",
+      dataType: "json",
+      data: { capital: capital, countryCode: countryCode },
       success: function (result, status, xhr) {
         resolve(result);
       },
@@ -845,6 +867,7 @@ L.easyBar(
         // get
         getGeonamesData(countryCode)
           .then((data) => {
+            console.log(data);
             data.cities.forEach(function (item) {
               // Convert lat and lng to numbers
               const lat = parseFloat(item.lat);
@@ -1027,7 +1050,6 @@ L.easyBar(
 
         getNewsApiData(countryCode)
           .then((data) => {
-
             $("#contentContainer").html(
               createNewsContainer(countryName, data.data)
             );
@@ -1165,6 +1187,15 @@ $("#countrySelect").on("change", function () {
   // extract value from the <select> element
   selectedCode = this.value;
 
+  
+
+  getCountrylayerData(selectedCode).then((data) => {
+    const capital = data.data[0].capital[0];
+    getOpencageFromCapital(capital, selectedCode).then((data) => {
+      console.log(data.data.results[0].geometry);
+    });
+  });
+
   // Clear old layer if exists
   if (currentCountryGeoJsonLayer) {
     map.removeLayer(currentCountryGeoJsonLayer);
@@ -1211,38 +1242,38 @@ $("#countrySelect").on("change", function () {
 });
 
 // Create all borders with Leaflet.js *****************************************
-function createAllBorders(array) {
-  allCountriesGeoJsonLayer = L.geoJSON(array, {
-    style: {
-      color: "#1c1c1c",
-      fillColor: "",
-      fillOpacity: 0.1,
-      dashArray: "5",
-      weight: 2,
-      opacity: 0.8,
-    },
-    onEachFeature: function (feature, layer) {
-      layer.bindPopup("Country: " + feature.properties.name);
+// function createAllBorders(array) {
+//   allCountriesGeoJsonLayer = L.geoJSON(array, {
+//     style: {
+//       color: "#1c1c1c",
+//       fillColor: "",
+//       fillOpacity: 0.1,
+//       dashArray: "5",
+//       weight: 2,
+//       opacity: 0.8,
+//     },
+//     onEachFeature: function (feature, layer) {
+//       layer.bindPopup("Country: " + feature.properties.name);
 
-      layer.on({
-        mouseover: function () {
-          // On mouseover, change the style
-          layer.setStyle({
-            fillOpacity: 0, // Increase opacity on hover
-          });
-        },
-        mouseout: function () {
-          // On mouseout, reset the style to initial
-          allCountriesGeoJsonLayer.resetStyle(layer); // Use the initial style
-        },
-        click: function () {
-          // Handle the click event
-          $("#countrySelect").val(feature.properties.iso_a2).trigger("change");
-        },
-      });
-    },
-  }).addTo(map);
-}
+//       layer.on({
+//         mouseover: function () {
+//           // On mouseover, change the style
+//           layer.setStyle({
+//             fillOpacity: 0, // Increase opacity on hover
+//           });
+//         },
+//         mouseout: function () {
+//           // On mouseout, reset the style to initial
+//           allCountriesGeoJsonLayer.resetStyle(layer); // Use the initial style
+//         },
+//         click: function () {
+//           // Handle the click event
+//           $("#countrySelect").val(feature.properties.iso_a2).trigger("change");
+//         },
+//       });
+//     },
+//   }).addTo(map);
+// }
 
 $("#countrySelect").on("change", function () {
   map.removeLayer(airportsCluster);
