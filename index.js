@@ -245,17 +245,58 @@ function createWeatherTable(forecastArray) {
   `;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // CurrencyCard
 function createCurrencyCard(
-  countryName,
+
+
+
   currencyObject,
-  selectOptions,
-  currency
+  selectOptions
+
 ) {
+
+  console.log(selectOptions);
+
+
+
+
+
+
   function createCurrencySelect(selectOptions) {
+
+    // Get all key-value pairs
+const entries = Object.entries(selectOptions);
+
+// Check that there are at least 19 items
+
+  const index = entries.length - 20;
+  const [key, value] = entries[index];
+
     let html =
       '<select name="currency" id="currencySelect" class="form-select shadow-sm mb-4">';
-    html += "<option disabled selected value=''>Select a currency</option>";
+    html += `<option value="${value}">${key}</option>`;
 
     for (const [code, rate] of Object.entries(selectOptions)) {
       html += `<option value="${rate}">${code}</option>`;
@@ -263,6 +304,7 @@ function createCurrencyCard(
 
     html = "<label for='currencySelect'>Convert to</label>" + html;
     html += "</select>";
+
     return html;
   }
 
@@ -271,15 +313,21 @@ function createCurrencyCard(
 
   return `
       <div class="my-4">
+
+
         <label for="currencyAmount" class="form-label"
           >From ${currencyName}s (${currencySymbol}):</label
         >
+
+
         <input
           type="number"
           id="currencyAmount"
           class="form-control"
-          placeholder="Enter a number"
+          value="1"
         />
+
+
       </div>
 
       ${createCurrencySelect(selectOptions)}
@@ -291,6 +339,25 @@ function createCurrencyCard(
       </div>
 `;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // NewsContainer
 function createNewsContainer(countryName, newsData) {
@@ -1112,13 +1179,15 @@ L.easyBar(
 
         getCountrylayerData(countryCode) // pull currency info on base country
           .then((data) => {
+
             const currency = Object.keys(data.data[0].currencies)[0]; // eg. GBP
             let currencyObject = data.data[0].currencies[currency]; // eg. {symbol: '£', name: 'British pound'}
 
             getExchangeRateData(currency)
               .then((data) => {
-                const selectOptions = data.allRates.rates;
 
+
+                const selectOptions = data.allRates.rates;
                 const dollarRate = data.dollarRate.rates;
 
                 const [multiplierKey, multiplierValue] =
@@ -1130,28 +1199,67 @@ L.easyBar(
                   convertedRates[code] = value / multiplierValue;
                 }
 
+
+
                 $("#contentContainer").html(
                   createCurrencyCard(
-                    countryName,
+
                     currencyObject,
-                    convertedRates,
-                    currency
+                    convertedRates
+ 
                   )
                 );
+
                 $("#modalPreloader").addClass("fadeOut");
 
+
+
+
+
+
+
+
+
+
+
+
+
                 $("#currencySelect").on("change", function () {
+
                   const selectedCurrencyRate = parseFloat($(this).val());
+                  console.log(selectedCurrencyRate);
+
                   const amount = $("#currencyAmount").val();
+                  console.log(amount);
+
                   const totalCurrencyValue = (
                     selectedCurrencyRate * amount
                   ).toFixed(2);
+                  console.log(totalCurrencyValue);
 
                   const currencyCode = $(this).find("option:selected").text();
+                  console.log(currencyCode);
+
                   $("#currencyOutput").text(
                     totalCurrencyValue + " " + currencyCode
                   );
+
                 });
+
+$("#currencySelect").trigger("change");
+
+  
+
+
+
+
+
+
+
+
+
+
+
               })
               .catch(function (error) {
                 console.log(error);
@@ -1171,11 +1279,51 @@ L.easyBar(
         });
       }
     }),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   ],
   {
     position: "topright",
   }
 ).addTo(map);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Create country boarder with Leaflet.js *****************************************
 // initialise variable for layer
